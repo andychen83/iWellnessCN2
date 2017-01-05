@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="shadow">#aa222222</color>
+    <color name="alertdialog_line">#c6c6c6</color>
+    <color name="actionsheet_blue">#037BFF</color>
+    <color name="actionsheet_red">#FD4A2E</color>
+    <color name="actionsheet_gray">#8F8F8F</color>
+    <color name="window_bg">#ffeef1f3</color>
+    <color name="qqblue">#ff54acea</color>
+    <color name="white">#ffffff</color>
+    <color name="lucensy">#00000001</color>
+    <color name="translucency">#e0000000</color>
+    <color name="orange">#ffa500</color>
+    <color name="blue">#0066dd</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="tm">#00000000</color>
+    <color name="light_orange">#fcb75c</color>
+    <color name="alpha_00">#00000000</color>
+    <color name="gray">#DBDBDB</color>
+    <color name="trans">#50000000</color>
+    <color name="red">#fe0202</color>
+    <color name="background">#e5e5e5</color>
+    <color name="transparent_background">#50000000</color>
+    <color name="darkgray">#74787c</color>
+    <color name="blue_custom">#585eaa</color>
+    <color name="lightgray">#cccccc</color>
+    <color name="allbackground">#38b9e1</color>
+    <color name="titlebackground">#3ca8cc</color>
+    <color name="mainitem_bg">#00a0cd</color>
+    <color name="setting_bg">#3c89b3</color>
+    <color name="unfocused">#ffffff</color>
+    <color name="pressed">#0373d9</color>
+    <color name="selected">#0373d9</color>
+    <color name="focused">#0373d9</color>
+    <color name="graphcolor">#315661</color>
+    <color name="graph_bg">#2e525e</color>
+    <color name="graph_margin">#C5142429</color>
+    <color name="graph_line">#b6c3c7</color>
+
+
+    <color name="green_color">#5CA145</color>
+    <color name="green_light_color">#93CA51</color>
+    <color name="green_yello_color">#DCE254</color>
+    <color name="red_light_color">#F59B39</color>
+    <color name="red_middle_color">#F26C36</color>
+    <color name="red_med_color">#EF4A33</color>
+    <color name="red_color">#EF3133</color>
+    <color name="violet_color">#BC549F</color>
+
+    <color name="gdd_brand_color_blue_pressed">#E0177EE6</color>
+    <color name="gdd_brand_color_blue">#177EE6</color>
+
+    <color name="gdd_brand_color_gay_pressed">#E0adacac</color>
+    <color name="gdd_brand_color_gay">#adacac</color>
+
+    <drawable name="title_bar">#c6c6c6</drawable>
+
+</resources>

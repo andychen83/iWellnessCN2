@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:gravity="center" >
+    <View  
+        android:id="@+id/space_view"
+        android:layout_width="wrap_content"
+    android:layout_height="20dp"
+    android:background="@color/transparent"/>
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="horizontal"
+    android:gravity="center" >
+    <com.lefu.es.view.MyTextView
+        android:id="@+id/weight_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="30sp" >
+    </com.lefu.es.view.MyTextView>
+
+    <TextView
+        android:id="@+id/unti_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="kg" />
+     </LinearLayout>
+     <TextView
+        android:id="@+id/weight_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="@string/wight_kitchen_title" />
+</LinearLayout>

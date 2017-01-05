@@ -1,0 +1,505 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="140dp"
+        android:layout_weight="0.11"
+        android:background="@drawable/title_bg"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/reviseHead"
+            android:layout_width="140.0dip"
+            android:layout_height="140.0dip"
+            android:background="@drawable/user_pic"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1.75"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:scaleY="1.5"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="@string/user_info_name"
+                    android:textColor="@color/darkgray" />
+
+                <EditText
+                    android:id="@+id/add_brith_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:hint="@string/user_info_name_tip"
+                    android:singleLine="true"
+                    android:maxLength="16"
+                    android:background="@drawable/login_editbox"
+                    android:lines="1"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scaleY="1.5"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="@string/user_info_gender"
+                    android:textColor="@color/darkgray" />
+
+                 <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/sex_male_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:checked="true"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dip"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                    <Button
+                        android:id="@+id/sex_male"
+                        android:layout_width="32dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/mand"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+                      <RadioButton
+                        android:id="@+id/sex_female_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                         android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dip"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                    <Button
+                        android:id="@+id/sex_female"
+                        android:layout_width="32dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/women"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:scaleY="1.5"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="25dip"
+                    android:background="@null"
+                    android:text="@string/user_info_unit"
+                    android:textColor="@color/darkgray" />
+
+                <RadioGroup
+                    android:id="@+id/unit_radioGourp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/add_unit_kg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dip"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="6dip"
+                        android:text="kg"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:textSize="14sp"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                    <RadioButton
+                        android:id="@+id/add_unit_ST"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dip"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="15dip"
+                        android:text="st:lb"
+                         android:scaleX="1.3"
+                        android:scaleY="1.3"
+                         android:textSize="14sp"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                    <RadioButton
+                        android:id="@+id/add_unit_lb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dip"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dip"
+                        android:text="lb"
+                         android:scaleX="1.3"
+                        android:scaleY="1.3"
+                         android:textSize="14sp"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                 android:id="@+id/birth_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:scaleY="1.5"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="@string/user_info_birthday"
+                    android:textColor="@color/darkgray" />
+
+                  <EditText
+                     android:id="@+id/add_brith_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/login_editbox"
+                    android:hint="@string/user_info_birthday_tip"
+                    android:lines="1"
+                    android:editable="false"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scaleY="1.5"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="@string/user_info_height"
+                    android:textColor="@color/darkgray" />
+
+                <EditText
+                    android:id="@+id/add_brith_height1"
+                    android:layout_width="100dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/login_editbox"
+                    android:lines="1"
+                    android:maxLength="3"
+                    android:numeric="decimal"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/heng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/add_brith_height2"
+                    android:layout_width="100dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@drawable/login_editbox"
+                    android:lines="1"
+                    android:maxLength="2"
+                    android:numeric="integer"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/add_height_danwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@null"
+                    android:hint=""
+                    android:lines="1"
+                    android:text="cm"
+                    android:textColor="@color/darkgray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:scaleY="1.5"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="@string/user_info_level"
+                    android:textColor="@color/darkgray" />
+
+                <RadioButton
+                        android:id="@+id/ordinary_btn_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:checked="true"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                <Button
+                    android:id="@+id/ordinary_btn"
+                    android:layout_width="66dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/pcommd"
+                    android:gravity="center_vertical|right" />
+                
+                 <RadioButton
+                        android:id="@+id/amateur_btn_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                <Button
+                    android:id="@+id/amateur_btn"
+                    android:layout_width="66dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/pyeyu"
+                    android:gravity="center_vertical|right"
+                    />
+                
+                 <RadioButton
+                        android:id="@+id/profess_btn_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#0fffffff"
+                        android:button="@null"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
+                        android:drawableLeft="@drawable/add_brith_xingbie"
+                        android:gravity="center_vertical"
+                        android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                <Button
+                    android:id="@+id/profess_btn"
+                    android:layout_width="66dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/pyundong"
+                    android:gravity="center_vertical|right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/taget_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/userset_line_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scaleY="1.5"
+                android:gravity="center_vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dip"
+                    android:background="@null"
+                    android:text="Target Weight: "
+                    android:textColor="@color/darkgray" />
+
+                <EditText
+                    android:id="@+id/target_edittv"
+                    android:layout_width="100dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/login_editbox"
+                    android:gravity="center"
+                    android:hint=""
+                    android:lines="1"
+                    android:maxLength="5"
+                    android:numeric="integer"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/kgheng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/target_edittv2"
+                    android:layout_width="100dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@drawable/login_editbox"
+                    android:lines="1"
+                     android:numeric="integer"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/add_taeget_danwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@null"
+                    android:hint=""
+                    android:lines="1"
+                    android:textColor="@color/darkgray"
+                    android:text="kg"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/title_bg" >
+
+        <ImageView
+            android:id="@+id/userCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.00"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/usercancle_btn_shap" />
+
+        <ImageView
+            android:id="@+id/userSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+             android:layout_gravity="center_vertical"
+            android:background="@drawable/usersave_btn_shap_next" />
+    </LinearLayout>
+
+</LinearLayout>

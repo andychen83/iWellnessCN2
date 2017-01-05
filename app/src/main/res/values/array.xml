@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="kitchenUnit">
+        <item>G</item>
+        <item>ML</item>
+        <item>LB</item>
+    </string-array>
+</resources>

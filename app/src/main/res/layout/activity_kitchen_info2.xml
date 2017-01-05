@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:background="#00a5d2"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="#43c2ea"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/btn_mback"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/back_button"
+            android:gravity="center_vertical"
+            android:onClick="onClickBack"
+            android:text="@string/back_name"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/lefu_mbtn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/logo"
+            android:onClick="openIntentate"
+            android:visibility="gone" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:paddingLeft="16dp"
+        android:paddingRight="1dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:text="@string/food_info_waring" />
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/search_btn"
+            android:layout_alignParentRight="true"
+            android:layout_width="48dp"
+            android:layout_height="30dp"
+            android:background="@drawable/search_icon"
+            android:clickable="true"
+            android:gravity="center_vertical" />
+
+        <AutoCompleteTextView
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_toLeftOf="@+id/search_btn"
+            android:layout_height="30dp"
+            android:background="@drawable/search_corners_blue_bg_normal2"
+            android:drawableLeft="@drawable/search_bar_icon_normal"
+            android:drawablePadding="8dp"
+            android:drawableRight="@drawable/search_clear"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:hint="@string/kitchen_info_name_tip"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textColor="#222222"
+            android:textColorHint="#AAAAAA"
+            android:textSize="12sp"
+            android:completionThreshold="1"
+            />
+        <!-- <com.lefu.es.view.DiseaseAutoCompleteTextView
+            android:id="@+id/search_et"
+            android:layout_width="fill_parent"
+            android:layout_toLeftOf="@+id/search_btn"
+            android:layout_height="30dp"
+            android:background="@drawable/search_corners_blue_bg_normal2"
+            android:drawableLeft="@drawable/search_bar_icon_normal"
+            android:drawablePadding="8dp"
+            android:drawableRight="@drawable/search_clear"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:hint="input food name"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textColor="#222222"
+            android:textColorHint="#AAAAAA"
+            android:textSize="14sp" >
+        </com.lefu.es.view.DiseaseAutoCompleteTextView> -->
+
+        <AutoCompleteTextView
+            android:id="@+id/weight_et"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/search_et"
+            android:layout_marginTop="10dp"
+            android:layout_height="30dp"
+            android:background="@drawable/search_corners_blue_bg_normal2"
+            android:drawablePadding="8dp"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:hint="@string/kitchen_info_tip"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:inputType="number"
+            android:singleLine="true"
+            android:textColor="#222222"
+            android:textColorHint="#AAAAAA"
+            android:textSize="14sp" >
+        </AutoCompleteTextView>
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_toRightOf="@id/weight_et"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/search_et"
+            android:layout_width="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="30dp"
+            android:background="@drawable/search_corners_blue_bg_normal2"
+            />
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_below="@id/weight_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/food_detail_title"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:gravity="center_vertical" />
+
+        <ScrollView
+            android:layout_below="@id/title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Food_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Water_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/jiujing_vol_ml_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/jiujing_vol_g_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Energ_excel_title"
+                            />
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Food_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Water_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/jiujing_vol_ml_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Energ_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Protein_excel_title"
+                            style="@style/textview_style"
+                            />
+
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Energ_kj_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Protein_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Lipid_excel_title"
+                            />
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Energ_kj_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Lipid_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Ash_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/CHO_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Dietary_Fiber_excel_title"
+                            />
+
+
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/Carbohydrt_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Fiber_excel_title"
+                            style="@style/textview_style"
+                            />
+
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Cholesterol_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Ash_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_A_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Carotene_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Retinol_excel_title"
+                            />
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Sugar_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Calcium_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Iron_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Magnesium_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Phosphorus_excel_title"
+                            style="@style/textview_style"
+                            />
+
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Thiamin_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Riboflavin_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Niacin_excel_title"
+                            />
+
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Potassium_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Sodium_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Zinc_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_C_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_E_excel_title"
+                            />
+
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/Copper_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Manganese_excel_title"
+                            style="@style/textview_style"
+                            />
+
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_aE_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_βγE_excel_title"
+                            />
+
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Selenium_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Vit_C_excel_title"
+                            style="@style/textview_style"
+                            />
+
+
+                    </TableRow>
+
+                </TableLayout>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vitamin_δE_excel_title"
+                            />
+
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Calcium_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Phosphorus_excel_title"
+                            />
+
+
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/Thiamin_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Riboflavin_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Niacin_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Potassium_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Sodium_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Magnesium_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Iron_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Zinc_excel_title"
+                            />
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Panto_Acid_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Vit_B6_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Folate_Tot_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Folic_Acid_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Food_Folate_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:visibility="visible"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Selenium_excel_title"
+                            />
+
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Copper_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Manganese_excel_title"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            style="@style/textview_style"
+                            android:text="@string/Vit_A_IU_excel_title"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            style="@style/textview_style"
+                            android:text="@string/Vit_A_RAE_excel_title"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            style="@style/textview_style"
+                            android:text="@string/Retinol_excel_title"
+                            />
+
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Folate_DFE_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/Choline_Tot_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Vit_B12_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/Vit_A_IU_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/Vit_A_RAE_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/Retinol_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/Alpha_Carot_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/Beta_Carot_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Alpha_Carot_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Beta_Carot_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Beta_Crypt_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Lycopene_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/LutZea_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vit_E_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vit_D_excel_title"
+                            />
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Beta_Crypt_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Lycopene_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/LutZea_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Vit_E_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Vit_D_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vit_D_IU_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Vit_K_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/FA_Sat_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/FA_Mono_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/FA_Poly_excel_title"
+                            />
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Vit_D_IU_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/Vit_K_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/FA_Sat_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/FA_Mono_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/FA_Poly_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    android:stretchColumns="*"
+                    >
+
+                    <TableRow >
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Cholesterol_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/GmWt_1_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/GmWt_2_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            android:text="@string/Refuse_Pct_excel_title"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/Cholesterol_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            android:id="@+id/GmWt_1_excel_title"
+                            style="@style/textview_style"
+                            />
+
+                        <TextView
+                            android:id="@+id/GmWt_2_excel_title"
+                            style="@style/textview_style"
+                            android:layout_height="match_parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/Refuse_Pct_excel_title"
+                            style="@style/textview_style"
+                            />
+                        <TextView
+                            style="@style/textview_style"
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

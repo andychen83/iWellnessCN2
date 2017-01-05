@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="100" >
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <RelativeLayout
+        android:id="@+id/scaletype_choice"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="80"
+        android:background="@drawable/scallist_corners_view" >
+
+        
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/rounded_corners_view"
+                    android:weightSum="80"
+                    android:shrinkColumns="1,2"
+                    android:stretchColumns="0,1" >
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:id="@+id/tvdetail_weight_title"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/Weightkg_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <com.lefu.es.view.MyTextView2
+            				android:id="@+id/tvdetail_weight"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_weight"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/bone_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tvdetail_bone"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_bone"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/bodyfat_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tvdetail_bodyfat"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_bf"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:textSize="24sp"
+                            android:text="@string/muscle_cloun"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tvdetail_muscle"
+                           android:textSize="24sp"
+                            android:text=""
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_mm"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/bodywater_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tvdetail_bodywater"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_bw"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                           	android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/visceral_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tvdetail_visceral"
+                           android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_vf"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/bmi_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tvdetail_bmi"
+                      		android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_bmi"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+
+                    <TableRow android:layout_width="wrap_content" android:layout_weight="10">
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="@string/bmr_cloun"
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tvdetail_bmr"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="24sp"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/iv_bmr"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            style="@style/iv_arrow" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+</LinearLayout>

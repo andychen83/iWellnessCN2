@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:weightSum="100"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_bar"
+        android:layout_weight="5"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/useredit_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="@string/user_list_edit"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/back_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/useredit_textView"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/darkgray"
+            android:layout_marginLeft="10dp"
+            android:text="@string/back_name_mark" />
+
+    </RelativeLayout>
+
+     <ListView
+            android:layout_weight="90"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollingCache="false"
+        	android:fadeScrollbars="true" 
+        	android:id="@+id/user_listview"
+        	android:divider="@drawable/xuxian"
+          >
+         
+     </ListView>
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:gravity="center_vertical" >
+
+          <ImageView
+              android:id="@+id/addphoto_imageView"
+              android:layout_width="35dp"
+              android:layout_height="35dp"
+              android:layout_alignParentLeft="true"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="16dp"
+              android:scaleType="fitXY"
+              android:src="@drawable/add_bg" />
+
+     </RelativeLayout>
+     
+</LinearLayout>

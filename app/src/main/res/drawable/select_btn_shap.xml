@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="false" android:drawable="@drawable/select_bk">
+    </item>
+    <!--点击背景-->
+    <item android:state_pressed="true" android:drawable="@drawable/selectd_bk">
+    </item>
+    <item android:state_focused="true" android:drawable="@drawable/selectd_bk">
+    </item>
+    <item android:state_selected="true" android:drawable="@drawable/selectd_bk">
+    </item>
+    <!--默认背景-->
+    <item android:drawable="@drawable/select_bk">
+	</item>
+
+</selector>

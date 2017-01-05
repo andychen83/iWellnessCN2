@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    android:background="@drawable/dialog_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/waiting_alert_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/mesuefat"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+             android:layout_marginTop="1dp"
+             android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold" />
+        
+        <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="10"
+            android:gravity="center"
+            android:orientation="horizontal" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:orientation="horizontal" >
+ 		</LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/waiting_alert_layout_2"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/error_title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+             android:layout_marginTop="30dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/mesuefat_try"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+             android:layout_marginTop="30dp"
+             android:layout_marginLeft="20dp"
+             android:layout_marginRight="20dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold" />
+        
+        </LinearLayout>
+
+         <Button
+             android:id="@+id/okBtn"
+             android:layout_width="300dp"
+             android:layout_height="40dp"
+             android:layout_alignParentBottom="true"
+             android:background="@drawable/dialog_btn_bg"
+             android:textColor="@color/white"
+             android:layout_centerHorizontal="true"
+             android:layout_marginBottom="20dp"
+             android:visibility="gone"
+             android:text="@string/ok_btn" />
+</RelativeLayout>

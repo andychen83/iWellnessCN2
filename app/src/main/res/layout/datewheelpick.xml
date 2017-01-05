@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/datepicker"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/datepicker_bg"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip"
+            android:visibility="gone"
+            android:layout_marginTop="10.0dip" >
+
+            <Button
+                android:id="@+id/ig_solar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20.0dip"
+                android:background="@drawable/whtbtn"
+                android:text="公历"
+                android:textColor="@color/white"
+                android:textSize="16.0sp" />
+
+            <Button
+                android:id="@+id/ig_lunar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20.0dip"
+                android:background="@drawable/orgbtn"
+                android:text="农历"
+                android:textColor="@color/orange"
+                android:textSize="16.0sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" >
+
+            <com.lefu.es.wheelview.WheelView
+                android:id="@+id/month"
+                android:layout_width="0.0px"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="5.0" />
+
+            <com.lefu.es.wheelview.WheelView
+                android:id="@+id/day"
+                android:layout_width="0.0px"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="5.0" />
+            
+            <com.lefu.es.wheelview.WheelView
+                android:id="@+id/year"
+                android:layout_width="0.0px"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="5.0" />
+
+            <com.lefu.es.wheelview.WheelView
+                android:id="@+id/hours"
+                android:layout_width="0.0px"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="3.0" />
+
+            <com.lefu.es.wheelview.WheelView
+                android:id="@+id/min"
+                android:layout_width="0.0px"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="3.0" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_datetime_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginTop="5.0dip"
+            android:background="@drawable/add_brith_baocun"
+            android:shadowColor="#ff000000"
+            android:shadowDx="1.0"
+            android:shadowRadius="1.0"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="20.0sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

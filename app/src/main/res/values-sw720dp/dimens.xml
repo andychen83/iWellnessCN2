@@ -1,0 +1,10 @@
+<resources>
+
+    <dimen name="activity_horizontal_margin">128dp</dimen>
+    <dimen name="chart_offset_y">20px</dimen>
+    <dimen name="chart_offset_x">38px</dimen>
+    <dimen name="chart_offset_y2">15px</dimen>
+    <dimen name="chart_offset_x2">40px</dimen>
+    <dimen name="margin_land">300dp</dimen>
+
+</resources>

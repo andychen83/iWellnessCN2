@@ -1,0 +1,8 @@
+<resources>
+
+    <dimen name="chart_offset_y">10px</dimen>
+    <dimen name="chart_offset_x">15px</dimen>
+    <dimen name="chart_offset_y2">15px</dimen>
+    <dimen name="margin_land">200dp</dimen>
+
+</resources>

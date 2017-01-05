@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/titlebg_shap"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btn_mback"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/mm_title_back_normal2"
+            android:onClick="onClickBack"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/back_name"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btn_mback"
+            android:layout_alignBottom="@+id/btn_mback"
+            android:layout_centerHorizontal="true"
+            android:text="@string/scale_detecting"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <com.lefu.es.system.SearchDevicesView
+        android:id="@+id/search_device_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_layout"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+    
+    <com.lefu.es.progressbar.NumberProgressBar
+        android:id="@+id/numberbar1"
+        style="@style/NumberProgressBar_Default"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp"
+        custom:progress_current="0" />
+</RelativeLayout>

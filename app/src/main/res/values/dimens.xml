@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="chart_offset_y">15px</dimen>
+    <dimen name="chart_offset_x">25px</dimen>
+	<dimen name="chart_offset_x2">40px</dimen>
+	<dimen name="chart_offset_y2">20px</dimen>
+	
+	 <dimen name="main_scale_btn_size">80dp</dimen>
+	 <dimen name="main_scale_btn_pad">120dp</dimen>
+	 
+	 <dimen name="dialog_four_items">480dp</dimen>
+</resources>

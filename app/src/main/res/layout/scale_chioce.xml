@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/bodyfat_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/select_btn_shap"
+         android:textColor="@color/white"
+        android:text="@string/scale_type_bobyFat" />
+
+    <Button
+        android:id="@+id/bathroom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bodyfat_button"
+        android:layout_marginTop="16dp"
+         android:background="@drawable/select_btn_shap"
+        android:textColor="@color/white"
+        android:text="@string/scale_type_bathroom" />
+    
+
+    <Button
+        android:id="@+id/babyScale_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bathroom_button"
+        android:layout_marginTop="16dp"
+         android:background="@drawable/select_btn_shap"
+        android:textColor="@color/white"
+        android:text="@string/scale_type_babyScale" />
+    
+    <Button
+        android:id="@+id/kitchenScale_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/babyScale_button"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/select_btn_shap"
+        android:textColor="@color/white"
+        android:text="@string/scale_type_kitchenScale" />
+
+   
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+
+    <dimen name="chart_offset_y">30px</dimen>
+    <dimen name="chart_offset_x">35px</dimen>
+    <dimen name="chart_offset_y2">20px</dimen>
+
+</resources>

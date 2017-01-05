@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#00a5d2"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/titlebg_shap"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btn_mback"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/mm_title_back_normal2"
+            android:onClick="onClickBack"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/back_name"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/lefu_mbtn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/logo"
+            android:onClick="openIntentate"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btn_mback"
+            android:layout_alignBottom="@+id/btn_mback"
+            android:layout_centerHorizontal="true"
+            android:text=""
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/wv_activity_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/tm"
+        android:scrollbars="none" />
+
+</LinearLayout>

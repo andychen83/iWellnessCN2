@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/chinesetw_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/select_btn_shap"
+         android:textColor="@color/white"
+        android:text="@string/langue_chinese_titie" />
+
+    <Button
+        android:id="@+id/english_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/chinesetw_button"
+        android:layout_marginTop="16dp"
+         android:background="@drawable/select_btn_shap"
+        android:textColor="@color/white"
+        android:text="@string/langue_english_titie" />
+
+</RelativeLayout>

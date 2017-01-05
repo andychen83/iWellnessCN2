@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'android.keystore'
+            keyPassword '123456'
+            storeFile file('E:/kuaipan/android.keystore')
+            storePassword '123456'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    defaultConfig {
+        applicationId "com.lefu.iwellness.newes.cn.system"
+        minSdkVersion 11
+        targetSdkVersion 21
+        //multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    //compile 'com.android.support:multidex:1.0.+'
+    compile files('libs/fastjson-1.1.31.jar')
+    compile files('libs/HTBodyfat.jar')
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:design:23.3.0'
+    compile project(':library')
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //compile 'com.github.tajchert:nammu:1.1.1'
+}

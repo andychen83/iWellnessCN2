@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="150dp"
+    android:background="@drawable/dialog_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/scale_change_title"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/scale_change_content"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="10"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/cancle_datacbtn"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_height="30dp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:background="@drawable/dialog_btn_bg"
+                android:onClick="saveOrCancle"
+                android:text="@string/Cancle_btn" />
+           
+
+            <Button
+                android:id="@+id/save_databtn"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:background="@drawable/dialog_btn_bg"
+                android:onClick="saveOrCancle"
+                android:text="@string/yes_btn" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

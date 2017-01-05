@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customDialog"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button
+        android:id="@+id/rb_setPhoto1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/select_bk"
+         android:textColor="@color/white"
+         android:textSize="24sp"
+        android:text="@string/user_photo_take" />
+    
+     <Button
+        android:id="@+id/rb_setPhoto2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rb_setPhoto1"
+        android:layout_marginTop="16dp"
+        android:textSize="24sp"
+        android:background="@drawable/select_bk"
+        android:textColor="@color/white"
+        android:text="@string/user_photo_album" />
+     
+      <Button
+        android:id="@+id/rb_setPhoto3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rb_setPhoto2"
+        android:layout_marginTop="16dp"
+        android:textSize="24sp"
+        android:background="@drawable/select_bk"
+        android:textColor="@color/white"
+        android:text="@string/Cancle_btn" />
+
+
+</RelativeLayout>

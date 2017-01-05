@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+    
+    <TextView 
+        android:id="@+id/excel_name"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/NDB_No_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Carbohydrt"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Carbohydrt_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+       android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Energ"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Energ_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Protein"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Protein_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Lipid"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Lipid_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_VitC"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Vit_C_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Fiber"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Fiber_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Cholesterol"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Cholesterol_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+       android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    <TextView 
+        android:id="@+id/excel_Calcium"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:textColor="@color/black"
+        android:text="@string/Calcium_excel_title"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="3dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        />
+    
+    
+   
+
+</LinearLayout>

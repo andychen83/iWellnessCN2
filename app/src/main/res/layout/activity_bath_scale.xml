@@ -1,0 +1,379 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="0dp"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/title_bg" >
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/username_tv"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="6dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="75dp"
+                    android:layout_height="45dp"
+                    android:layout_above="@+id/textView19"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone"
+                    android:src="@drawable/bluetooth_no" />
+
+                <TextView
+                    android:id="@+id/username_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="95dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_marginTop="25dp"
+                android:layout_height="30dp">
+                 <TextView
+                    android:id="@+id/scale_connect_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/scale_connect_state_not_connected"
+                    android:textColor="@color/darkgray"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView15"
+                    android:layout_alignBottom="@+id/textView15"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/textView15"
+                    android:text=""
+                    android:textColor="@color/darkgray"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/bathscale_bg"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:id="@+id/norecord_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/weight_contains"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="78dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/scale_no_record"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
+
+                <com.lefu.es.view.MyTextView2
+                    android:id="@+id/compare_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView16"
+                    android:layout_alignTop="@+id/textView16"
+                    android:text="0.2kg"
+                    android:textSize="12sp" >
+                </com.lefu.es.view.MyTextView2>
+
+               
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/weight_contains"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginTop="60dp"
+                    android:background="@color/transparent"
+                    android:scaleType="centerInside" >
+                </android.support.v4.view.ViewPager>
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageView2"
+                    android:layout_marginBottom="74dp"
+                    android:layout_toLeftOf="@+id/imageView2"
+                    android:layout_marginRight="10dp"
+                    android:scaleType="center"
+                    android:src="@drawable/left_to" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView3"
+                    android:layout_toRightOf="@+id/imageView2"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/right_to" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="30dp" >
+
+                          <TextView
+                            android:id="@+id/BMI_tv"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="16dp"
+                            android:gravity="right"
+                            android:text="@string/bmi_title"
+                            android:textSize="10sp" />
+
+                        <com.lefu.es.view.MyBar
+                            android:id="@+id/mybar"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_toRightOf="@+id/BMI_tv" >
+                        </com.lefu.es.view.MyBar>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_guide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="44dp" >
+
+                            <TextView
+                                android:id="@+id/tv_guide_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="0.0"
+                                android:textColor="@color/darkgray"
+                                android:textSize="11sp" />
+
+                            <ImageView
+                                android:id="@+id/guide_imageview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_guide_value"
+                                android:src="@drawable/guide" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal"
+                        android:weightSum="100" >
+
+                        <TextView
+                            android:id="@+id/tv_mhealthy"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/tv_mthin"
+                            android:layout_alignBottom="@+id/rl_imageView1"
+                            android:layout_toLeftOf="@+id/tv_mgroup"
+                            android:layout_weight="25"
+                            android:gravity="center"
+                            android:text="@string/thin"
+                            android:textColor="@color/darkgray"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_mfat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/tv_mhealthy"
+                            android:layout_alignBottom="@+id/rl_imageView1"
+                            android:layout_alignRight="@+id/textView3"
+                            android:layout_weight="30"
+                            android:gravity="center"
+                            android:text="@string/Healthy"
+                            android:textColor="@color/darkgray"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_mthin"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/rl_imageView1"
+                            android:layout_below="@+id/rl_imageView1"
+                            android:layout_weight="25"
+                            android:gravity="center"
+                            android:text="@string/Fat"
+                            android:textColor="@color/darkgray"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_moverweight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/rl_imageView1"
+                            android:layout_below="@+id/rl_imageView1"
+                            android:layout_weight="20"
+                            android:gravity="center"
+                            android:text="@string/Overweight"
+                            android:textColor="@color/darkgray"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/linearLayout1"
+                    android:layout_alignLeft="@+id/imageView2"
+                    android:layout_marginLeft="-20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/scale_weight_compare"
+                    android:textColor="@color/darkgray"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/compare_tv"
+                    android:layout_alignLeft="@+id/imageView2"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/scale_target_weight"
+                    android:textColor="@color/darkgray"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                 <com.lefu.es.view.MyTextView2
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/textView1"
+                    android:layout_toRightOf="@+id/textView1"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/darkgray"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+      
+   <ImageView
+            android:id="@+id/reviseHead"
+            android:layout_width="75.0dip"
+            android:layout_height="75.0dip"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/user_pic"
+            android:scaleType="fitXY" /> 
+    </FrameLayout>
+
+    
+   <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+   
+        <CheckBox 
+            android:id="@+id/cb_scan_device"
+            android:layout_width="30dp"
+        	android:layout_height="30dp"
+        	android:background="@drawable/scan_bluetooth_bg"
+        	android:button="@null"
+        	android:checked="false"
+            />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="42dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/info_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/info_btn_shap" />
+
+        <Button
+            android:id="@+id/seting_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/seting_btn_shap" />
+
+        <Button
+            android:id="@+id/delete_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/deletemain_btn_shap" />
+    </LinearLayout>
+
+</LinearLayout>

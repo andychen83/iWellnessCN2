@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dip"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_bg"
+   >
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="280dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:scrollbars="vertical" >
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="自定义Dialog标题"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+        <LinearLayout 
+             android:layout_width="fill_parent"
+             android:layout_height="20dip"
+         >
+            
+        </LinearLayout>
+       <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                android:gravity="center"
+                android:text="资源1："
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        <LinearLayout 
+             android:layout_width="fill_parent"
+             android:layout_height="20dip"
+         >
+            
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="36dip"
+        
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip" >
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:background="@drawable/dialog_button_active"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                 android:background="@drawable/dialog_button_active"
+                android:layout_marginLeft="20dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+       
+    </LinearLayout>
+
+</ScrollView>
