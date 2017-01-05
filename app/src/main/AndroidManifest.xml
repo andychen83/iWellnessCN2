@@ -2,31 +2,49 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lefu.iwellness.newes.cn.system"
     android:versionCode="21"
-    android:versionName="1.4" >
+    android:versionName="1.4">
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="21" />
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true" >
-    </supports-screens>
+        android:smallScreens="true"></supports-screens>
 
-    <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="21" />
+    <!-- 权限 -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name="com.lefu.es.application.IwellnessApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.lefu.es.system.LoadingActivity"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar" >
-           <intent-filter>
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,7 +52,9 @@
         <!-- BT连接服务服务 -->
         <service android:name="com.lefu.es.service.TimeService" />
         <!-- BLE连接服务服务 -->
-        <service android:name="com.lefu.es.ble.BluetoothLeService" android:enabled="true" />
+        <service
+            android:name="com.lefu.es.ble.BluetoothLeService"
+            android:enabled="true" />
 
         <activity
             android:name="com.lefu.es.system.ReceiveAlertActivity"
@@ -69,15 +89,10 @@
         <activity
             android:name="com.lefu.es.system.KitchenScaleActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-             
-        </activity>
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
         <activity
             android:name="com.lefu.es.system.KitchenInfoActivity"
-            android:screenOrientation="portrait"
-             >
-             
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.lefu.es.system.BathScaleActivity"
             android:screenOrientation="portrait"
@@ -123,20 +138,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
+        <activity android:name="com.lefu.es.system.BodyFatNewActivity"></activity>
     </application>
-
-    <!-- 权限 -->
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>

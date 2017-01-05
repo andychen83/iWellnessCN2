@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-     <string name="click_see_list">点击进入列表展示界面</string>
-     <string name="click_see_share">点击通过twitter／邮件／短信分享</string>
-    
+    <string name="click_see_list">点击进入列表展示界面</string>
+    <string name="click_see_share">点击通过twitter／邮件／短信分享</string>
+
     <string name="click_see_data">点击查看数据趋势图</string>
     <string name="waring_title">提醒</string>
     <string name="yeyu_waring_title">业余运动员：一个星期专业运动锻炼少于5天或等于五天的人。</string>
@@ -115,7 +115,7 @@
     <string name="ml_danwei">ml</string>
     <string name="ml_danwei2">ml(牛奶)</string>
     <string name="oz_danwei2">fl:oz</string>
-    
+
     <string name="scale_detecting">搜寻设备</string>
     <string name="detect_timeout_once_more">检测超时，再检测一次!</string>
     <string name="detect_timeout">没有发现设备，请按“返回”返回!</string>
@@ -131,7 +131,7 @@
     <!-- 连接状态 -->
     <string name="scale_connect_state_connected">连接状态：连接</string>
     <string name="scale_connect_state_not_connected">连接状态：未连接</string>
-    
+
     <!-- 分享导出 -->
     <string name="export_name">姓名:</string>
     <string name="export_time">时间:</string>
@@ -145,7 +145,7 @@
     <string name="export_visceral_fat">内脏脂肪:</string>
     <string name="export_bmr">基础代谢率:</string>
     <string name="export_muscle_mass">肌肉含量:</string>
-    
+
     <!-- 设置界面 -->
     <string name="scale_title">切换秤</string>
     <string name="setting_noSDCard">沒有SD卡!</string>
@@ -156,7 +156,7 @@
     <string name="langue_setting_titie">語言</string>
     <string name="langue_chinese_titie">繁体中文</string>
     <string name="langue_english_titie">English</string>
-    
+
     <!-- 用户添加或者修改 -->
     <string name="user_info_height_tip">身高必须在3ft:3in和7ft:3in之间</string>
     <string name="user_info_height_tip2">身高必须在1ft:0in和7ft:3in之间</string>
@@ -175,7 +175,7 @@
     <string name="user_info_save_error">保存用户信息错误</string>
     <string name="user_target_weight">目标体重</string>
     <string name="wight_kitchen_title">重量</string>
-    
+
     <!-- 秤主界面 -->
     <string name="scale_target_weight">目标体重:</string>
     <string name="scale_weight_compare">与上次体重相比:</string>
@@ -197,46 +197,46 @@
     <string name="kitchen_fiber">纤维:</string>
     <string name="kitchen_cholesterol">胆固醇:</string>
     <string name="kitchen_calcium">钙:</string>
-    
+
     <string name="energ_cloun">能量(kcal)</string>
-    
+
     <string name="Proteing_cloun">蛋白质(g)</string>
     <string name="Proteinlb_cloun">蛋白质(lb)</string>
     <string name="Proteinstlb_cloun">蛋白质(st:lb)</string>
-    
+
     <string name="Lipidg_cloun">脂肪(g)</string>
     <string name="Lipidlb_cloun">脂肪(lb)</string>
     <string name="Lipidstlb_cloun">脂肪(st:lb)</string>
-    
+
     <string name="Calciumg_cloun">钙(mg)</string>
     <string name="Calciumlb_cloun">钙(lb)</string>
     <string name="Calciumstlb_cloun">钙(st:lb)</string>
-    
+
     <string name="Fiberg_cloun">纤维(g)</string>
     <string name="Fiberlb_cloun">纤维(lb)</string>
     <string name="Fiberstlb_cloun">纤维(st:lb)</string>
-    
+
     <string name="Cholesterolg_cloun">胆固醇(mg)</string>
     <string name="Cholesterollb_cloun">胆固醇(lb)</string>
     <string name="Cholesterolstlb_cloun">胆固醇(st:lb)</string>
-    
+
     <string name="Vitaming_cloun">总维生素A(mg)</string>
     <string name="Vitaminlb_cloun">总维生素A(lb)</string>
     <string name="Vitaminstlb_cloun">总维生素A(st:lb)</string>
-    
+
     <string name="Carbohydrateg_cloun">碳水化合物(g)</string>
     <string name="Carbohydratelb_cloun">碳水化合物(lb)</string>
     <string name="Carbohydratestlb_cloun">碳水化合物(st:lb)</string>
     <!-- 重新检测秤 -->
     <string name="scale_change_title">重新扫描</string>
     <string name="scale_change_content">是否检测秤?</string>
-    
+
     <!-- 记录列表界面 -->
     <string name="scale_record_graph">图</string>
     <string name="scale_record_list">清单</string>
     <string name="date_title">日期</string>
     <string name="wight_gr_title">体重</string>
-    
+
     <!-- 设置界面 -->
     <string name="scale_setting_myInformation">我的信息</string>
     <string name="scale_setting_save_as">另存为</string>
@@ -244,101 +244,101 @@
     <string name="contact_us">意见反馈</string>
     <!-- 用户列表界面 -->
     <string name="user_list_edit">编辑</string>
-    
+
     <!-- 弹窗保存界面 -->
-    <string name="record_save_title">注意</string>  
-    <string name="record_save_notice">确认储存?</string>  
-    
+    <string name="record_save_title">注意</string>
+    <string name="record_save_notice">确认储存?</string>
+
     <!-- 弹窗保存界面 -->
-    <string name="scale_type_bobyFat">体脂秤</string>  
+    <string name="scale_type_bobyFat">体脂秤</string>
     <string name="scale_type_bathroom">体重秤</string>
     <string name="scale_type_babyScale">婴儿秤</string>
     <string name="scale_type_kitchenScale">营养秤</string>
-    
+
     <string name="please_select">请选择</string>
     <string name="please_select_type"></string>
-    
-     <string name="xlistview_header_hint_normal">下拉刷新</string>
+
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
     <string name="xlistview_header_hint_loading">正在刷新...</string>
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
-    
+
+
     <string name="kitchen_info_tip">100(修改)</string>
     <string name="kitchen_info_name_tip">输入食品名称</string>
     <!-- excel中列表标题 -->
     <string name="NDB_No_excel_title">姓名</string>
-    
+
     <string name="Food_excel_title">食部(%)</string>
-      
-    <string name="Water_excel_title">水(g)</string>  
-    <string name="Energ_excel_title">能量(kcal)</string>  
-    <string name="Energ_kj_excel_title">能量(kJ)</string>  
-    <string name="Protein_excel_title">蛋白质(g)</string>  
-    <string name="Lipid_excel_title">脂肪(g)</string>  
-    <string name="Ash_excel_title">灰(g)</string>  
-    
-    <string name="Carbohydrt_excel_title">糖</string>  
-    <string name="Fiber_excel_title">纤维</string>  
-    <string name="Sugar_excel_title">糖</string>  
-    <string name="Calcium_excel_title">钙(mg)</string>  
-    <string name="Iron_excel_title">铁(mg)</string>  
-    
-    <string name="Magnesium_excel_title">镁(mg)</string>  
-    <string name="Phosphorus_excel_title">磷(mg)</string>  
-    <string name="Potassium_excel_title">钾(mg)</string>  
-    <string name="Sodium_excel_title">钠(mg)</string>  
-    <string name="Zinc_excel_title">锌(mg)</string>  
-    
-    <string name="Copper_excel_title">铜(mg)</string>  
-    <string name="Manganese_excel_title">锰(mg)</string>  
-    <string name="Selenium_excel_title">硒(µg)</string>  
-    <string name="Vit_C_excel_title">維C</string>  
-    <string name="Thiamin_excel_title">硫胺素(mg)</string> 
-     
-    <string name="Riboflavin_excel_title">核黃素(mg)</string>  
-    <string name="Niacin_excel_title">尼克酸(mg)</string>  
+
+    <string name="Water_excel_title">水(g)</string>
+    <string name="Energ_excel_title">能量(kcal)</string>
+    <string name="Energ_kj_excel_title">能量(kJ)</string>
+    <string name="Protein_excel_title">蛋白质(g)</string>
+    <string name="Lipid_excel_title">脂肪(g)</string>
+    <string name="Ash_excel_title">灰(g)</string>
+
+    <string name="Carbohydrt_excel_title">糖</string>
+    <string name="Fiber_excel_title">纤维</string>
+    <string name="Sugar_excel_title">糖</string>
+    <string name="Calcium_excel_title">钙(mg)</string>
+    <string name="Iron_excel_title">铁(mg)</string>
+
+    <string name="Magnesium_excel_title">镁(mg)</string>
+    <string name="Phosphorus_excel_title">磷(mg)</string>
+    <string name="Potassium_excel_title">钾(mg)</string>
+    <string name="Sodium_excel_title">钠(mg)</string>
+    <string name="Zinc_excel_title">锌(mg)</string>
+
+    <string name="Copper_excel_title">铜(mg)</string>
+    <string name="Manganese_excel_title">锰(mg)</string>
+    <string name="Selenium_excel_title">硒(µg)</string>
+    <string name="Vit_C_excel_title">維C</string>
+    <string name="Thiamin_excel_title">硫胺素(mg)</string>
+
+    <string name="Riboflavin_excel_title">核黃素(mg)</string>
+    <string name="Niacin_excel_title">尼克酸(mg)</string>
     <string name="Panto_Acid_excel_title">该酸</string>
-    <string name="Vit_B6_excel_title">总维生素A(µgRE)</string>  
+    <string name="Vit_B6_excel_title">总维生素A(µgRE)</string>
     <string name="Folate_Tot_excel_title">叶酸TOT</string>
-      
-    <string name="Folic_Acid_excel_title">叶酸</string>  
-    <string name="Food_Folate_excel_title">食物叶酸</string>  
-    <string name="Folate_DFE_excel_title">叶酸DFE</string>  
-    <string name="Choline_Tot_excel_title">胆碱TOT</string>  
-    <string name="Vit_B12_excel_title">维他命B12</string>  
-    
-    <string name="Vit_A_IU_excel_title">维他命_A_IU</string>  
-    <string name="Vit_A_RAE_excel_title">维他命_A_RAE</string>  
-    <string name="Retinol_excel_title">视黄醇</string>  
-    <string name="Alpha_Carot_excel_title">α-胡萝卜</string>  
-    <string name="Beta_Carot_excel_title">β-胡萝卜</string>  
-    
-    <string name="Beta_Crypt_excel_title">β隐窝</string>  
-    <string name="Lycopene_excel_title">番茄紅素</string>  
-    <string name="LutZea_excel_title">Lut+Zea</string>  
-    <string name="Vit_E_excel_title">维他命E</string>  
-    <string name="Vit_D_excel_title">维他命D</string>  
-    
-    <string name="Vit_D_IU_excel_title">维他命_D_IU</string>  
-    <string name="Vit_K_excel_title">维他命_K</string>  
-    <string name="FA_Sat_excel_title">FA_Sat</string>  
-    <string name="FA_Mono_excel_title">FA_Mono</string>  
-    <string name="FA_Poly_excel_title">FA_Poly</string>  
-    
-    <string name="Cholesterol_excel_title">胆固醇(mg)</string>    
+
+    <string name="Folic_Acid_excel_title">叶酸</string>
+    <string name="Food_Folate_excel_title">食物叶酸</string>
+    <string name="Folate_DFE_excel_title">叶酸DFE</string>
+    <string name="Choline_Tot_excel_title">胆碱TOT</string>
+    <string name="Vit_B12_excel_title">维他命B12</string>
+
+    <string name="Vit_A_IU_excel_title">维他命_A_IU</string>
+    <string name="Vit_A_RAE_excel_title">维他命_A_RAE</string>
+    <string name="Retinol_excel_title">视黄醇</string>
+    <string name="Alpha_Carot_excel_title">α-胡萝卜</string>
+    <string name="Beta_Carot_excel_title">β-胡萝卜</string>
+
+    <string name="Beta_Crypt_excel_title">β隐窝</string>
+    <string name="Lycopene_excel_title">番茄紅素</string>
+    <string name="LutZea_excel_title">Lut+Zea</string>
+    <string name="Vit_E_excel_title">维他命E</string>
+    <string name="Vit_D_excel_title">维他命D</string>
+
+    <string name="Vit_D_IU_excel_title">维他命_D_IU</string>
+    <string name="Vit_K_excel_title">维他命_K</string>
+    <string name="FA_Sat_excel_title">FA_Sat</string>
+    <string name="FA_Mono_excel_title">FA_Mono</string>
+    <string name="FA_Poly_excel_title">FA_Poly</string>
+
+    <string name="Cholesterol_excel_title">胆固醇(mg)</string>
     <string name="GmWt_1_excel_title">GmWt_1</string>
     <string name="GmWt_2_excel_title">GmWt_2</string>
     <string name="Refuse_Pct_excel_title">Refuse_Pct</string>
-    
-    
+
+
     <string name="jiujing_vol_ml_excel_title">酒精(ml)</string>
     <string name="jiujing_vol_g_excel_title">酒精(g)</string>
     <string name="CHO_excel_title">碳水化合物 (g)</string>
     <string name="Dietary_Fiber_excel_title">不溶性纤维(g)</string>
-    
+
     <string name="Vitamin_A_excel_title">总维生素A(ug)</string>
     <string name="Carotene_excel_title">胡萝卜素(µg)</string>
     <string name="Vitamin_C_excel_title">维生素C(mg)</string>
@@ -346,12 +346,12 @@
     <string name="Vitamin_aE_excel_title">维生素a-E(µg)</string>
     <string name="Vitamin_βγE_excel_title">维生素(β+γ)-E(mg)</string>
     <string name="Vitamin_δE_excel_title">维生素δ-E(mg)</string>
-    
-   <!-- info -->
-   <string name="food_detail_title">详细的食品配料:</string>
-   <string name="default_spinner_hint">g</string>
-   <string name="i_know">我知道了</string>
-   <string name="keep_stand_with_bare_feet">请光脚上秤</string>
+
+    <!-- info -->
+    <string name="food_detail_title">详细的食品配料:</string>
+    <string name="default_spinner_hint">g</string>
+    <string name="i_know">我知道了</string>
+    <string name="keep_stand_with_bare_feet">请光脚上秤</string>
 
     <string name="permission_blurtooth">Need to start blurtooth</string>
     <string name="permission_carame">Need to start camera</string>
