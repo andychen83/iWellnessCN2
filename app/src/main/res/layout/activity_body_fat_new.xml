@@ -16,15 +16,137 @@
         >
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/main_ly"
-        android:layout_below="@id/title_ly"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_scale_btn_pad2"
         android:background="@color/white"
-        >
+        android:layout_below="@+id/title_ly"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
+        <RelativeLayout
+            android:id="@+id/weight_circle"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/blue_circle"
+            android:gravity="center"
+            android:layout_width="140dp"
+            android:layout_height="140dp">
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="体重"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/weith_value_tx"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:text="55.5kg"
+                    android:textSize="24sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/weith_status"
+                    android:text="正常"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bmi_circle"
+            android:layout_toLeftOf="@id/weight_circle"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/blue_circle"
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:layout_height="90dp">
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="BMI"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/bmi_value_tx"
+                    android:layout_marginTop="3dp"
+                    android:text="20"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/bmi_status"
+                    android:text="正常"
+                    android:layout_marginTop="3dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/visal_circle"
+            android:layout_toRightOf="@id/weight_circle"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/blue_circle"
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:layout_height="90dp">
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="体脂率"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/visal_value_tx"
+                    android:layout_marginTop="3dp"
+                    android:text="30"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/visal_status"
+                    android:text="正常"
+                    android:layout_marginTop="3dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/bluetooth_ly"
         android:layout_below="@id/main_ly"
@@ -59,16 +181,7 @@
         android:layout_height="@dimen/bottom_bar_height">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="match_parent">
-            <ImageView
-                android:background="@drawable/history_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-
-        <RelativeLayout
+            android:background="@drawable/history_menu"
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="match_parent">
@@ -76,6 +189,15 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:background="@drawable/setting_menu"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/harmbaby"
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="match_parent">
@@ -83,6 +205,11 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+
+
+
+
 
 
 
@@ -108,4 +235,5 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+
 </RelativeLayout>

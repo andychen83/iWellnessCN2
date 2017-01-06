@@ -58,6 +58,8 @@
     <color name="gdd_brand_color_gay_pressed">#E0adacac</color>
     <color name="gdd_brand_color_gay">#adacac</color>
 
+    <color name="main_text_color">#7F7F7F</color>
+
     <drawable name="title_bar">#c6c6c6</drawable>
 
 </resources>
