@@ -6,6 +6,8 @@
 
     <dimen name="title_bar_height">48dp</dimen>
 
+    <dimen name="bottom_bar_height">36dp</dimen>
+
     <dimen name="chart_offset_y">15px</dimen>
     <dimen name="chart_offset_x">25px</dimen>
     <dimen name="chart_offset_x2">40px</dimen>
