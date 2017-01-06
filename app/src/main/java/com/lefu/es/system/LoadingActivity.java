@@ -35,7 +35,7 @@ public class LoadingActivity extends Activity {
 		setContentView(R.layout.activity_loading);
 		mainActivty = this;
 		
-		isPad();
+		//isPad();
 		
 		UtilConstants.su = new SharedPreferencesUtil(LoadingActivity.this);
 //		UtilConstants.FIRST_INSTALL_BODY = (String) UtilConstants.su.readbackUp("lefuconfig", "first_install_body","");

@@ -13,7 +13,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.lefu.iwellness.newes.cn.system"
-        minSdkVersion 11
+        minSdkVersion 18
         targetSdkVersion 21
         //multiDexEnabled true
     }

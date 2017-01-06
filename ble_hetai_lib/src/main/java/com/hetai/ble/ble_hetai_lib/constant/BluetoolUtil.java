@@ -24,6 +24,7 @@ public class BluetoolUtil {
 	public static final int FOUND_DEVICE = 101;
 	public static final int RECEIVE_DATA = 102;
 	public static final int CLEARALL_DATA = 103;
+	public static final int DESCIVE_SERVICE = 104;
 
 	public static final String ELECTRONIC_SCALE="Electronic Scale";
 	

@@ -359,6 +359,9 @@
     <string name="permission_write_storage_rationale">Need to store permissions when taking pictures</string>
     <string name="permission_title_rationale">Authority requirement</string>
 
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+
     <string name="milk_title">牛奶</string>
     <string name="food_info_waring">通过简单地输入食物的名称及其重量，分析超过9000种不同食物的营养素</string>
     <string name="age_error1">选择您的生日</string>
