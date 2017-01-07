@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.ble.BluetoothLeService;
+import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.BLEConstant;
 import com.lefu.es.constant.BluetoolUtil;
@@ -47,6 +48,7 @@ import com.lefu.es.service.UserService;
 import com.lefu.es.util.MyUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
+import com.lefu.es.util.ToastUtils;
 import com.lefu.iwellness.newes.cn.system.R;
 
 /**
@@ -111,20 +113,7 @@ public class AutoBLEActivity extends BaseBleActivity {
 		}
 	}
 
-	@Override
-	public void updateConnectionState(int resourceId) {
 
-	}
-
-	@Override
-	public void discoverBleService() {
-
-	}
-
-	@Override
-	public void reveiveBleData(String data) {
-
-	}
 
 	/**点击事件*/
 	View.OnClickListener OnClickListener = new View.OnClickListener() {
@@ -228,235 +217,186 @@ public class AutoBLEActivity extends BaseBleActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	@Override
+	public void updateConnectionState(int resourceId) {
+
+	}
+
+	@Override
+	public void discoverBleService() {
+		ToastUtils.ToastCenter(AutoBLEActivity.this, getString(R.string.scale_paired_success));
+		//发送人体参数
+		if(null!= mDeviceName && (mDeviceName.toLowerCase().startsWith("heal")
+				|| mDeviceName.toLowerCase().startsWith("yu"))){
+
+			try {
+				if(null!=mBluetoothLeService){
+					final BluetoothGattCharacteristic characteristic = mBluetoothLeService.getCharacteristicNew(mBluetoothLeService.getSupportedGattServices(), "2a9c");
+					mBluetoothLeService.setCharacteristicIndaicate(characteristic, true); //开始监听通道
+					//发送用户组数据
+					String unit = "00";
+					if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+						unit = "02";
+					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)) {
+						unit = "01";
+					} else {
+						unit = "00";
+					}
+					// 获取用户组
+					String p = UtilConstants.CURRENT_USER.getGroup().replace("P", "0");
+					// 获取 校验位
+					String xor = Integer.toHexString(StringUtils.hexToTen("fd") ^ StringUtils.hexToTen("37")^ StringUtils.hexToTen(unit) ^ StringUtils.hexToTen(p));
+					Log.e(TAG, "发送新称数据：" + "fd37"+unit + p + "000000000000" + xor);
+					// 发送数据
+					BleHelper1.getInstance().sendDateToScale(mBluetoothLeService,"fd37"+unit + p + "000000000000" + xor);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			BleHelper1.getInstance().sendDateToScale(mBluetoothLeService,MyUtil.getUserInfo());
+		}
+
+	}
+
+	@Override
+	public void reveiveBleData(String readMessage) {
+		System.out.println("检测读取到数据：" + readMessage);
+		if(TextUtils.isEmpty(readMessage)) return;
+		if (readMessage.startsWith(UtilConstants.BABY_SCALE)) {
+			if (UtilConstants.CURRENT_USER.getAgeYear() < 1 || UtilConstants.CURRENT_USER.getBheigth()<30) {
+				if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
+					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_5), Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_7), Toast.LENGTH_SHORT).show();
+				}
+
+				return;
+			}
+		}else{
+			if (UtilConstants.CURRENT_USER.getAgeYear() < 10 || UtilConstants.CURRENT_USER.getBheigth()<100) {
+				if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
+					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_4), Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_6), Toast.LENGTH_SHORT).show();
+				}
+				return;
+			}
+		}
+		boolean newScale = false;
+		try {
+			if ((readMessage.startsWith("0306"))) {//阿里秤
+				newScale = true;
+				UtilConstants.CURRENT_SCALE = UtilConstants.BODY_SCALE;
+			}else{
+				newScale = false;
+				//测脂错误
+				if (readMessage.equals(UtilConstants.ERROR_CODE)) {
+					if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)){
+						Toast.makeText(AutoBLEActivity.this, getString(R.string.user_data_error), Toast.LENGTH_LONG).show();
+					}else{
+						Toast.makeText(AutoBLEActivity.this, getString(R.string.user_data_error_lb), Toast.LENGTH_LONG).show();
+					}
+					return;
+				} else if (readMessage.equals(UtilConstants.ERROR_CODE_TEST)) {
+					Toast.makeText(AutoBLEActivity.this, getString(R.string.scale_measurement_error), Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				/** 称类型判断 */
+				String choice_scale = "";
+				if ((readMessage.toLowerCase().startsWith(UtilConstants.BODY_SCALE))) {
+					choice_scale = UtilConstants.BODY_SCALE;
+				}else if ((readMessage.toLowerCase().startsWith(UtilConstants.BATHROOM_SCALE))) {
+					choice_scale = UtilConstants.BATHROOM_SCALE;
+				}else if ((readMessage.toLowerCase().startsWith(UtilConstants.BABY_SCALE))) {
+					choice_scale = UtilConstants.BABY_SCALE;
+				}else if ((readMessage.toLowerCase().startsWith(UtilConstants.KITCHEN_SCALE))) {
+					choice_scale = UtilConstants.KITCHEN_SCALE;
+				}
+				UtilConstants.CURRENT_SCALE = choice_scale;
+			}
+			if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith("dl")){ //新的DL Scale
+				//CF 88 13 00 14 00 00 00 00 00 40
+				if(RecordDao.isLockData(readMessage)){
+                    /*是否是重新检测*/
+					Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
+					UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+					if(reCheck==null||!reCheck){
+							/*添加用户信息*/
+						try {
+							uservice.save(UtilConstants.CURRENT_USER);
+							UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
+							UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+							UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
+							UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}else{
+							/*更新用户信息*/
+						try {
+							uservice.update(UtilConstants.CURRENT_USER);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					RecordDao.parseDLScaleMeaage(recordService,readMessage, UtilConstants.CURRENT_USER);
+					handler.sendEmptyMessage(2);
+				}
+			}else{
+				/**判断是不是两次连续的数据*/
+				if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+					UtilConstants.receiveDataTime=System.currentTimeMillis();
+
+					scaleType= UtilConstants.CURRENT_SCALE;
+					UtilConstants.su.editSharedPreferences("lefuconfig", "scale", UtilConstants.CURRENT_SCALE);
+
+					/*是否是重新检测*/
+					Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
+					UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+					if(reCheck==null||!reCheck){
+							/*添加用户信息*/
+						try {
+							uservice.save(UtilConstants.CURRENT_USER);
+							UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
+							UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+							UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
+							UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}else{
+							/*更新用户信息*/
+						try {
+							uservice.update(UtilConstants.CURRENT_USER);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+						/*保存蓝牙类型*/
+					UtilConstants.su.editSharedPreferences("lefuconfig", "bluetooth_type"+ UtilConstants.CURRENT_USER.getId(), "BLE");
+					if (readMessage.toLowerCase().startsWith(UtilConstants.KITCHEN_SCALE)) {
+						RecordDao.dueKitchenDate(recordService, readMessage, null);
+					}else{
+						if(newScale){
+							UtilConstants.CURRENT_USER.setScaleType(UtilConstants.BODY_SCALE);
+							RecordDao.parseZuKangMeaage(recordService,readMessage, UtilConstants.CURRENT_USER);
+						}else{
+							RecordDao.dueDate(recordService,readMessage);
+						}
+					}
+					handler.sendEmptyMessage(2);
+				}
+			}
+
+		} catch (Exception e) {
+			Log.e(TAG, "解析数据异常"+e.getMessage());
+		}
+	}
 
 
-	/** 数据发送接收 */
-//	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			final String action = intent.getAction();
-//			if (BLEConstant.ACTION_GATT_CONNECTED.equals(action)) {
-//				singleton.setmConnected(true);
-//			} else if (BLEConstant.ACTION_GATT_DISCONNECTED.equals(action)) {
-//			} else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-//				sendCodeCount = 0;
-//				isConneced=true;
-//				/* 提示连接成功 */
-//				Toast tost = Toast.makeText(AutoBLEActivity.this, getString(R.string.scale_paired_success), Toast.LENGTH_SHORT);
-//				tost.setGravity(Gravity.CENTER, 0, 0);
-//				tost.show();
-//				//Toast.makeText(AutoBLEActivity.this, getString(R.string.scale_paired_success), Toast.LENGTH_SHORT).setGravity(Gravity.CENTER, 0, 0).show();
-//				Toast tost1 = Toast.makeText(AutoBLEActivity.this, getString(R.string.scale_paired_success), Toast.LENGTH_SHORT);
-//				tost1.setGravity(Gravity.CENTER, 0, 0);
-//				tost1.show();
-//				Thread thread = new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (singleton.getmConnected()) {
-//							if (mBluetoothLeService != null) {
-//								send_data();
-//							}
-//						}
-//					}
-//				});
-//				thread.start();
-//			} else if (BLEConstant.ACTION_DATA_AVAILABLE.equals(action)) {
-//				String readMessage = intent.getStringExtra(BLEConstant.EXTRA_DATA);
-//				System.out.println("检测读取到数据：" + readMessage);
-//				if(TextUtils.isEmpty(readMessage)) return;
-//				if (readMessage.startsWith(UtilConstants.BABY_SCALE)) {
-//					if (UtilConstants.CURRENT_USER.getAgeYear() < 1 || UtilConstants.CURRENT_USER.getBheigth()<30) {
-//						if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-//							Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_5), Toast.LENGTH_SHORT).show();
-//						}else{
-//							Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_7), Toast.LENGTH_SHORT).show();
-//						}
-//
-//						return;
-//					}
-//				}else{
-//					if (UtilConstants.CURRENT_USER.getAgeYear() < 10 || UtilConstants.CURRENT_USER.getBheigth()<100) {
-//						if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-//							Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_4), Toast.LENGTH_SHORT).show();
-//						}else{
-//							Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_6), Toast.LENGTH_SHORT).show();
-//						}
-//						return;
-//					}
-//				}
-//				boolean newScale = false;
-//				try {
-//					if ((readMessage.startsWith("0306"))) {
-//						newScale = true;
-//						UtilConstants.CURRENT_SCALE = UtilConstants.BODY_SCALE;
-//					}else{
-//						newScale = false;
-//						if (readMessage.equals(UtilConstants.ERROR_CODE)) {
-//							if (sendCodeCount <1) {
-//								if (mBluetoothLeService != null) {
-//									send_data();
-//								}
-//								sendCodeCount++;
-//							} else {
-//								if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)){
-//									Toast.makeText(AutoBLEActivity.this, getString(R.string.user_data_error), Toast.LENGTH_LONG).show();
-//								}else{
-//									Toast.makeText(AutoBLEActivity.this, getString(R.string.user_data_error_lb), Toast.LENGTH_LONG).show();
-//								}
-//
-//								//Toast.makeText(AutoBLEActivity.this, getString(R.string.user_data_error), Toast.LENGTH_LONG).show();
-//							}
-//						} else if (readMessage.equals(UtilConstants.ERROR_CODE_TEST)) {
-//							Toast.makeText(AutoBLEActivity.this, getString(R.string.scale_measurement_error), Toast.LENGTH_LONG).show();
-//						}
-//
-//						/** 称类型判断 */
-//						String choice_scale = "";
-//						if ((readMessage.toLowerCase().startsWith(UtilConstants.BODY_SCALE) && readMessage.length() > 31)) {
-//							choice_scale = UtilConstants.BODY_SCALE;
-//						}else if ((readMessage.toLowerCase().startsWith(UtilConstants.BATHROOM_SCALE) && readMessage.length() > 31)) {
-//							choice_scale = UtilConstants.BATHROOM_SCALE;
-//						}else if ((readMessage.toLowerCase().startsWith(UtilConstants.BABY_SCALE) && readMessage.length() > 31)) {
-//							choice_scale = UtilConstants.BABY_SCALE;
-//						}else if ((readMessage.toLowerCase().startsWith(UtilConstants.KITCHEN_SCALE) && readMessage.length() > 31)) {
-//							choice_scale = UtilConstants.KITCHEN_SCALE;
-//						}
-//						UtilConstants.CURRENT_SCALE = choice_scale;
-//					}
-//
-//
-//					/**判断是不是两次连续的数据*/
-//					if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
-//						UtilConstants.receiveDataTime=System.currentTimeMillis();
-//
-//						scaleType= UtilConstants.CURRENT_SCALE;
-//						UtilConstants.su.editSharedPreferences("lefuconfig", "scale", UtilConstants.CURRENT_SCALE);
-//
-//						/*是否是重新检测*/
-//						Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
-//						UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
-//						if(reCheck==null||!reCheck){
-//							/*添加用户信息*/
-//							try {
-//								uservice.save(UtilConstants.CURRENT_USER);
-//								UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
-//								UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
-//								UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
-//								UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}else{
-//							/*更新用户信息*/
-//							try {
-//								uservice.update(UtilConstants.CURRENT_USER);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}
-//						/*保存蓝牙类型*/
-//						UtilConstants.su.editSharedPreferences("lefuconfig", "bluetooth_type"+ UtilConstants.CURRENT_USER.getId(), "BLE");
-//						if (readMessage.toLowerCase().startsWith(UtilConstants.KITCHEN_SCALE)) {
-//							RecordDao.dueKitchenDate(recordService, readMessage, null);
-//						}else{
-//							if(newScale){
-//								UtilConstants.CURRENT_USER.setScaleType(UtilConstants.BODY_SCALE);
-//								RecordDao.parseZuKangMeaage(recordService,readMessage, UtilConstants.CURRENT_USER);
-//							}else{
-//								RecordDao.dueDate(recordService,readMessage);
-//							}
-//						}
-//						handler.sendEmptyMessage(2);
-//					}
-//				} catch (Exception e) {
-//					Log.e(TAG, "解析数据异常"+e.getMessage());
-//				}
-//
-//			}
-//		}
-//	};
-//
-//	/** 发送数据*/
-//	private void send_data() {
-//		System.out.println("蓝牙名称:" + BluetoolUtil.mConnectedDeviceName);
-//		if(null!= BluetoolUtil.mConnectedDeviceName && (BluetoolUtil.mConnectedDeviceName.toLowerCase().startsWith("heal")
-//				|| BluetoolUtil.mConnectedDeviceName.toLowerCase().startsWith("yu"))){
-//
-//			try {
-//				if(null!=mBluetoothLeService){
-//					final BluetoothGattCharacteristic characteristic = mBluetoothLeService.getCharacteristicNew(mBluetoothLeService.getSupportedGattServices(), "2a9c");
-//					mBluetoothLeService.setCharacteristicIndaicate(characteristic, true); //开始监听通道
-//					//发送用户组数据
-//					String unit = "00";
-//					if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
-//						unit = "02";
-//					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)) {
-//						unit = "01";
-//					} else {
-//						unit = "00";
-//					}
-//					// 获取用户组
-//					String p = UtilConstants.CURRENT_USER.getGroup().replace("P", "0");
-//					// 获取 校验位
-//					String xor = Integer.toHexString(StringUtils.hexToTen("fd") ^ StringUtils.hexToTen("37")^ StringUtils.hexToTen(unit) ^ StringUtils.hexToTen(p));
-//					Log.e(TAG, "发送新称数据：" + "fd37"+unit + p + "000000000000" + xor);
-//					// 发送数据
-//					sendDateToScale1("fd37"+unit + p + "000000000000" + xor);
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}else{
-//			sendDateToScale1(MyUtil.getUserInfo());
-//		}
-//	}
-//
-//	private void sendDateToScale1(String data) {
-//		sendDateToScale(data);
-//	}
-//
-//
-//	private void sendDateToScale(String data) {
-//		final BluetoothGattCharacteristic characteristic2 = mBluetoothLeService.getCharacteristic(mBluetoothLeService.getSupportedGattServices(), "fff4");
-//		if (characteristic2 != null) {
-//			mBluetoothLeService.setCharacteristicNotification(characteristic2, true);
-//		}
-//		try {
-//			Thread.sleep(300);
-//
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		final BluetoothGattCharacteristic characteristic = mBluetoothLeService.getCharacteristic(mBluetoothLeService.getSupportedGattServices(), "fff1");
-//		if (characteristic != null) {
-//			final byte[] dataArray = StringUtils.hexStringToByteArray(data);
-//			characteristic.setValue(dataArray);
-//			mBluetoothLeService.wirteCharacteristic(characteristic);
-//			characteristic.getProperties();
-//		}
-//		try {
-//			Thread.sleep(500);
-//
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		//final BluetoothGattCharacteristic characteristic = mBluetoothLeService.getCharacteristic(mBluetoothLeService.getSupportedGattServices(), "fff1");
-//		if (characteristic != null) {
-//			final byte[] dataArray = StringUtils.hexStringToByteArray(data);
-//			characteristic.setValue(dataArray);
-//			mBluetoothLeService.wirteCharacteristic(characteristic);
-//			characteristic.getProperties();
-//		}
-//	}
-//
-//	/** 休眠 */
-//	private void sleep(long time) {
-//		try {
-//			Thread.sleep(time);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 
 	/** 超时检测线程 */
 	private Runnable TimeoutRunnable = new Runnable() {
