@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+
 import com.lefu.iwellness.newes.cn.system.R;
 
 /*人体秤
