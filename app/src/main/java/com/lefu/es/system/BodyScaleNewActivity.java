@@ -1,5 +1,6 @@
 package com.lefu.es.system;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -7,7 +8,7 @@ import com.lefu.iwellness.newes.cn.system.R;
 
 /*人体秤
 * */
-public class BodyScaleNewActivity extends AppCompatActivity {
+public class BodyScaleNewActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
