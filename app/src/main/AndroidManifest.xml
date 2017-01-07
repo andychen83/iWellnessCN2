@@ -142,10 +142,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
 
-        <activity
-            android:name="com.lefu.es.system.BodyScaleNewActivity"
+
+        <activity android:name="com.lefu.es.system.BodyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
 
         </activity>
     </application>
