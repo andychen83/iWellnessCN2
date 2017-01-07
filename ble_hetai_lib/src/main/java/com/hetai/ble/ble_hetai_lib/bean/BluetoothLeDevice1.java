@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.hetai.ble.ble_hetai_lib.utils.ByteUtils;
+import com.hetai.ble.ble_hetai_lib.utils.ByteUtils1;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import java.util.Map;
  * 作者: andy on 2016/11/9.
  * 作用:
  */
-public class BluetoothLeDevice implements Parcelable {
+public class BluetoothLeDevice1 implements Parcelable {
     private static final String PARCEL_EXTRA_BLUETOOTH_DEVICE = "bluetooth_device";
     private static final String PARCEL_EXTRA_CURRENT_RSSI = "current_rssi";
     private static final String PARCEL_EXTRA_CURRENT_TIMESTAMP = "current_timestamp";
@@ -36,13 +36,13 @@ public class BluetoothLeDevice implements Parcelable {
     private long mCurrentTimestamp;
 
     /** The Constant CREATOR. */
-    public static final Creator<BluetoothLeDevice> CREATOR = new Creator<BluetoothLeDevice>() {
-        public BluetoothLeDevice createFromParcel(Parcel in) {
-            return new BluetoothLeDevice(in);
+    public static final Creator<BluetoothLeDevice1> CREATOR = new Creator<BluetoothLeDevice1>() {
+        public BluetoothLeDevice1 createFromParcel(Parcel in) {
+            return new BluetoothLeDevice1(in);
         }
 
-        public BluetoothLeDevice[] newArray(int size) {
-            return new BluetoothLeDevice[size];
+        public BluetoothLeDevice1[] newArray(int size) {
+            return new BluetoothLeDevice1[size];
         }
     };
 
@@ -54,12 +54,12 @@ public class BluetoothLeDevice implements Parcelable {
      * @param scanRecord the scan record of the device
      * @param timestamp the timestamp of the RSSI reading
      */
-    public BluetoothLeDevice(BluetoothDevice device, int rssi, byte[] scanRecord, long timestamp){
+    public BluetoothLeDevice1(BluetoothDevice device, int rssi, byte[] scanRecord, long timestamp){
         mDevice = device;
         mFirstRssi = rssi;
         mFirstTimestamp = timestamp;
         mScanRecord = scanRecord;
-        mRssiLog = new LimitedLinkHashMap<Long, Integer>(MAX_RSSI_LOG_SIZE);
+        mRssiLog = new LimitedLinkHashMap1<Long, Integer>(MAX_RSSI_LOG_SIZE);
         updateRssiReading(timestamp, rssi);
     }
 
@@ -68,7 +68,7 @@ public class BluetoothLeDevice implements Parcelable {
      *
      * @param device the device
      */
-    public BluetoothLeDevice(BluetoothLeDevice device) {
+    public BluetoothLeDevice1(BluetoothLeDevice1 device) {
         mCurrentRssi = device.getRssi();
         mCurrentTimestamp = device.getTimestamp();
         mDevice = device.getDevice();
@@ -84,7 +84,7 @@ public class BluetoothLeDevice implements Parcelable {
      * @param in the in
      */
     @SuppressWarnings("unchecked")
-    protected BluetoothLeDevice(Parcel in) {
+    protected BluetoothLeDevice1(Parcel in) {
         final Bundle b = in.readBundle(getClass().getClassLoader());
 
         mCurrentRssi = b.getInt(PARCEL_EXTRA_CURRENT_RSSI, 0);
@@ -133,7 +133,7 @@ public class BluetoothLeDevice implements Parcelable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        BluetoothLeDevice other = (BluetoothLeDevice) obj;
+        BluetoothLeDevice1 other = (BluetoothLeDevice1) obj;
         if (mCurrentRssi != other.mCurrentRssi)
             return false;
         if (mCurrentTimestamp != other.mCurrentTimestamp)
@@ -181,7 +181,7 @@ public class BluetoothLeDevice implements Parcelable {
      * @return the bluetooth device class name
      */
     public String getBluetoothDeviceClassName(){
-        return BluetoothClassResolver.resolveDeviceClass(mDevice.getBluetoothClass().getDeviceClass());
+        return BluetoothClassResolver1.resolveDeviceClass(mDevice.getBluetoothClass().getDeviceClass());
     }
 
     /**
@@ -310,7 +310,7 @@ public class BluetoothLeDevice implements Parcelable {
      */
     @Override
     public String toString() {
-        return "BluetoothLeDevice [mDevice=" + mDevice + ", mRssi=" + mFirstRssi + ", mScanRecord=" + ByteUtils.byteArrayToHexString(mScanRecord) + ", getBluetoothDeviceBondState()=" + getBluetoothDeviceBondState() + ", getBluetoothDeviceClassName()=" + getBluetoothDeviceClassName() + "]";
+        return "BluetoothLeDevice1 [mDevice=" + mDevice + ", mRssi=" + mFirstRssi + ", mScanRecord=" + ByteUtils1.byteArrayToHexString(mScanRecord) + ", getBluetoothDeviceBondState()=" + getBluetoothDeviceBondState() + ", getBluetoothDeviceClassName()=" + getBluetoothDeviceClassName() + "]";
     }
 
     /**

@@ -15,7 +15,7 @@ android {
         applicationId "com.lefu.iwellness.newes.cn.system"
         minSdkVersion 18
         targetSdkVersion 21
-        //multiDexEnabled true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -45,7 +45,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
-    //compile 'com.android.support:multidex:1.0.+'
+    compile 'com.android.support:multidex:1.0.+'
     compile files('libs/fastjson-1.1.31.jar')
     compile files('libs/HTBodyfat.jar')
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -54,5 +54,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
     //compile 'com.github.tajchert:nammu:1.1.1'
-    compile project(':ble_hetai_lib')
 }

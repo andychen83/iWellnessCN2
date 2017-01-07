@@ -1,6 +1,7 @@
-package com.hetai.ble.ble_hetai_lib.utils;
+package com.lefu.es.blenew.utils;
 
-import com.hetai.ble.ble_hetai_lib.bean.BleAdvertisedData;
+import com.lefu.es.blenew.bean.BleAdvertisedData1;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,12 +15,12 @@ import java.util.UUID;
  * 2016-10-26
  *
  */
-final public class BleUtil {
-	public static BleAdvertisedData parseAdertisedData(byte[] advertisedData) {
+final public class BleUtil1 {
+	public static BleAdvertisedData1 parseAdertisedData(byte[] advertisedData) {
 		List<UUID> uuids = new ArrayList<UUID>();
 		String name = null;
 		if (advertisedData == null) {
-			return new BleAdvertisedData(uuids, name);
+			return new BleAdvertisedData1(uuids, name);
 		}
 
 		ByteBuffer buffer = ByteBuffer.wrap(advertisedData).order(ByteOrder.LITTLE_ENDIAN);
@@ -60,6 +61,6 @@ final public class BleUtil {
 					break;
 			}
 		}
-		return new BleAdvertisedData(uuids, name);
+		return new BleAdvertisedData1(uuids, name);
 	}
 }

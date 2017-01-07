@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.service;
+package com.lefu.es.blenew.service;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -6,10 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.hetai.ble.ble_hetai_lib.bean.BleAdvertisedData1;
-import com.hetai.ble.ble_hetai_lib.bean.BluetoothLeDevice1;
-import com.hetai.ble.ble_hetai_lib.constant.BluetoolUtil1;
-import com.hetai.ble.ble_hetai_lib.utils.BleUtil1;
+import com.lefu.es.blenew.bean.BleAdvertisedData1;
+import com.lefu.es.blenew.bean.BluetoothLeDevice1;
+import com.lefu.es.blenew.constant.BluetoolUtil1;
+import com.lefu.es.blenew.utils.BleUtil1;
 
 /**
  * 作者: andy on 2016/11/9.

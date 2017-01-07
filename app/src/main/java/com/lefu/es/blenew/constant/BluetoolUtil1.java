@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.constant;
+package com.lefu.es.blenew.constant;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,7 +12,7 @@ import java.util.Set;
  * @author andy
  * 2016-10-26
  */
-public class BluetoolUtil {
+public class BluetoolUtil1 {
 	// Message types sent from the BluetoothChatService Handler
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;

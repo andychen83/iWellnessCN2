@@ -59,8 +59,6 @@ public class AutoBLEActivity extends BaseBleActivity {
 	private Button backButton;
 	//private BlueSingleton singleton;
 	private static final int REQUEST_ENABLE_BT_CLICK = 31;
-	//private BluetoothLeService mBluetoothLeService;
-	//private BluetoothAdapter mBluetoothAdapter;
 	private boolean isServiceReg = false; // mServiceConnection是否已绑定
 	private static boolean receiverReleased = false; // mGattUpdateReceiver是否已释放注册
 	private RecordService recordService;

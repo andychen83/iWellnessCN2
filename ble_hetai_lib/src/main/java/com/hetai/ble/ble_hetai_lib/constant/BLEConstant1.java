@@ -5,7 +5,7 @@ package com.hetai.ble.ble_hetai_lib.constant;
  * @author andy
  * 2016-10-26
  */
-public class BLEConstant {
+public class BLEConstant1 {
 	/**GATT连接成功*/
 	public final static String ACTION_GATT_CONNECTED = "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
 	/**GATT断开连接*/

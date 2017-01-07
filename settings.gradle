@@ -1,1 +1,1 @@
-include ':app', ':library', ':ble_hetai_lib'
+include ':app', ':library'

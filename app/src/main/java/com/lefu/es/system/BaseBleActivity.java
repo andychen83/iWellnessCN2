@@ -22,14 +22,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hetai.ble.ble_hetai_lib.bean.BluetoothLeDevice;
-import com.hetai.ble.ble_hetai_lib.constant.BLEConstant;
-import com.hetai.ble.ble_hetai_lib.constant.BluetoolUtil;
-import com.hetai.ble.ble_hetai_lib.enmu.Units;
-import com.hetai.ble.ble_hetai_lib.helper.BleHelper;
-import com.hetai.ble.ble_hetai_lib.service.BluetoothLeScannerInterface;
-import com.hetai.ble.ble_hetai_lib.service.BluetoothLeService;
-import com.hetai.ble.ble_hetai_lib.service.BluetoothUtils;
+import com.lefu.es.blenew.bean.BluetoothLeDevice1;
+import com.lefu.es.blenew.constant.BluetoolUtil1;
+import com.lefu.es.blenew.service.BluetoothLeScannerInterface;
+import com.lefu.es.blenew.service.BluetoothLeService1;
+import com.lefu.es.blenew.service.BluetoothUtils1;
+import com.lefu.es.constant.BLEConstant;
+import com.lefu.es.constant.BluetoolUtil;
 import com.lefu.iwellness.newes.cn.system.R;
 
 /**
@@ -40,10 +39,10 @@ import com.lefu.iwellness.newes.cn.system.R;
 public abstract class BaseBleActivity extends Activity {
     private final static String TAG = BaseBleActivity.class.getSimpleName();
 
-    private BluetoothUtils mBluetoothUtils;
+    private BluetoothUtils1 mBluetoothUtils;
     private BluetoothLeScannerInterface mScanner;
 
-    private BluetoothLeService mBluetoothLeService;
+    private BluetoothLeService1 mBluetoothLeService;
     private String mDeviceAddress;
     private String mDeviceName;
     private boolean mConnected = false;
@@ -55,14 +54,14 @@ public abstract class BaseBleActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBluetoothUtils = new BluetoothUtils(this);
+        mBluetoothUtils = new BluetoothUtils1(this);
         if(mBluetoothUtils.isBluetoothLeSupported()){
             scanHandler = new Handler();
             mScanner = mBluetoothUtils.initBleScaner(nofityHandler);
             //注册通知
-            registerReceiver(mGattUpdateReceiver, BluetoothUtils.makeGattUpdateIntentFilter());
+            registerReceiver(mGattUpdateReceiver, BluetoothUtils1.makeGattUpdateIntentFilter());
             //绑定蓝牙服务服务
-            final Intent gattServiceIntent = new Intent(BaseBleActivity.this, BluetoothLeService.class);
+            final Intent gattServiceIntent = new Intent(BaseBleActivity.this, BluetoothLeService1.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -181,7 +180,7 @@ public abstract class BaseBleActivity extends Activity {
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            mBluetoothLeService = ((BluetoothLeService1.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
                 finish();
@@ -217,7 +216,7 @@ public abstract class BaseBleActivity extends Activity {
                 if (null != mBluetoothLeService) {
                     if (null != mDeviceName) {
                         if(mDeviceName.toLowerCase().startsWith("heal")){
-                            Message msg1 = nofityHandler.obtainMessage(BluetoolUtil.DESCIVE_SERVICE);
+                            Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_SERVICE);
                             nofityHandler.sendMessage(msg1);
                             // 监听 阿里秤 读通道
                            // BleHelper.getInstance().listenAliScale(mBluetoothLeService);
@@ -233,7 +232,7 @@ public abstract class BaseBleActivity extends Activity {
                 String readMessage = intent.getStringExtra(BLEConstant.EXTRA_DATA);
                 Log.e(TAG, "接收数据"+readMessage);
                 if(!TextUtils.isEmpty(readMessage) && readMessage.length()>10){
-                    Message msg1 = nofityHandler.obtainMessage(BluetoolUtil.RECEIVE_DATA);
+                    Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.RECEIVE_DATA);
                     msg1.obj = readMessage;
                     nofityHandler.sendMessage(msg1);
                 }
@@ -248,10 +247,10 @@ public abstract class BaseBleActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case BluetoolUtil.FOUND_DEVICE:
+                case BluetoolUtil1.FOUND_DEVICE:
                     Log.i(TAG, "[蓝牙连接状态]=="+ (null==mBluetoothLeService?"未初始化":mBluetoothLeService.getmConnectionState()));
-                    BluetoothLeDevice deviceLe = (BluetoothLeDevice)msg.obj;
-                    if(null!=deviceLe && null!=mBluetoothLeService && mBluetoothLeService.getmConnectionState()==BluetoothLeService.STATE_DISCONNECTED){
+                    BluetoothLeDevice1 deviceLe = (BluetoothLeDevice1)msg.obj;
+                    if(null!=deviceLe && null!=mBluetoothLeService && mBluetoothLeService.getmConnectionState()==BluetoothLeService1.STATE_DISCONNECTED){
                         mDeviceAddress = deviceLe.getAddress();
                         mDeviceName = deviceLe.getName();
 
@@ -259,11 +258,11 @@ public abstract class BaseBleActivity extends Activity {
                     }
                     break;
 
-                case BluetoolUtil.RECEIVE_DATA: //接收到数据
+                case BluetoolUtil1.RECEIVE_DATA: //接收到数据
                     String data  = (String)msg.obj;
                     //reciveDataAdapter.addToFirst(data);
                     break;
-                case BluetoolUtil.DESCIVE_SERVICE: //发现服务
+                case BluetoolUtil1.DESCIVE_SERVICE: //发现服务
                     // String data  = (String)msg.obj;
                     // reciveDataAdapter.
                     break;

@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.service;
+package com.lefu.es.blenew.service;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -14,9 +14,11 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import com.hetai.ble.ble_hetai_lib.bean.BleAdvertisedData;
-import com.hetai.ble.ble_hetai_lib.constant.BluetoolUtil;
-import com.hetai.ble.ble_hetai_lib.utils.BleUtil;
+
+import com.lefu.es.blenew.bean.BleAdvertisedData1;
+import com.lefu.es.blenew.constant.BluetoolUtil1;
+import com.lefu.es.blenew.utils.BleUtil1;
+
 import java.io.Serializable;
 
 /**
@@ -25,10 +27,10 @@ import java.io.Serializable;
  * @author andy 2016-10-26
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class BlueSingleton implements Serializable {
+public class BlueSingleton1 implements Serializable {
 	private static final long serialVersionUID = -7953127527312783591L;
 	/* 单例 */
-	private static BlueSingleton uniqueInstance = null;
+	private static BlueSingleton1 uniqueInstance = null;
 	/* 是否已经连接 */
 	private boolean mConnected = false;
 	/* 是否在扫描中 */
@@ -48,13 +50,13 @@ public class BlueSingleton implements Serializable {
 	
 	private BluetoothLeScanner scanner;
 
-	private BlueSingleton() {
+	private BlueSingleton1() {
 	}
 
 	/** 获取单例 */
-	public static BlueSingleton getInstance(Handler h) {
+	public static BlueSingleton1 getInstance(Handler h) {
 		if (uniqueInstance == null) {
-			uniqueInstance = new BlueSingleton();
+			uniqueInstance = new BlueSingleton1();
 		}
 		return uniqueInstance;
 	}
@@ -172,14 +174,14 @@ public class BlueSingleton implements Serializable {
 						mScanning = false;
 					}
 					/* 记录蓝牙地址 */
-					BluetoolUtil.mDeviceAddress = device.getAddress();
-					BluetoolUtil.mConnectedDeviceName = deviceName;
+					BluetoolUtil1.mDeviceAddress = device.getAddress();
+					BluetoolUtil1.mConnectedDeviceName = deviceName;
 					/* 启动连接服务 */
 					if(mHasBind){
 						activity.getApplicationContext().unbindService(mServiceConnection);
 						mHasBind = false;
 					}
-					activity.getApplicationContext().bindService(new Intent(activity, BluetoothLeService.class), mServiceConnection, activity.BIND_AUTO_CREATE);
+					activity.getApplicationContext().bindService(new Intent(activity, BluetoothLeService1.class), mServiceConnection, activity.BIND_AUTO_CREATE);
 					mHasBind = true;
 				}
 	        }
@@ -206,7 +208,7 @@ public class BlueSingleton implements Serializable {
 				@Override
 				public void run() {
 					try {
-						final BleAdvertisedData badata = BleUtil.parseAdertisedData(scanRecord);
+						final BleAdvertisedData1 badata = BleUtil1.parseAdertisedData(scanRecord);
 						String deviceName = device.getName();
 						if (deviceName == null) {
 							deviceName = badata.getName();
@@ -222,14 +224,14 @@ public class BlueSingleton implements Serializable {
 								mScanning = false;
 							}
 							/* 记录蓝牙地址 */
-							BluetoolUtil.mDeviceAddress = device.getAddress();
-							BluetoolUtil.mConnectedDeviceName = deviceName;
+							BluetoolUtil1.mDeviceAddress = device.getAddress();
+							BluetoolUtil1.mConnectedDeviceName = deviceName;
 							/* 启动连接服务 */
 							if(mHasBind){
 								activity.getApplicationContext().unbindService(mServiceConnection);
 								mHasBind = false;
 							}
-							activity.getApplicationContext().bindService(new Intent(activity, BluetoothLeService.class), mServiceConnection, activity.BIND_AUTO_CREATE);
+							activity.getApplicationContext().bindService(new Intent(activity, BluetoothLeService1.class), mServiceConnection, activity.BIND_AUTO_CREATE);
 							mHasBind = true;
 						}
 					} catch (Exception e) {

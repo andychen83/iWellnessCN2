@@ -3,6 +3,7 @@ package com.lefu.es.application;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.lefu.es.cache.CacheHelper;
@@ -13,7 +14,7 @@ import com.lefu.es.db.DatabaseCreatOrUpdateHelper;
  * 作用:
  */
 
-public class IwellnessApplication extends Application{
+public class IwellnessApplication extends MultiDexApplication{
     public static IwellnessApplication app = null;
 
     @Override

@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ble_hetai_lib/ble_hetai_lib.iml" filepath="$PROJECT_DIR$/ble_hetai_lib/ble_hetai_lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ble_hetai_lib/ble_hetai_lib.iml" filepath="$PROJECT_DIR$/ble_hetai_lib/ble_hetai_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/iWellnessCN2.iml" filepath="$PROJECT_DIR$/iWellnessCN2.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>

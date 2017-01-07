@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.bean;
+package com.lefu.es.blenew.bean;
 
 import android.bluetooth.BluetoothClass;
 
@@ -6,7 +6,7 @@ import android.bluetooth.BluetoothClass;
  * 作者: andy on 2016/11/9.
  * 作用:
  */
-public class BluetoothClassResolver {
+public class BluetoothClassResolver1 {
     public static String resolveDeviceClass(int btClass){
         switch (btClass){
             case BluetoothClass.Device.AUDIO_VIDEO_CAMCORDER:

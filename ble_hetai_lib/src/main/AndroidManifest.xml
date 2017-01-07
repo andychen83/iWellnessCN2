@@ -12,7 +12,7 @@
         android:supportsRtl="true">
 
         <!-- BLE连接服务服务 -->
-        <service android:name="com.hetai.ble.ble_hetai_lib.service.BluetoothLeService" android:enabled="true" />
+        <service android:name="com.hetai.ble.ble_hetai_lib.service.BluetoothLeService1" android:enabled="true" />
     </application>
 
 </manifest>
