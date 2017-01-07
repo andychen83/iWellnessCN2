@@ -25,10 +25,14 @@ public class BluetoolUtil1 {
 	public static final int RECEIVE_DATA = 102;
 	public static final int CLEARALL_DATA = 103;
 	public static final int DESCIVE_SERVICE = 104;
+	public static final int DESCIVE_CONNECTED = 105;
+	public static final int DESCIVE_DISCONNECT = 106;
 
 	public static final String ELECTRONIC_SCALE="Electronic Scale";
 	
 	public static final String HEALTH_SCALE="Health Scale";
+
+	public static final String DL_SCALE="DL Scale";
 	
 	// Key names received from the BluetoothChatService Handler
 	public static final String DEVICE_NAME = "device_name";

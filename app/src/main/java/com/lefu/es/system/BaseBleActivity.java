@@ -37,17 +37,17 @@ import com.lefu.iwellness.newes.cn.system.R;
  */
 
 public abstract class BaseBleActivity extends Activity {
-    private final static String TAG = BaseBleActivity.class.getSimpleName();
+    public final static String TAG = BaseBleActivity.class.getSimpleName();
 
-    private BluetoothUtils1 mBluetoothUtils;
-    private BluetoothLeScannerInterface mScanner;
+    public BluetoothUtils1 mBluetoothUtils;
+    public BluetoothLeScannerInterface mScanner;
 
-    private BluetoothLeService1 mBluetoothLeService;
-    private String mDeviceAddress;
-    private String mDeviceName;
-    private boolean mConnected = false;
-    private boolean mActivty = false; //页面是否激活
-    private Handler scanHandler;
+    public BluetoothLeService1 mBluetoothLeService;
+    public String mDeviceAddress;
+    public String mDeviceName;
+    public boolean mConnected = false;
+    public boolean mActivty = false; //页面是否激活
+    public Handler scanHandler;
 
     protected static final int REQUEST_ACCESS_COARSE_LOCATION_PERMISSION = 101;
 
@@ -203,12 +203,17 @@ public abstract class BaseBleActivity extends Activity {
             if (BLEConstant.ACTION_GATT_CONNECTED.equals(action)) { //蓝牙连接了
                 mConnected = true;
                 Log.e(TAG, "蓝牙已连接");
-                updateConnectionState(R.string.connected);
+                Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_CONNECTED);
+                nofityHandler.sendMessage(msg1);
+
+
                 //invalidateOptionsMenu();
             } else if (BLEConstant.ACTION_GATT_DISCONNECTED.equals(action)) {//蓝牙断开连接
                 mConnected = false;
                 Log.e(TAG, "蓝牙断开");
-               updateConnectionState(R.string.disconnected);
+                Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_DISCONNECT);
+                nofityHandler.sendMessage(msg1);
+
 
             } else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {//发现蓝牙服务
                 // Show all the supported services and characteristics on the user interface.
@@ -257,18 +262,21 @@ public abstract class BaseBleActivity extends Activity {
                         if(!TextUtils.isEmpty(mDeviceAddress))mBluetoothLeService.connect(mDeviceAddress);
                     }
                     break;
-
                 case BluetoolUtil1.RECEIVE_DATA: //接收到数据
                     String data  = (String)msg.obj;
-                    //reciveDataAdapter.addToFirst(data);
+                    reveiveBleData(data);
                     break;
                 case BluetoolUtil1.DESCIVE_SERVICE: //发现服务
-                    // String data  = (String)msg.obj;
-                    // reciveDataAdapter.
+                    discoverBleService();
+                    break;
+                case BluetoolUtil1.DESCIVE_DISCONNECT: //蓝牙断开
+                    updateConnectionState(R.string.disconnected);
+                    break;
+                case BluetoolUtil1.DESCIVE_CONNECTED: //蓝牙连接
+                    updateConnectionState(R.string.connected);
                     break;
             }
             super.handleMessage(msg);
-
         }
     };
 
