@@ -188,6 +188,21 @@
                 layout="@layout/weight_scale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <!--水分率-->
+            <include
+                layout="@layout/moisture_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!--脂肪率-->
+            <include
+                layout="@layout/bft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!--骨量-->
+            <include
+                layout="@layout/bone_mass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <!--BMI-->
             <include
                 layout="@layout/bmi_scale"

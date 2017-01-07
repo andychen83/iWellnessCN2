@@ -22,13 +22,13 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/bmi_icon" />
+                android:src="@drawable/bft" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="BMI"
+                android:text="脂肪率"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="19.1kg"
+            android:text="20.2%"
             android:textColor="@color/main_text_color" />
 
         <LinearLayout
@@ -67,13 +67,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/status_bar_bmi"
+        android:id="@+id/status_bar_bft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/top_wa_bmi"
+            android:id="@+id/top_wa_bft"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -119,7 +119,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/top_wa_bmi"
+            android:layout_below="@+id/top_wa_bft"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginTop="8dp"
