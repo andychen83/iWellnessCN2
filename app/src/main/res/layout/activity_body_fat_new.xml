@@ -208,6 +208,16 @@
                 layout="@layout/bmi_scale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <!--内脏脂肪-->
+            <include
+                layout="@layout/visceral_fat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!--BMR-->
+            <include
+                layout="@layout/bmr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
