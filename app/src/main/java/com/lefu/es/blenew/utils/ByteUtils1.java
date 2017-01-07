@@ -1,8 +1,8 @@
-package com.hetai.ble.ble_hetai_lib.utils;
+package com.lefu.es.blenew.utils;
 
 import java.nio.ByteBuffer;
 
-public class ByteUtils {
+public class ByteUtils1 {
 
 	/** The Constant HEXES. */
 	private static final String HEXES = "0123456789ABCDEF";
@@ -66,7 +66,7 @@ public class ByteUtils {
 		result[2] = input[0];
 		result[3] = input[1];
 
-		return ByteUtils.getIntFromByteArray(result);
+		return ByteUtils1.getIntFromByteArray(result);
 	}
 
 	/**

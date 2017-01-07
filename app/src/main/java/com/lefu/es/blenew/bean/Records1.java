@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.bean;
+package com.lefu.es.blenew.bean;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 测量记录
  * @author andy
  */
-public class Records implements Serializable  {
+public class Records1 implements Serializable  {
 	private static final long serialVersionUID = 1781102348190850847L;
 	private int id;//id
 	private int useId;//用户Id

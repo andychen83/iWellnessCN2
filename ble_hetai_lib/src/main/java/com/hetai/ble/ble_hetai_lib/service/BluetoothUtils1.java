@@ -10,20 +10,20 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 
-import com.hetai.ble.ble_hetai_lib.constant.BLEConstant;
+import com.hetai.ble.ble_hetai_lib.constant.BLEConstant1;
 
 /**
  * 作者: andy on 2016/11/9.
  * 作用: 蓝牙设备基础检测类
  */
-public class BluetoothUtils {
+public class BluetoothUtils1 {
     private final Activity mActivity;
     private final BluetoothAdapter mBluetoothAdapter;
     private final BluetoothManager mBluetoothManager;
     private BluetoothLeScannerInterface mScanner;
     public final static int REQUEST_ENABLE_BT = 2001;
 
-    public BluetoothUtils(Activity activity){
+    public BluetoothUtils1(Activity activity){
         mActivity = activity;
         mBluetoothManager = (BluetoothManager) mActivity.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
@@ -79,10 +79,10 @@ public class BluetoothUtils {
     /**注册GATT状态变化广播*/
     public static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BLEConstant.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(BLEConstant.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(BLEConstant.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BLEConstant.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BLEConstant1.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BLEConstant1.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BLEConstant1.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BLEConstant1.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
 }

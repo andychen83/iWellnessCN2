@@ -1,4 +1,7 @@
-package com.hetai.ble.ble_hetai_lib.utils;
+package com.lefu.es.blenew.utils;
+
+import android.annotation.SuppressLint;
+import android.util.Log;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -7,11 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
-
 @SuppressLint("SimpleDateFormat")
-public class UtilTooth {
+public class UtilTooth1 {
 	public static final int BAR_WEIGHT_SUM = 170;
 	public static final int BAR_WEIGHT_THIN = 27;
 	public static final int BAR_WEIGHT_HEALTHY = 73;

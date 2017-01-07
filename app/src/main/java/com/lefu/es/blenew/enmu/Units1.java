@@ -1,11 +1,11 @@
-package com.hetai.ble.ble_hetai_lib.enmu;
+package com.lefu.es.blenew.enmu;
 
 /**
  * 作者: 单位 on 2016/11/24.
  * 作用: 单位枚举
  */
 
-public enum Units {
+public enum Units1 {
     UNIT_KG("00","kg"),
     UNIT_LB("01","lb"),
     UNIT_ST("02","st");
@@ -14,7 +14,7 @@ public enum Units {
     private String  desc;
 
 
-    Units(String code, String desc) {
+    Units1(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

@@ -3,10 +3,10 @@ package com.hetai.ble.ble_hetai_lib.bean;
 import java.util.List;
 import java.util.UUID;
 
-public class BleAdvertisedData {
+public class BleAdvertisedData1 {
 	private List<UUID> mUuids;
 	private String mName;
-	public BleAdvertisedData(List<UUID> uuids, String name) {
+	public BleAdvertisedData1(List<UUID> uuids, String name) {
 		mUuids = uuids;
 		mName = name;
 	}

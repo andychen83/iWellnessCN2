@@ -16,8 +16,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import com.hetai.ble.ble_hetai_lib.constant.BLEConstant;
-import com.hetai.ble.ble_hetai_lib.utils.StringUtils;
+import com.hetai.ble.ble_hetai_lib.constant.BLEConstant1;
+import com.hetai.ble.ble_hetai_lib.utils.StringUtils1;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +28,8 @@ import java.util.UUID;
  * 2016-10-26
  */
 @SuppressLint("NewApi")
-public class BluetoothLeService extends Service {
-	private final static String TAG = BluetoothLeService.class.getSimpleName();
+public class BluetoothLeService1 extends Service {
+	private final static String TAG = BluetoothLeService1.class.getSimpleName();
 	private BluetoothManager mBluetoothManager;
 	private BluetoothAdapter mBluetoothAdapter;
 	private String mBluetoothDeviceAddress;
@@ -48,13 +48,13 @@ public class BluetoothLeService extends Service {
 			if (newState == BluetoothProfile.STATE_CONNECTED) {
 				mConnectionState = STATE_CONNECTED;
 				/*连接成功*/
-				broadcastUpdate(BLEConstant.ACTION_GATT_CONNECTED);
+				broadcastUpdate(BLEConstant1.ACTION_GATT_CONNECTED);
 				/*发现服务*/
 				mBluetoothGatt.discoverServices();
 			} else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 				mConnectionState = STATE_DISCONNECTED;
 				/*断开连接*/
-				broadcastUpdate(BLEConstant.ACTION_GATT_DISCONNECTED);
+				broadcastUpdate(BLEConstant1.ACTION_GATT_DISCONNECTED);
 			}
 		}
 
@@ -62,7 +62,7 @@ public class BluetoothLeService extends Service {
 		public void onServicesDiscovered(BluetoothGatt gatt, int status) {
 			if (status == BluetoothGatt.GATT_SUCCESS) {
 				/*发现服务*/
-				broadcastUpdate(BLEConstant.ACTION_GATT_SERVICES_DISCOVERED);
+				broadcastUpdate(BLEConstant1.ACTION_GATT_SERVICES_DISCOVERED);
 			}
 		}
 
@@ -70,7 +70,7 @@ public class BluetoothLeService extends Service {
 		public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
 			if (status == BluetoothGatt.GATT_SUCCESS) {
 				/*读到数据*/
-				broadcastUpdate(BLEConstant.ACTION_DATA_AVAILABLE, characteristic);
+				broadcastUpdate(BLEConstant1.ACTION_DATA_AVAILABLE, characteristic);
 				/*释放连接*/
 				disconnect();
 			}
@@ -82,7 +82,7 @@ public class BluetoothLeService extends Service {
 
 		@Override
 		public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-			broadcastUpdate(BLEConstant.ACTION_DATA_AVAILABLE, characteristic);
+			broadcastUpdate(BLEConstant1.ACTION_DATA_AVAILABLE, characteristic);
 		}
 
 		@Override
@@ -104,13 +104,13 @@ public class BluetoothLeService extends Service {
 	private void broadcastUpdate(final String action, final BluetoothGattCharacteristic characteristic) {
 		final Intent intent = new Intent(action);
 		final byte[] data = characteristic.getValue();
-		intent.putExtra(BLEConstant.EXTRA_DATA, StringUtils.bytes2HexString(data));
+		intent.putExtra(BLEConstant1.EXTRA_DATA, StringUtils1.bytes2HexString(data));
 		sendBroadcast(intent);
 	}
 
 	public class LocalBinder extends Binder {
-		public BluetoothLeService getService() {
-			return BluetoothLeService.this;
+		public BluetoothLeService1 getService() {
+			return BluetoothLeService1.this;
 		}
 	}
 	
@@ -208,7 +208,7 @@ public class BluetoothLeService extends Service {
 	public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
 		if (mBluetoothAdapter != null && mBluetoothGatt != null) {
 			mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SampleGattAttributes1.CLIENT_CHARACTERISTIC_CONFIG));
 			if (descriptor != null) {
 				descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 				mBluetoothGatt.writeDescriptor(descriptor);
@@ -220,7 +220,7 @@ public class BluetoothLeService extends Service {
 	public void setCharacteristicIndaicate(BluetoothGattCharacteristic characteristic, boolean enabled) {
 		if (mBluetoothGatt != null && null!=characteristic) {
 			mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SampleGattAttributes1.CLIENT_CHARACTERISTIC_CONFIG));
 			if (descriptor != null) {
 				descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
 				mBluetoothGatt.writeDescriptor(descriptor);

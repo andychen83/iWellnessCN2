@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream;
  * 作者: andy on 2016/10/26.
  * 作用:字符串工具类
  */
-public class StringUtils {
+public class StringUtils1 {
     /**字节数组转字符串*/
     public static String bytes2HexString(byte[] b) {
         String ret = "";

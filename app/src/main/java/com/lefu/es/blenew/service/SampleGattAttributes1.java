@@ -1,4 +1,4 @@
-package com.hetai.ble.ble_hetai_lib.service;
+package com.lefu.es.blenew.service;
 
 import java.util.HashMap;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
  * This class includes a small subset of standard GATT attributes for
  * demonstration purposes.
  */
-public class SampleGattAttributes {
+public class SampleGattAttributes1 {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static HashMap<String, String> attributes = new HashMap();
 	public static String HEART_RATE_MEASUREMENT = "0000C004-0000-1000-8000-00805f9b34fb";
