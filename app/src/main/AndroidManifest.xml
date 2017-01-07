@@ -12,7 +12,7 @@
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true"></supports-screens>
+        android:smallScreens="true" />
 
     <!-- 权限 -->
     <uses-feature
@@ -88,10 +88,10 @@
         <activity
             android:name="com.lefu.es.system.KitchenScaleActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.lefu.es.system.KitchenInfoActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lefu.es.system.BathScaleActivity"
             android:screenOrientation="portrait"
@@ -137,10 +137,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
-
-        <activity android:name="com.lefu.es.system.BodyFatNewActivity"
-                   android:screenOrientation="portrait"
-                   android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.lefu.es.system.BodyFatNewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="com.lefu.es.system.BodyScaleNewActivity"></activity>
     </application>
 
 </manifest>
