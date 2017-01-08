@@ -250,7 +250,7 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="18dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -358,7 +358,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="18dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -390,7 +390,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/setting_menu">
+            android:clickable="true"
+            android:background="@drawable/setting_menu"
+            android:id="@+id/set">
 
         </RelativeLayout>
 
