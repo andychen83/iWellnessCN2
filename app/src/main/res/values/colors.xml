@@ -61,5 +61,7 @@
     <color name="main_text_color">#7F7F7F</color>
 
     <drawable name="title_bar">#c6c6c6</drawable>
+    <color name="blueitem_normal">#CCE9F1</color>
+    <color name="blueitem_pressed">#bbe1ec</color>
 
 </resources>
