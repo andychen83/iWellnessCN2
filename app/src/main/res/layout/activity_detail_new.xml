@@ -58,6 +58,37 @@
             android:scaleY="1"
             android:src="@drawable/shar" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/tongji_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp" >
+
+            <RadioButton
+                android:id="@+id/man"
+                android:checked="true"
+                android:text="男"
+                android:tag="0"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <RadioButton
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/woman"
+                android:tag="1"
+                android:layout_marginLeft="10dp"
+                android:text="女" />
+        </RadioGroup>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

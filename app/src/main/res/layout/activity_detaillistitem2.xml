@@ -49,8 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="0.15"
-                android:shrinkColumns="1,2"
-                android:stretchColumns="0,1"
+                android:shrinkColumns="1,2,3"
+                android:stretchColumns="0,1,2"
                 android:weightSum="90" >
 
                 <TableRow
@@ -70,6 +70,14 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text=""
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvdetail_weight_status"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="@string/biaozhun_cloun"
                         android:textColor="@color/black" />
                 </TableRow>
 
@@ -92,6 +100,14 @@
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvdetail_bmi_status"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="@string/biaozhun_cloun"
+                        android:textColor="@color/black" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>

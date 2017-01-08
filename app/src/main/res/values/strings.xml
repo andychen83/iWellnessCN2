@@ -368,4 +368,6 @@
     <string name="inputname_waring">输入姓名</string>
     <string name="height_error_1">身高在100 至 220厘米之间</string>
 
+    <string name="biaozhun_cloun">标准</string>
+
 </resources>
