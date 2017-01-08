@@ -218,6 +218,11 @@
                 layout="@layout/bmr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <!--肌肉率-->
+            <include
+                layout="@layout/muscle_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
