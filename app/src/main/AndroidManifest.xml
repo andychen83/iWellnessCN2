@@ -150,7 +150,8 @@
         <activity
             android:name="com.lefu.es.system.BabyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
         <!-- 婴儿秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BabySetScaleActivity"

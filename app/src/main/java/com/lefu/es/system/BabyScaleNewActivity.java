@@ -43,6 +43,7 @@ public class BabyScaleNewActivity extends Activity implements View.OnClickListen
         view = LayoutInflater.from(BabyScaleNewActivity.this).inflate(R.layout.baby_dialog_gridview, null);
         dialog = new Dialog(BabyScaleNewActivity.this);
         dialog.setContentView(view);
+        dialog.setTitle("请选择");
         GridView gridview = (GridView) view.findViewById(R.id.gview);
         BabyGirdViewAdpter adpter = new BabyGirdViewAdpter(getLayoutInflater(),getData());
         gridview.setAdapter(adpter);
