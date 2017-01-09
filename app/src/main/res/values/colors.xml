@@ -62,4 +62,7 @@
 
     <drawable name="title_bar">#c6c6c6</drawable>
 
+    <color name="main_title_color">#996DC7D7</color>
+    <color name="main_title_clickcolor">#6DC7D7</color>
+
 </resources>

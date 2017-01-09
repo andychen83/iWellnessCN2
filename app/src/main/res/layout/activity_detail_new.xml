@@ -58,37 +58,128 @@
             android:scaleY="1"
             android:src="@drawable/shar" />
     </RelativeLayout>
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RadioGroup
             android:id="@+id/tongji_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="3dp"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="3dp" >
 
-            <RadioButton
-                android:id="@+id/man"
-                android:checked="true"
-                android:text="男"
-                android:tag="0"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
+                <RadioButton
+                    android:id="@+id/weight_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/weight_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
-            <RadioButton
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/woman"
-                android:tag="1"
-                android:layout_marginLeft="10dp"
-                android:text="女" />
+                <RadioButton
+                    android:id="@+id/water_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/water_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/fat_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/fat_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/bone_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bone_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
         </RadioGroup>
+        <RadioGroup
+            android:id="@id/tongji_group"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp" >
 
-    </RelativeLayout>
+                <RadioButton
+                    android:id="@+id/bmi_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bmi_menu"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/visfat_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/visfat_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/bmr_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bmr_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/muscial_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/muscial_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+        </RadioGroup>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

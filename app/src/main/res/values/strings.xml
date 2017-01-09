@@ -370,4 +370,13 @@
 
     <string name="biaozhun_cloun">标准</string>
 
+    <string name="weight_menu">重量</string>
+    <string name="water_menu">水分</string>
+    <string name="fat_menu">脂肪率</string>
+    <string name="bone_menu">骨骼</string>
+    <string name="bmi_menu">BMI</string>
+    <string name="visfat_menu">内脏脂肪</string>
+    <string name="bmr_menu">BMR</string>
+    <string name="muscial_menu">肌肉率</string>
+
 </resources>
