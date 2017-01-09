@@ -43,7 +43,6 @@
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -140,18 +139,31 @@
         <activity
             android:name="com.lefu.es.system.BodyFatNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
 
-        <!--人体秤-->
+        <!-- 人体秤 -->
         <activity
             android:name="com.lefu.es.system.BodyScaleNewActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- 婴儿秤 -->
+        <activity
+            android:name="com.lefu.es.system.BabyScaleNewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- 婴儿秤设置界面 -->
+        <activity
+            android:name="com.lefu.es.system.BabySetScaleActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+        </activity>
+        <!--脂肪秤设置界面-->
+        <activity
+            android:name="com.lefu.es.system.BodyFatScaleSetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         </activity>
     </application>
 
