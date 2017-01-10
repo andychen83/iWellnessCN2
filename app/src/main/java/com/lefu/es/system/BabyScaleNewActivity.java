@@ -85,7 +85,6 @@ public class BabyScaleNewActivity extends Activity implements View.OnClickListen
             items.add(baby);
         }
         return items;
-
     }
 
     class Baby{
