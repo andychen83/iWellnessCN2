@@ -84,6 +84,7 @@ public class BabyScaleNewActivity extends Activity implements View.OnClickListen
             baby.setName("baby"+i);
             items.add(baby);
         }
+
         return items;
     }
 
