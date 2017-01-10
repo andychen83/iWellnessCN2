@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/blue_img"
-            android:text="未连接"
+            android:text="@string/connect_state_not_connected"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </RelativeLayout>

@@ -135,7 +135,7 @@ public class LoadingActivity extends Activity {
 				UtilConstants.su.editSharedPreferences("lefuconfig", "reCheck", false);
 				Intent intent1 = new Intent();
 				if (UtilConstants.BATHROOM_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-					intent1.setClass(LoadingActivity.this, BathScaleActivity.class);
+					intent1.setClass(LoadingActivity.this, BodyScaleNewActivity.class);
 					Log.e(TAG, "to BathScaleActivity");
 				} else if(UtilConstants.BABY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
 					intent1.setClass(LoadingActivity.this, BabyScaleActivity.class);
@@ -144,7 +144,7 @@ public class LoadingActivity extends Activity {
 					intent1.setClass(LoadingActivity.this, KitchenScaleActivity.class);
 					Log.e(TAG, "to KitchenScaleActivity");
 				}else{
-					intent1.setClass(LoadingActivity.this, BodyFatScaleActivity.class);
+					intent1.setClass(LoadingActivity.this, BodyFatNewActivity.class);
 					Log.e(TAG, "to BodyFatScaleActivity");
 				}
 				intent1.putExtra("ItemID", UtilConstants.SELECT_USER);
