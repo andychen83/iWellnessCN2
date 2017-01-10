@@ -35,6 +35,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.ble.BluetoothLeService;
 import com.lefu.es.blenew.helper.BleHelper1;
+import com.lefu.es.blenew.service.BluetoothLeService1;
+import com.lefu.es.blenew.service.BluetoothUtils1;
 import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.BLEConstant;
 import com.lefu.es.constant.BluetoolUtil;
@@ -316,33 +318,40 @@ public class AutoBLEActivity extends BaseBleActivity {
 				}
 				UtilConstants.CURRENT_SCALE = choice_scale;
 			}
-			if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith("dl")){ //新的DL Scale
+			if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
 				//CF 88 13 00 14 00 00 00 00 00 40
 				if(RecordDao.isLockData(readMessage)){
-                    /*是否是重新检测*/
-					Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
-					UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
-					if(reCheck==null||!reCheck){
+					if(!RecordDao.checkData(readMessage)) return;
+					if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+						UtilConstants.receiveDataTime = System.currentTimeMillis();
+						  /*是否是重新检测*/
+						Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
+						UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+						if(reCheck==null||!reCheck){
 							/*添加用户信息*/
-						try {
-							uservice.save(UtilConstants.CURRENT_USER);
-							UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
-							UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
-							UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
-							UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}else{
+							try {
+								uservice.save(UtilConstants.CURRENT_USER);
+								UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
+								UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+								UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
+								UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}else{
 							/*更新用户信息*/
-						try {
-							uservice.update(UtilConstants.CURRENT_USER);
-						} catch (Exception e) {
-							e.printStackTrace();
+							try {
+								uservice.update(UtilConstants.CURRENT_USER);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
+						/*保存蓝牙类型*/
+						UtilConstants.su.editSharedPreferences("lefuconfig", "bluetooth_type"+ UtilConstants.CURRENT_USER.getId(), "BLE");
+						RecordDao.parseDLScaleMeaage(recordService,readMessage, UtilConstants.CURRENT_USER);
+						handler.sendEmptyMessage(2);
 					}
-					RecordDao.parseDLScaleMeaage(recordService,readMessage, UtilConstants.CURRENT_USER);
-					handler.sendEmptyMessage(2);
+
 				}
 			}else{
 				/**判断是不是两次连续的数据*/

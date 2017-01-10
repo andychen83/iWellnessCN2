@@ -379,30 +379,30 @@
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/history_menu"
+            android:background="@drawable/history_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/history_menu">
+            android:layout_height="match_parent">
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
             android:background="@drawable/setting_menu"
-            android:id="@+id/set">
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:layout_height="match_parent"
+            android:id="@+id/setting_menu">
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/up_scale"
+            android:id="@+id/harmbaby_menu"
+            android:background="@drawable/harmbaby"
             android:layout_width="wrap_content"
-            android:clickable="true"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/harmbaby">
+            android:layout_height="match_parent">
 
         </RelativeLayout>
 

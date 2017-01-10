@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lefu.es.blenew.helper.BleHelper1;
@@ -27,17 +28,27 @@ import com.lefu.iwellness.newes.cn.system.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickListener {
+public class BodyFatNewActivity extends BaseBleActivity {
 
-    private RelativeLayout set;
+    @Bind(R.id.setting_menu)
+    RelativeLayout set;
 
     @Bind(R.id.bluetooth_status)
-    AppCompatTextView bluetoothStatusTx;
+    TextView bluetoothStatusTx;
 
     @Bind(R.id.weith_value_tx)
-    AppCompatTextView weithValueTx;
+    TextView weithValueTx;
 
+    @Bind(R.id.user_name)
+    TextView userNameTx;
+
+    @Bind(R.id.bmi_value_tx)
+    TextView bmTx;
+
+    @Bind(R.id.visal_value_tx)
+    TextView visalTx;
 
     private UserService uservice;
 
@@ -46,11 +57,45 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body_fat_new);
         ButterKnife.bind(this);
-        set = (RelativeLayout) findViewById(R.id.set);
-        set.setOnClickListener(this);
 
         uservice = new UserService(this);
+
+        initView();
     }
+
+
+    private void initView() {
+        if(null!=UtilConstants.CURRENT_USER){
+            userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
+            try {
+                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
+                if(null!=lastRecords)localData(lastRecords);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @OnClick(R.id.harmbaby_menu)
+    public void harmBabyMenuClick(){
+        startActivity(BabyScaleNewActivity.creatIntent(BodyFatNewActivity.this));
+    }
+
+    @OnClick(R.id.setting_menu)
+    public void setMenuClick(){
+        startActivity(SettingActivity.creatIntent(BodyFatNewActivity.this));
+    }
+
+    @OnClick(R.id.history_menu)
+    public void  historyMenuClick(){
+        Intent intent = new Intent();
+        intent.setClass(BodyFatNewActivity.this, RecordListActivity.class);
+        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
+        intent.putExtra("id", 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityForResult(intent, 0);
+    }
+
 
     @Override
     public void updateConnectionState(int resourceId) {
@@ -162,12 +207,15 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
                 }
                 UtilConstants.CURRENT_SCALE = choice_scale;
             }
-            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith("dl")){ //新的DL Scale
+            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
-                    dueDate(readMessage,2);
+                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                        UtilConstants.receiveDataTime = System.currentTimeMillis();
+                        dueDate(readMessage,3);
+                    }
                 }else{
-                    dueDate(readMessage,3);
+                    dueDate(readMessage,2);
                 }
             }else{
                 /**判断是不是两次连续的数据*/
@@ -251,7 +299,6 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
-
             weithValueTx.setText(String.valueOf(weight));
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
@@ -259,6 +306,18 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }
+    }
+
+    /**
+     * 锁定数据显示
+     * @param data
+     */
+    private  void localData(Records data){
+        weithValueTx.setText(String.valueOf(data.getRweight()));
+
+        bmTx.setText(String.valueOf(data.getRbmi()));
+        visalTx.setText(String.valueOf(data.getRvisceralfat()));
+
     }
 
     Handler handler = new Handler() {
@@ -270,7 +329,7 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
                     Records data  = (Records)msg.obj;
                     if(null!=data){
                         playSound();
-
+                        localData(data);
                         showReceiveDataDialog();
                     }
                     break;
@@ -309,14 +368,5 @@ public class BodyFatNewActivity extends BaseBleActivity implements View.OnClickL
         super.onDestroy();
         ButterKnife.unbind(this);
     }
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.set:
-                startActivity(BodyFatScaleSetActivity.creatIntent(BodyFatNewActivity.this));
-                break;
-            default:
-                break;
-        }
 
-    }
 }

@@ -205,7 +205,7 @@ public abstract class BaseBleActivity extends Activity {
         }
     }
 
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+    protected final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService1.LocalBinder) service).getService();
@@ -243,22 +243,12 @@ public abstract class BaseBleActivity extends Activity {
                 nofityHandler.sendMessage(msg1);
 
 
-            } else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {//发现蓝牙服务
+            } else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) { //发现蓝牙服务
                 // Show all the supported services and characteristics on the user interface.
                 Log.e(TAG, "发现服务");
                 if (null != mBluetoothLeService) {
-                    if (null != mDeviceName) {
-                        if(mDeviceName.toLowerCase().startsWith("heal")){
-                            Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_SERVICE);
-                            nofityHandler.sendMessage(msg1);
-                            // 监听 阿里秤 读通道
-                           // BleHelper.getInstance().listenAliScale(mBluetoothLeService);
-                            // 获取用户组
-                           // String sendData = BleHelper.getInstance().assemblyAliData(Units.UNIT_KG.getCode(),"01");
-                            // 发送数据
-                           // BleHelper.getInstance().sendDateToScale(mBluetoothLeService,sendData);
-                        }
-                    }
+                    Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_SERVICE);
+                    nofityHandler.sendMessage(msg1);
                 }
 
             } else if (BLEConstant.ACTION_DATA_AVAILABLE.equals(action)) { //接收到数据
@@ -409,12 +399,13 @@ public abstract class BaseBleActivity extends Activity {
                                 RecordDao.handleData2(recordService, receiveRecod);
                             }
 
-
                             if (!BluetoolUtil.bleflag){
                                 TimeService.setIsdoing(false);
                             }else{
                                 BlueSingleton.setIsdoing(false);
                             }
+                            receiveDataDialog.dismiss();
+                            receiveDataDialog = null;
                             receiveRecod = null;
                         }
 

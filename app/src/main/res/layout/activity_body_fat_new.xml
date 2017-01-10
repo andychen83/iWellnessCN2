@@ -45,15 +45,17 @@
                     android:textColor="@color/main_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/weith_value_tx"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
-                    android:text="55.5kg"
+                    android:text="0kg"
                     android:textSize="24sp"
                     android:textColor="@color/main_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/weith_status"
                     android:text="正常"
@@ -86,15 +88,17 @@
                     android:textColor="@color/main_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/bmi_value_tx"
                     android:layout_marginTop="3dp"
-                    android:text="20"
+                    android:text="0"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/main_text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/bmi_status"
                     android:text="正常"
@@ -129,7 +133,7 @@
                 <TextView
                     android:id="@+id/visal_value_tx"
                     android:layout_marginTop="3dp"
-                    android:text="30"
+                    android:text="0"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/main_text_color"
@@ -232,9 +236,11 @@
         android:layout_alignParentBottom="true"
         android:weightSum="3"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="@dimen/bottom_bar_height">
 
         <RelativeLayout
+            android:id="@+id/history_menu"
             android:background="@drawable/history_menu"
             android:layout_width="wrap_content"
             android:layout_weight="1"
@@ -248,11 +254,12 @@
             android:layout_weight="1"
             android:clickable="true"
             android:layout_height="match_parent"
-            android:id="@+id/set">
+            android:id="@+id/setting_menu">
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/harmbaby_menu"
             android:background="@drawable/harmbaby"
             android:layout_width="wrap_content"
             android:layout_weight="1"
@@ -287,6 +294,7 @@
             android:layout_marginTop="5dp"
             android:id="@+id/user_name"
             android:hint="@string/name_title"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

@@ -394,15 +394,26 @@ public class RecordDao {
 	 * @return
      */
 	public static boolean isLockData(String readMessage){
-		if(TextUtils.isEmpty(readMessage) && readMessage.length()<22){
+		if(TextUtils.isEmpty(readMessage) || readMessage.length()<22 ){
 			return false;
 		}
 		String stats =  readMessage.substring(18, 20);
 		if("00".equals(stats)){
+			Log.e(TAG,readMessage +"   锁定数据");
+			return true;
+		}else{
+			Log.e(TAG,readMessage +"   过程数据");
+			return false;
+		}
+	}
+
+	public static boolean checkData(String readMessage){
+		if(!TextUtils.isEmpty(readMessage) && (readMessage.startsWith(UtilConstants.BODY_SCALE) || readMessage.startsWith(UtilConstants.BATHROOM_SCALE))){
 			return true;
 		}else{
 			return false;
 		}
+
 	}
 
 	/**
@@ -450,65 +461,69 @@ public class RecordDao {
 		recod.setRecordTime(UtilTooth.dateTimeChange(new Date()));
 
 		if (unit.equals("00")) {//kg
-
+			recod.setUnitType(0);
 		} else if (unit.equals("01")) {//lb
-
+			recod.setUnitType(1);
 		} else if (unit.equals("02")) {//st
-
+			recod.setUnitType(2);
 		} else if (unit.equals("03")) {//斤
-
+			recod.setUnitType(3);
 		} else if (unit.equals("04")) {//g
-
+			recod.setUnitType(4);
 		}else if (unit.equals("05")) {//lb:oz
-
+			recod.setUnitType(5);
 		}else if (unit.equals("06")) {//oz
-
+			recod.setUnitType(6);
 		}else if (unit.equals("07")) {//ml(water)
-
+			recod.setUnitType(7);
 		}else if (unit.equals("08")) {//ml(milk)
-
+			recod.setUnitType(8);
 		}else {
-
+			recod.setUnitType(0);
 		}
-
-		HTBodyfatGeneral bodyfat = new HTBodyfatGeneral(weight,height,sex, age, level, impedance);
-
-		Log.e(TAG, "输入参数==>体重："+weight+"  身高:"+height+"  性别:"+sex+"  年龄:"+age+"  类型:"+level+"  阻抗:"+impedance);
-
-		Log.e(TAG, "计算结果==>" + bodyfat.getBodyfatParameters()+"====阻抗系数++>"+impedance);
-
 		try {
-			if(bodyfat.getBodyfatParameters() == HTDataType.ErrorNone){
-				//正常计算
-				recod.setRbmi(UtilTooth.keep1Point3(bodyfat.BMI));
-				recod.setRbmr((int)bodyfat.BMR);
-				recod.setRbodyfat(UtilTooth.keep1Point3(bodyfat.bodyfatPercentage));
-				recod.setRbodywater(UtilTooth.keep1Point3(bodyfat.waterPercentage));
-				recod.setRbone(UtilTooth.keep1Point3(bodyfat.boneKg));
-				recod.setRmuscle(UtilTooth.keep1Point3(bodyfat.muscleKg));
-				recod.setRvisceralfat((int) bodyfat.VFAL);
-
-				recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
-				recod.setSbodyfat(UtilTooth.onePoint(recod.getRbodyfat()));
-				recod.setSbone(UtilTooth.onePoint(recod.getRbone()));
-				recod.setSmuscle(UtilTooth.onePoint(recod.getRmuscle()));
-				recod.setSvisceralfat(UtilTooth.onePoint(recod.getRvisceralfat()));
-				recod.setSbodywater(UtilTooth.onePoint(recod.getRbodywater()));
-				recod.setSbmr(UtilTooth.onePoint(recod.getRbmr()));
-				float bmi = UtilTooth.countBMI2(recod.getRweight(), (user.getBheigth() / 100));
-				recod.setBodyAge(UtilTooth.getPhysicAge(bmi,user.getAgeYear()));
-				Log.e(TAG, "阻抗:" + bodyfat.ZTwoLegs +
-						"Ω  BMI:" + String.format("%.1f",bodyfat.BMI) +
-						"  BMR:" + (int) bodyfat.BMR +
-						"  内脏脂肪:" + (int) bodyfat.VFAL +
-						"  骨量:" + String.format("%.1fkg",bodyfat.boneKg) +
-						"  脂肪率:" +String.format("%.1f%%",bodyfat.bodyfatPercentage) +
-						"  水分:" + String.format("%.1f%%",bodyfat.waterPercentage) +
-						"  肌肉:" + String.format("%.1fkg",bodyfat.muscleKg) + "\r\n");
-			}else {
+			if(readMessage.startsWith(UtilConstants.BATHROOM_SCALE)){
 				recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
 				recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
-				Log.e(TAG, "输入数据有误==>" + bodyfat.toString());
+			}else if(readMessage.startsWith(UtilConstants.BODY_SCALE)){
+				HTBodyfatGeneral bodyfat = new HTBodyfatGeneral(weight,height,sex, age, level, impedance);
+
+				Log.e(TAG, "输入参数==>体重："+weight+"  身高:"+height+"  性别:"+sex+"  年龄:"+age+"  类型:"+level+"  阻抗:"+impedance);
+
+				Log.e(TAG, "计算结果==>" + bodyfat.getBodyfatParameters()+"====阻抗系数++>"+impedance);
+
+				if(bodyfat.getBodyfatParameters() == HTDataType.ErrorNone){
+					//正常计算
+					recod.setRbmi(UtilTooth.keep1Point3(bodyfat.BMI));
+					recod.setRbmr((int)bodyfat.BMR);
+					recod.setRbodyfat(UtilTooth.keep1Point3(bodyfat.bodyfatPercentage));
+					recod.setRbodywater(UtilTooth.keep1Point3(bodyfat.waterPercentage));
+					recod.setRbone(UtilTooth.keep1Point3(bodyfat.boneKg));
+					recod.setRmuscle(UtilTooth.keep1Point3(bodyfat.muscleKg));
+					recod.setRvisceralfat((int) bodyfat.VFAL);
+
+					recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
+					recod.setSbodyfat(UtilTooth.onePoint(recod.getRbodyfat()));
+					recod.setSbone(UtilTooth.onePoint(recod.getRbone()));
+					recod.setSmuscle(UtilTooth.onePoint(recod.getRmuscle()));
+					recod.setSvisceralfat(UtilTooth.onePoint(recod.getRvisceralfat()));
+					recod.setSbodywater(UtilTooth.onePoint(recod.getRbodywater()));
+					recod.setSbmr(UtilTooth.onePoint(recod.getRbmr()));
+					float bmi = UtilTooth.countBMI2(recod.getRweight(), (user.getBheigth() / 100));
+					recod.setBodyAge(UtilTooth.getPhysicAge(bmi,user.getAgeYear()));
+					Log.e(TAG, "阻抗:" + bodyfat.ZTwoLegs +
+							"Ω  BMI:" + String.format("%.1f",bodyfat.BMI) +
+							"  BMR:" + (int) bodyfat.BMR +
+							"  内脏脂肪:" + (int) bodyfat.VFAL +
+							"  骨量:" + String.format("%.1fkg",bodyfat.boneKg) +
+							"  脂肪率:" +String.format("%.1f%%",bodyfat.bodyfatPercentage) +
+							"  水分:" + String.format("%.1f%%",bodyfat.waterPercentage) +
+							"  肌肉:" + String.format("%.1fkg",bodyfat.muscleKg) + "\r\n");
+				}else {
+					recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
+					recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
+					Log.e(TAG, "输入数据有误==>" + bodyfat.toString());
+				}
 			}
 			lastRecod = recordService.findLastRecordsByScaleType(
 					recod.getScaleType(), recod.getUgroup());

@@ -2,6 +2,8 @@ package com.lefu.es.system;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lefu.es.constant.UtilConstants;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.util.ArrayList;
@@ -22,23 +25,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /*婴儿秤
 * */
-public class BabyScaleNewActivity extends Activity implements View.OnClickListener {
+public class BabyScaleNewActivity extends Activity {
 
-    private RelativeLayout set;
-    private RelativeLayout up_scale;
+    @Bind(R.id.setting_menu)
+     RelativeLayout set;
+
+    @Bind(R.id.harmbaby_menu)
+     RelativeLayout up_scale;
+
     private Dialog dialog;
     View view;
+
+    public static Intent creatIntent(Context context){
+        Intent intent = new Intent(context,BabyScaleNewActivity.class);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_scale_new);
-        set = (RelativeLayout) findViewById(R.id.set);
-        up_scale = (RelativeLayout) findViewById(R.id.up_scale);
-        set.setOnClickListener(this);
-        up_scale.setOnClickListener(this);
-
+        ButterKnife.bind(this);
 
         view = LayoutInflater.from(BabyScaleNewActivity.this).inflate(R.layout.baby_dialog_gridview, null);
         dialog = new Dialog(BabyScaleNewActivity.this);
@@ -58,19 +71,21 @@ public class BabyScaleNewActivity extends Activity implements View.OnClickListen
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.set:
-                startActivity(BabySetScaleActivity.creatIntent(BabyScaleNewActivity.this));
-                break;
-            case R.id.up_scale:
-                dialog.show();
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.history_menu)
+    public void  historyMenuClick(){
+        Intent intent = new Intent();
+        intent.setClass(BabyScaleNewActivity.this, RecordListActivity.class);
+        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
+        intent.putExtra("id", 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityForResult(intent, 0);
     }
+
+    @OnClick(R.id.setting_menu)
+    public void setMenuClick(){
+        startActivity(BodyFatScaleSetActivity.creatIntent(BabyScaleNewActivity.this));
+    }
+
 
     /**
      * 将数据ArrayList中
@@ -154,4 +169,11 @@ public class BabyScaleNewActivity extends Activity implements View.OnClickListen
         ImageView image;
         TextView name;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
 }

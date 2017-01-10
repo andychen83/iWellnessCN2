@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -59,7 +60,13 @@ public class SettingActivity extends Activity {
 	private FileUtils fileutil = null;
 	
 	private UserService uservice;
-	
+
+	public static Intent creatIntent(Context context){
+		Intent intent = new Intent(context,SettingActivity.class);
+		return intent;
+	}
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

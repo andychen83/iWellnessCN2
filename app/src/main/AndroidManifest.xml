@@ -54,6 +54,10 @@
             android:name="com.lefu.es.ble.BluetoothLeService"
             android:enabled="true" />
 
+        <service
+            android:name="com.lefu.es.blenew.service.BluetoothLeService1"
+            android:enabled="true" />
+
         <activity
             android:name="com.lefu.es.system.ReceiveAlertActivity"
             android:theme="@style/dialog" />
