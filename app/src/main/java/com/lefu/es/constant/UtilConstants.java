@@ -86,7 +86,7 @@ public class UtilConstants {
 
 	/**称回复错误代码*/
 	public static String ERROR_CODE = "fd31000000000031";
-	public static String ERROR_CODE_TEST = "fd31000000000033";
+	public static String ERROR_CODE_TEST = "fd33000000000033";
 	public static String ERROR_CODE_GETDATE = "fd33000000000033";
 	/**关机指令*/
 	public static String SCALE_ORDER_SHUTDOWN = "fd35000000000035";

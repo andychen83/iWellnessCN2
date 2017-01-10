@@ -32,6 +32,59 @@ public class RecordDao {
 		Records recod = MyUtil.parseMeaage(recordService, readMessage);
 		handleData(recordService,recod,readMessage);
 	}
+
+	public static void handleData2(RecordService recordService,Records recod) {
+		uservice = new UserService(IwellnessApplication.app);
+		try {
+			//UserModel user = UtilConstants.CURRENT_USER;
+//				UserModel um = new UserModel();
+//				um.setId(user.getId());
+//				um.setSex(recod.getSex());
+//				um.setBheigth(Float.parseFloat(recod.getsHeight()));
+//				um.setLevel(recod.getLevel());
+//				um.setAgeYear(Integer.parseInt(recod.getsAge()));
+//				um.setDanwei(user.getDanwei());
+			recod.setUseId(UtilConstants.CURRENT_USER.getId());
+			recod.setUgroup(UtilConstants.CURRENT_USER.getGroup());
+			recod.setRbmr(StringUtils.isNumber(recod.getSbmr()) == true ? (Float.parseFloat(recod.getSbmr()) / 1) : 0);
+			recod.setRbodyfat(StringUtils.isNumber(recod.getSbodyfat()) == true ? Float.parseFloat(recod.getSbodyfat()) : 0);
+			recod.setRbodywater(StringUtils.isNumber(recod.getSbodywater()) == true ? Float.parseFloat(recod.getSbodywater()) : 0);
+			recod.setRbone(StringUtils.isNumber(recod.getSbone()) == true ? Float.parseFloat(recod.getSbone()) : 0);
+			recod.setRmuscle(StringUtils.isNumber(recod.getSmuscle()) == true ? Float.parseFloat(recod.getSmuscle()) : 0);
+			recod.setRvisceralfat(StringUtils.isNumber(recod.getSvisceralfat()) == true ? (Float.parseFloat(recod.getSvisceralfat()) / 1) : 0);
+			recod.setRweight(StringUtils.isNumber(recod.getSweight()) == true ? Float.parseFloat(recod.getSweight()) : 0);
+			recod.setRecordTime(UtilTooth.dateTimeChange(new Date()));
+			if (UtilConstants.BABY_SCALE.equals(recod.getScaleType())) {
+				recod.setRweight(UtilTooth.myround2((float) (recod.getRweight() * 0.1)));
+			} else {
+				recod.setRweight(UtilTooth.myround((float) (recod.getRweight())));
+			}
+			if (StringUtils.isNumber(recod.getSbmi())) {
+				recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
+			}
+			if (StringUtils.isNumber(recod.getsHeight()) == true && !"0".equals(recod.getsHeight())) {
+				recod.setSbmi(String.valueOf(recod.getRbmi()));
+			}
+//				if (StringUtils.isNumber(recod.getSbmi())) {
+//					recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
+//				}
+			try {
+				uservice.update(UtilConstants.CURRENT_USER);
+
+				Records lastRecod = recordService.findLastRecordsByScaleTypeAndUser(recod.getScaleType(), String.valueOf(UtilConstants.CURRENT_USER.getId()));
+				if (null != lastRecod) {
+					recod.setCompareRecord((UtilTooth.myround(recod.getRweight() - lastRecod.getRweight())) + "");
+				} else {
+					recod.setCompareRecord("0.0");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			recordService.save(recod);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**处理数据*/
 	public static void handleData(RecordService recordService,Records recod,String readMessage){
@@ -151,6 +204,10 @@ public class RecordDao {
 	private static UserService uservice;
 	public static void dueKitchenDate(RecordService recordService,String readMessage,NutrientBo nutrient) {
 		Records recod = MyUtil.parseMeaage(recordService, readMessage);
+		handleKitchenData(recordService,recod,nutrient);
+	}
+
+	public static void dueKitchenDate2(RecordService recordService,Records recod,NutrientBo nutrient) {
 		handleKitchenData(recordService,recod,nutrient);
 	}
 

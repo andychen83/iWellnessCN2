@@ -254,7 +254,7 @@ public class UserService {
 	/**获取所有用户数据*/
 	public List<UserModel> getAllDatas()throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user ";
+		String sql="select * from user ORDER BY id DESC limit 0,1 ";
 		Cursor cursor = dbs.rawQuery(sql, null);
 		List<UserModel> pes = new ArrayList<UserModel>();
 		while (cursor.moveToNext()) {

@@ -10,6 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,16 +22,35 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.blenew.bean.BluetoothLeDevice1;
 import com.lefu.es.blenew.constant.BluetoolUtil1;
 import com.lefu.es.blenew.service.BluetoothLeScannerInterface;
 import com.lefu.es.blenew.service.BluetoothLeService1;
 import com.lefu.es.blenew.service.BluetoothUtils1;
+import com.lefu.es.cache.CacheHelper;
+import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.BLEConstant;
 import com.lefu.es.constant.BluetoolUtil;
+import com.lefu.es.constant.UtilConstants;
+import com.lefu.es.db.RecordDao;
+import com.lefu.es.entity.NutrientBo;
+import com.lefu.es.entity.Records;
+import com.lefu.es.service.RecordService;
+import com.lefu.es.service.TimeService;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import static com.lefu.iwellness.newes.cn.system.R.id.cancle_datacbtn;
+import static com.lefu.iwellness.newes.cn.system.R.id.home_img_btn;
+import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
 
 /**
  * Created by Administrator on 2017/1/6.
@@ -51,9 +72,16 @@ public abstract class BaseBleActivity extends Activity {
 
     protected static final int REQUEST_ACCESS_COARSE_LOCATION_PERMISSION = 101;
 
+    public RecordService recordService;
+
+    protected SoundPool soundpool;
+
+    protected Records receiveRecod = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        recordService = new RecordService(this);
         mBluetoothUtils = new BluetoothUtils1(this);
         if(mBluetoothUtils.isBluetoothLeSupported()){
             scanHandler = new Handler();
@@ -299,7 +327,107 @@ public abstract class BaseBleActivity extends Activity {
      */
     public abstract void reveiveBleData(String data);
 
-    @Override
+    /**自定义弹窗*/
+    public void openErrorDiolg(String code) {
+        try {
+            Intent openDialog = new Intent(this, CustomDialogActivity.class);
+            Bundle mBundle = new Bundle();
+            mBundle.putString("error", code);
+            openDialog.putExtras(mBundle);
+            openDialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(openDialog);
+        } catch (Exception e) {
+        }
+    }
+
+    /**播放声音*/
+    public void playSound() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                soundpool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+                int sourceid = -1;
+                sourceid = soundpool.load(BaseBleActivity.this, R.raw.ring, 0);
+                AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                int streamVolume = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                }
+                soundpool.play(sourceid, streamVolume, streamVolume, 1, 0, 1F);
+            }
+        }).start();
+    }
+
+    protected AlertDialog receiveDataDialog;
+    private Button cancleBtn,saveBtn;
+    /**
+     * 接收到数据提示
+     */
+    protected void showReceiveDataDialog() {
+        // 初始化自定义布局参数
+        LayoutInflater layoutInflater = getLayoutInflater();
+        // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
+        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.customDialog));
+
+        cancleBtn = (Button) customLayout.findViewById(R.id.cancle_datacbtn);
+        saveBtn = (Button) customLayout.findViewById(save_databtn);
+
+        cancleBtn.setOnClickListener(imgOnClickListener);
+        saveBtn.setOnClickListener(imgOnClickListener);
+
+        receiveDataDialog = new AlertDialog.Builder(this).setView(customLayout).show();
+
+        Window window = receiveDataDialog.getWindow();
+        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.mystyle); // 添加动画
+    }
+
+    View.OnClickListener imgOnClickListener = new View.OnClickListener() {
+        @SuppressWarnings("deprecation")
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case cancle_datacbtn:
+                    receiveDataDialog.dismiss();
+                    receiveDataDialog = null;
+                    break;
+                case save_databtn:
+                    try {
+                        AppData.hasCheckData=true;
+                        if (!BluetoolUtil.bleflag)
+                            TimeService.setIsdoing(true);
+                        else
+                            BlueSingleton.setIsdoing(true);
+                        if (null != receiveRecod && null != receiveRecod.getScaleType()) {
+                            if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                                NutrientBo nutrient = null;
+                                if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                                    nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                                }
+                                RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                            } else {
+                                RecordDao.handleData2(recordService, receiveRecod);
+                            }
+
+
+                            if (!BluetoolUtil.bleflag){
+                                TimeService.setIsdoing(false);
+                            }else{
+                                BlueSingleton.setIsdoing(false);
+                            }
+                            receiveRecod = null;
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "保存用户测量数据异常"+e.getMessage());
+                    }
+                    break;
+            }
+        }
+    };
+
+
+                @Override
     protected void onPause() {
         super.onPause();
         mActivty = false;

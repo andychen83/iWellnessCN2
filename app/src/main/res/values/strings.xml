@@ -131,6 +131,8 @@
     <!-- 连接状态 -->
     <string name="scale_connect_state_connected">连接状态：连接</string>
     <string name="scale_connect_state_not_connected">连接状态：未连接</string>
+    <string name="connect_state_connected">连接</string>
+    <string name="connect_state_not_connected">未连接</string>
 
     <!-- 分享导出 -->
     <string name="export_name">姓名:</string>
