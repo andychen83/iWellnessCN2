@@ -75,8 +75,8 @@
 
                 <RadioButton
                     android:id="@+id/weight_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -88,8 +88,8 @@
 
                 <RadioButton
                     android:id="@+id/water_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -99,8 +99,8 @@
                     android:textSize="14sp" />
                 <RadioButton
                     android:id="@+id/fat_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -111,8 +111,8 @@
 
                 <RadioButton
                     android:id="@+id/bone_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -134,8 +134,8 @@
 
                 <RadioButton
                     android:id="@+id/bmi_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
                     android:gravity="center"
@@ -145,8 +145,8 @@
                     android:textSize="14sp" />
                 <RadioButton
                     android:id="@+id/visfat_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -157,8 +157,8 @@
 
                 <RadioButton
                     android:id="@+id/bmr_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
@@ -168,8 +168,8 @@
                     android:textSize="14sp" />
                 <RadioButton
                     android:id="@+id/muscial_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/left_corners_btn_selector"
                     android:button="@null"
