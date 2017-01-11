@@ -97,7 +97,8 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
         Serializable serializable = getIntent().getSerializableExtra("baby");
         if(null==serializable){
-
+            Toast.makeText(BabyScaleNewActivity.this, getString(R.string.choice_a_baby), Toast.LENGTH_LONG).show();
+            finish();
         }else{
             babyUser = (UserModel)serializable;
         }

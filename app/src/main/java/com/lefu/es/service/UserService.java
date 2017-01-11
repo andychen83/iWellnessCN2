@@ -119,6 +119,39 @@ public class UserService {
 		dbs.close(); 
 		return pes;
 	}
+
+	/**
+	 * 查询所有婴儿数据
+	 * @return
+	 * @throws Exception
+     */
+	public List<UserModel> getAllBabys()throws Exception {
+		dbs = dbHelper.getReadableDatabase();
+		String sql="select * from user where ageyear<3";
+		Cursor cursor = dbs.rawQuery(sql,null);
+		List<UserModel> pes = new ArrayList<UserModel>();
+		while (cursor.moveToNext()) {
+			int id = cursor.getInt(cursor.getColumnIndex("id"));
+			String name = cursor.getString(cursor.getColumnIndex("username"));
+			String group = cursor.getString(cursor.getColumnIndex("ugroup"));
+			String sex = cursor.getString(cursor.getColumnIndex("sex"));
+			String level = cursor.getString(cursor.getColumnIndex("level"));
+			float bheigth = cursor.getFloat(cursor.getColumnIndex("bheigth"));
+			int ageyear = cursor.getInt(cursor.getColumnIndex("ageyear"));
+			int agemonth = cursor.getInt(cursor.getColumnIndex("agemonth"));
+			int number = cursor.getInt(cursor.getColumnIndex("number"));
+			String uId = cursor.getString(cursor.getColumnIndex("uniqueid"));
+			String birth = cursor.getString(cursor.getColumnIndex("birth"));
+			String photo = cursor.getString(cursor.getColumnIndex("per_photo"));
+			float targweight = cursor.getFloat(cursor.getColumnIndex("targweight"));
+			String  danwei = cursor.getString(cursor.getColumnIndex("danwei"));
+			String  scaletype = cursor.getString(cursor.getColumnIndex("scaletype"));
+			pes.add(new UserModel(id,name,group,sex,level,bheigth,ageyear,agemonth,number,scaletype,uId,birth,photo,targweight,danwei));
+		}
+		cursor.close();
+		dbs.close();
+		return pes;
+	}
 	
 	/**删除用户*/
 	public void delete(int id) throws Exception {

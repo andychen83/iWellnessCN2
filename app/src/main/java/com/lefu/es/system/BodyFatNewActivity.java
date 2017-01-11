@@ -22,6 +22,7 @@ import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.MyUtil;
@@ -29,6 +30,8 @@ import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,8 +88,21 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
     }
 
+    List<UserModel> babys = null;
     @OnClick(R.id.harmbaby_menu)
     public void harmBabyMenuClick(){
+        try {
+            if(null==babys || babys.size()==0) babys=uservice.getAllBabys();
+
+            if(null==babys || babys.size()==0){
+                //添加一个用户组
+            }else{
+                //弹出选择用户组
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         view = LayoutInflater.from(BodyFatNewActivity.this).inflate(R.layout.baby_dialog_gridview, null);
         dialog = new Dialog(BodyFatNewActivity.this);
         dialog.setContentView(view);
