@@ -223,6 +223,11 @@
                 layout="@layout/muscle_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <!--身体年龄-->
+            <include
+                layout="@layout/physical_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
