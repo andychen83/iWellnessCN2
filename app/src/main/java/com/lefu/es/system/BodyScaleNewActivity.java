@@ -67,7 +67,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.harmbaby_menu)
     public void harmBabyMenuClick(){
-        startActivity(BabyScaleNewActivity.creatIntent(BodyScaleNewActivity.this));
+//        startActivity(BabyScaleNewActivity.creatIntent(BodyScaleNewActivity.this));
     }
 
     @OnClick(R.id.setting_menu)
