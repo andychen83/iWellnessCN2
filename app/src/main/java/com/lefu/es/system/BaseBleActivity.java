@@ -27,7 +27,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lefu.es.ble.BlueSingleton;
@@ -44,9 +47,13 @@ import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.lefu.iwellness.newes.cn.system.R.id.cancle_datacbtn;
 import static com.lefu.iwellness.newes.cn.system.R.id.home_img_btn;
@@ -77,6 +84,8 @@ public abstract class BaseBleActivity extends Activity {
     protected SoundPool soundpool;
 
     protected Records receiveRecod = null;
+
+    protected Records  secondRecod = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +214,7 @@ public abstract class BaseBleActivity extends Activity {
         }
     }
 
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+    protected final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService1.LocalBinder) service).getService();
@@ -243,22 +252,12 @@ public abstract class BaseBleActivity extends Activity {
                 nofityHandler.sendMessage(msg1);
 
 
-            } else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {//发现蓝牙服务
+            } else if (BLEConstant.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) { //发现蓝牙服务
                 // Show all the supported services and characteristics on the user interface.
                 Log.e(TAG, "发现服务");
                 if (null != mBluetoothLeService) {
-                    if (null != mDeviceName) {
-                        if(mDeviceName.toLowerCase().startsWith("heal")){
-                            Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_SERVICE);
-                            nofityHandler.sendMessage(msg1);
-                            // 监听 阿里秤 读通道
-                           // BleHelper.getInstance().listenAliScale(mBluetoothLeService);
-                            // 获取用户组
-                           // String sendData = BleHelper.getInstance().assemblyAliData(Units.UNIT_KG.getCode(),"01");
-                            // 发送数据
-                           // BleHelper.getInstance().sendDateToScale(mBluetoothLeService,sendData);
-                        }
-                    }
+                    Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.DESCIVE_SERVICE);
+                    nofityHandler.sendMessage(msg1);
                 }
 
             } else if (BLEConstant.ACTION_DATA_AVAILABLE.equals(action)) { //接收到数据
@@ -409,12 +408,13 @@ public abstract class BaseBleActivity extends Activity {
                                 RecordDao.handleData2(recordService, receiveRecod);
                             }
 
-
                             if (!BluetoolUtil.bleflag){
                                 TimeService.setIsdoing(false);
                             }else{
                                 BlueSingleton.setIsdoing(false);
                             }
+                            receiveDataDialog.dismiss();
+                            receiveDataDialog = null;
                             receiveRecod = null;
                         }
 
@@ -427,7 +427,91 @@ public abstract class BaseBleActivity extends Activity {
     };
 
 
-                @Override
+    /**
+     * 将数据ArrayList中
+     *
+     * @return
+     */
+    protected ArrayList<Baby> getData() {
+        ArrayList<Baby> items = new ArrayList<Baby>();
+        for (int i = 0; i < 7; i++) {
+            Baby baby = new Baby();
+            baby.setName("baby"+i);
+            items.add(baby);
+        }
+        return items;
+    }
+
+    class Baby{
+        public String headUrl;
+        public String name;
+        public void setHeadUrl(String headUrl){
+            this.headUrl = headUrl;
+        }
+        public String getHeadUrl(){
+            return headUrl;
+        }
+        public void setName(String name){
+            this.name = name;
+        }
+        public String getName(){
+            return name;
+        }
+    }
+
+    class BabyGirdViewAdpter extends BaseAdapter {
+        private LayoutInflater inflater;
+        private List<Baby> list;
+
+        public BabyGirdViewAdpter(LayoutInflater inflater, ArrayList<Baby> list) {
+            this.inflater = inflater;
+            this.list = list;
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Baby baby =list.get(position);
+            View view;
+            ViewHolder viewHolder;
+            if(convertView==null){
+                view=inflater.inflate(R.layout.selet_baby, null);
+                viewHolder=new ViewHolder();
+                viewHolder.image=(ImageView) view.findViewById(R.id.imageview);
+                viewHolder.name=(TextView) view.findViewById(R.id.textview);
+                view.setTag(viewHolder);
+            }else{
+                view=convertView;
+                viewHolder=(ViewHolder) view.getTag();
+            }
+//            viewHolder.image.setImageResource();
+            viewHolder.image.setImageDrawable(getDrawable(R.drawable.baby));
+            viewHolder.name.setText(baby.getName());
+            return view;
+        }
+
+    }
+    class ViewHolder{
+        ImageView image;
+        TextView name;
+    }
+
+
+    @Override
     protected void onPause() {
         super.onPause();
         mActivty = false;

@@ -30,6 +30,7 @@ import com.lefu.iwellness.newes.cn.system.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /*人体秤
 * */
@@ -60,6 +61,40 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         ButterKnife.bind(this);
 
         uservice = new UserService(this);
+
+        initView();
+    }
+
+    @OnClick(R.id.harmbaby_menu)
+    public void harmBabyMenuClick(){
+        startActivity(BabyScaleNewActivity.creatIntent(BodyScaleNewActivity.this));
+    }
+
+    @OnClick(R.id.setting_menu)
+    public void setMenuClick(){
+        startActivity(SettingActivity.creatIntent(BodyScaleNewActivity.this));
+    }
+
+    @OnClick(R.id.history_menu)
+    public void  historyMenuClick(){
+        Intent intent = new Intent();
+        intent.setClass(BodyScaleNewActivity.this, RecordListActivity.class);
+        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
+        intent.putExtra("id", 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityForResult(intent, 0);
+    }
+
+    private void initView() {
+        if(null!=UtilConstants.CURRENT_USER){
+            userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
+            try {
+                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
+                if(null!=lastRecords)localData(lastRecords);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -173,12 +208,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                 }
                 UtilConstants.CURRENT_SCALE = choice_scale;
             }
-            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith("dl")){ //新的DL Scale
+            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
-                    dueDate(readMessage,2);
+                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                        UtilConstants.receiveDataTime = System.currentTimeMillis();
+                        dueDate(readMessage,3);
+                    }
                 }else{
-                    dueDate(readMessage,3);
+                    dueDate(readMessage,2);
                 }
             }else{
                 /**判断是不是两次连续的数据*/
@@ -245,6 +283,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     }
 
     /**
+     * 锁定数据显示
+     * @param data
+     */
+    private  void localData(Records data){
+        weithValueTx.setText(String.valueOf(data.getRweight()));
+
+    }
+
+    /**
      * 数据处理
      * @param readMessage
      * @param i
@@ -281,7 +328,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                     Records data  = (Records)msg.obj;
                     if(null!=data){
                         playSound();
-
+                        localData(data);
                         showReceiveDataDialog();
                     }
                     break;

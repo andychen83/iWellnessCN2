@@ -71,10 +71,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="返回"
+                    android:text="@string/back_name"
                     android:textStyle="bold"
                     android:textColor="@color/main_text_color"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/bluetooth_ly"
@@ -85,18 +85,18 @@
                 android:layout_alignParentRight="true">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@drawable/icon_bluetooth_normal" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/bluetooth_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="未连接"
+                    android:text="@string/connect_state_not_connected"
                     android:textStyle="bold"
                     android:textColor="@color/main_text_color"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -126,9 +126,9 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="体重"
+                        android:text="@string/weight_menu"
                         android:textColor="@color/main_text_color"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/weith_value_tx"
@@ -139,7 +139,7 @@
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="10.1kg"
+                        android:text="0kg"
                         android:textColor="@color/main_text_color"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -151,7 +151,7 @@
                         android:layout_marginTop="5dp"
                         android:text="正常"
                         android:textColor="@color/main_text_color"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -167,12 +167,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="目标体重：" />
+                android:text="@string/scale_target_weight" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="000kg" />
+                android:text="0kg" />
         </LinearLayout>
         <!--与上次体重相比-->
         <LinearLayout
@@ -185,12 +185,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="与上次体重相比：" />
+                android:text="@string/scale_weight_compare" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="000kg" />
+                android:text="0kg" />
         </LinearLayout>
         <!--参考尺度-->
         <RelativeLayout
@@ -379,30 +379,30 @@
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/history_menu"
+            android:background="@drawable/history_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/history_menu">
+            android:layout_height="match_parent">
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
             android:background="@drawable/setting_menu"
-            android:id="@+id/set">
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:layout_height="match_parent"
+            android:id="@+id/setting_menu">
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/up_scale"
+            android:id="@+id/harmbaby_menu"
+            android:background="@drawable/harmbaby"
             android:layout_width="wrap_content"
-            android:clickable="true"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/harmbaby">
+            android:layout_height="match_parent">
 
         </RelativeLayout>
 

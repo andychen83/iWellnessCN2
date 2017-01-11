@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="体重"
                     android:textColor="@color/main_text_color"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/weith_value_tx"
@@ -54,7 +54,7 @@
                     android:lines="1"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="55.5kg"
+                    android:text="0kg"
                     android:textColor="@color/main_text_color"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -66,7 +66,7 @@
                     android:layout_marginTop="5dp"
                     android:text="正常"
                     android:textColor="@color/main_text_color"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -101,9 +101,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_bar_height"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/history_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -112,6 +114,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/setting_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -120,6 +123,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/harmbaby_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -148,6 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
+            android:textColor="@color/white"
             android:layout_toRightOf="@id/user_header"
             android:hint="@string/name_title" />
 
