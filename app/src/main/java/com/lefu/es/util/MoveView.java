@@ -10,7 +10,7 @@ import android.view.View;
 public class MoveView {
 
     /*移动体重*/
-    public static void weight(View view, int sex) {
+    public static void weight(View view, int split1,int split2,int weight) {
 
     }
 }

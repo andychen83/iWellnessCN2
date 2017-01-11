@@ -41,10 +41,11 @@
             android:name="com.lefu.es.system.LoadingActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <!-- BT连接服务服务 -->
@@ -139,32 +140,36 @@
         <activity
             android:name="com.lefu.es.system.BodyFatNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <!-- 人体秤 -->
         <activity
             android:name="com.lefu.es.system.BodyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
         <!-- 婴儿秤 -->
         <activity
             android:name="com.lefu.es.system.BabyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <!-- 婴儿秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BabySetScaleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        </activity>
-        <!--脂肪秤设置界面-->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <!-- 脂肪秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BodyFatScaleSetActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name="com.lefu.es.system.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
