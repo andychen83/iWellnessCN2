@@ -540,6 +540,32 @@ public class RecordDao {
 		}
 		return recod;
 	}
+
+
+	/**
+	 * 保存 婴儿数据
+	 * @param recordService
+	 * @param recod
+	 * @param baby
+     */
+	public static void  handHarmBabyData(RecordService recordService,Records recod,UserModel baby){
+		if(null!=recod && null!=baby){
+			try {
+				recod.setUseId(baby.getId());
+				recod.setUgroup(baby.getGroup());
+				Records lastRecod = recordService.findLastRecordsByUID(baby.getId());
+				if (null != lastRecod) {
+					recod.setCompareRecord((UtilTooth.myround(recod.getRweight() - lastRecod.getRweight())) + "");
+				} else {
+					recod.setCompareRecord("0.0");
+				}
+				recordService.save(recod);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 	
 	
 }

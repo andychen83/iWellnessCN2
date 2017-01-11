@@ -189,6 +189,81 @@ public class MyUtil {
 		}
 		return recod;
 	}
+
+
+	/** 解析报文 */
+	public static Records parseMeaageForBaby(RecordService recordService, String readMessage) {
+		Records recod = new Records();
+		try {
+			recod.setScaleType(readMessage.substring(0, 2));
+			recod.setUgroup("P" + StringUtils.hexToTen(readMessage.substring(3, 4)) + "");
+			recod.setLevel(StringUtils.hexToTen(readMessage.substring(2, 3)) + "");
+			String biary = StringUtils.hexToBirary(readMessage.substring(4, 6));
+			if (biary.length() < 8) {
+				for (int i = biary.length(); i < 8; i++) {
+					biary = "0" + biary;
+				}
+			}
+
+
+			recod.setSex(biary.substring(0, 1));
+			recod.setsAge(StringUtils.binaryToTen(biary.substring(1)) + "");
+			recod.setsHeight(StringUtils.hexToTen(readMessage.substring(6, 8)) + "");
+			int weight = StringUtils.hexToTen(readMessage.substring(8, 12));
+			recod.setSweight((weight * 0.1) + "");
+			String unit = readMessage.substring(12, 14);
+			recod.setSbodyfat((StringUtils.hexToTen(readMessage.substring(12, 16)) * 0.1) + "");
+			recod.setSbone((StringUtils.hexToTen(readMessage.substring(16, 18)) * 0.1) + "");
+			//recod.setSbone(getBone(StringUtils.hexToTen(readMessage.substring(16, 18)), StringUtils.hexToTen(readMessage.substring(8, 12))));
+			recod.setSmuscle((StringUtils.hexToTen(readMessage.substring(18, 22)) * 0.1) + "");
+			recod.setSvisceralfat(StringUtils.hexToTen(readMessage.substring(22, 24)) + "");
+			recod.setSbodywater((StringUtils.hexToTen(readMessage.substring(24, 28)) * 0.1) + "");
+			recod.setSbmr((StringUtils.hexToTen(readMessage.substring(28, 32)) * 1) + "");
+
+			if (readMessage.length() > 32)
+				recod.setBodyAge(StringUtils.hexToTen(readMessage.substring(32, 34)) * 1);
+
+			recod.setRbmr(StringUtils.isNumber(recod.getSbmr()) == true ? (Integer.parseInt(recod.getSbmr()) / 1) : 0);
+			recod.setRbodyfat(StringUtils.isNumber(recod.getSbodyfat()) == true ? Float.parseFloat(recod.getSbodyfat()) : 0);
+			recod.setRbodywater(StringUtils.isNumber(recod.getSbodywater()) == true ? Float.parseFloat(recod.getSbodywater()) : 0);
+			recod.setRbone(StringUtils.isNumber(recod.getSbone()) == true ? Float.parseFloat(recod.getSbone()) : 0);
+			recod.setRmuscle(StringUtils.isNumber(recod.getSmuscle()) == true ? Float.parseFloat(recod.getSmuscle()) : 0);
+			recod.setRvisceralfat(StringUtils.isNumber(recod.getSvisceralfat()) == true ? (Integer.parseInt(recod.getSvisceralfat()) / 1) : 0);
+			recod.setRweight(StringUtils.isNumber(recod.getSweight()) == true ? Float.parseFloat(recod.getSweight()) : 0);
+			if (UtilConstants.BABY_SCALE.equals(recod.getScaleType())) {
+				recod.setUnitType(StringUtils.hexToTen(unit));
+				recod.setRweight(UtilTooth.myround2((float) (recod.getRweight() * 0.1)));
+			} else if (UtilConstants.KITCHEN_SCALE.equals(recod.getScaleType())) { //单位是g
+				recod.setSweight(weight + "");
+				recod.setRweight(Float.parseFloat(recod.getSweight()));
+				recod.setUnitType(StringUtils.hexToTen(readMessage.substring(12, 14)));
+			} else {
+				recod.setRweight(UtilTooth.myround((float) (recod.getRweight() * 0.1)));
+			}
+			if (UtilConstants.KITCHEN_SCALE.equals(recod.getScaleType())) {
+				recod.setSbmi("0.0");
+				recod.setRbmi(0.0f);
+			}else{
+				if (StringUtils.isNumber(recod.getsHeight()) == true && !"0".equals(recod.getsHeight())) {
+					recod.setSbmi(UtilTooth.countBMI(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100));
+				}
+				if (StringUtils.isNumber(recod.getSbmi())) {
+					recod.setRbmi(UtilTooth.myround(Float.parseFloat(recod.getSbmi())));
+				}
+			}
+			if (!UtilConstants.KITCHEN_SCALE.equals(recod.getScaleType())) {
+				lastRecod = recordService.findLastRecordsByScaleType(recod.getScaleType(), recod.getUgroup());
+			}
+			if (null != lastRecod) {
+				recod.setCompareRecord((UtilTooth.myround(recod.getRweight() - lastRecod.getRweight())) + "");
+			} else {
+				recod.setCompareRecord("0.0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return recod;
+	}
 	
 	public static Records parseZuKangMeaage(RecordService recordService ,String readMessage,UserModel user) {
 		Log.e("test", "解析数据：" + readMessage);

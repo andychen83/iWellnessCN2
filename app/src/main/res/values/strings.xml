@@ -380,5 +380,6 @@
     <string name="visfat_menu">内脏脂肪</string>
     <string name="bmr_menu">BMR</string>
     <string name="muscial_menu">肌肉率</string>
-
+    <string name="open_harmbaby_scale">测量婴儿体重请先点击  上秤  菜单，打开抱婴模式</string>
+    <string name="mesure_error_harmbaby">测量错误：抱婴后重量比之前更轻了</string>
 </resources>
