@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.db.DatabaseCreatOrUpdateHelper;
 
@@ -24,7 +25,7 @@ public class IwellnessApplication extends MultiDexApplication{
 		/*异常捕捉*/
 //		CrashHandler crashHandler = CrashHandler.getInstance();
 //		crashHandler.init(getApplicationContext());
-
+        Fresco.initialize(getApplicationContext());
         new IwellnessApplication.initAsyncTask().execute();//初始化营养参数
     }
 

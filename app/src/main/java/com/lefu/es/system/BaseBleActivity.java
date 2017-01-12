@@ -367,7 +367,7 @@ public abstract class BaseBleActivity extends Activity {
         // 初始化自定义布局参数
         LayoutInflater layoutInflater = getLayoutInflater();
         // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
-        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.customDialog));
+        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.receiveDataDialog));
 
         cancleBtn = (Button) customLayout.findViewById(R.id.cancle_datacbtn);
         saveBtn = (Button) customLayout.findViewById(save_databtn);
@@ -378,7 +378,7 @@ public abstract class BaseBleActivity extends Activity {
         receiveDataDialog = new AlertDialog.Builder(this).setView(customLayout).show();
 
         Window window = receiveDataDialog.getWindow();
-        window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
         window.setWindowAnimations(R.style.mystyle); // 添加动画
     }
 

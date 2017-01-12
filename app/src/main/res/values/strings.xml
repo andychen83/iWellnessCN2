@@ -175,6 +175,7 @@
     <string name="user_photo_take">拍照</string>
     <string name="user_photo_album">从照片图库</string>
     <string name="user_info_save_error">保存用户信息错误</string>
+    <string name="user_info_save_success">保存用户信息成功</string>
     <string name="user_target_weight">目标体重</string>
     <string name="wight_kitchen_title">重量</string>
 
@@ -383,4 +384,6 @@
     <string name="open_harmbaby_scale">测量婴儿体重请先点击  上秤  菜单，打开抱婴模式</string>
     <string name="mesure_error_harmbaby">测量错误：抱婴后重量比之前更轻了</string>
     <string name="choice_a_baby">请选择一个需要测量的婴儿</string>
+    <string name="please_choice_a_baby">请选择</string>
+    <string name="add_title">添加</string>
 </resources>

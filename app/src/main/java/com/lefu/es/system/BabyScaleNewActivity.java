@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.cache.CacheHelper;
@@ -42,6 +44,7 @@ import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +80,9 @@ public class BabyScaleNewActivity extends BaseBleActivity {
     @Bind(R.id.user_name)
     AppCompatTextView userNameTx;
 
+    @Bind(R.id.user_header)
+    SimpleDraweeView userHeadImg;
+
     private   boolean isOpenBabyScale = false;//是否是上秤模式
 
     protected UserModel babyUser = null; //选择的婴儿
@@ -101,8 +107,18 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             finish();
         }else{
             babyUser = (UserModel)serializable;
+            initView(babyUser);
         }
 
+    }
+
+    private void initView(UserModel babyUser) {
+        if(null!=babyUser){
+            if(!TextUtils.isEmpty(babyUser.getPer_photo())){
+                userHeadImg.setImageURI(Uri.fromFile(new File(babyUser.getPer_photo())));
+            }
+            userNameTx.setText(babyUser.getUserName());
+        }
     }
 
     /**
