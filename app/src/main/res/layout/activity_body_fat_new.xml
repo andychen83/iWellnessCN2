@@ -190,31 +190,43 @@
             <!--体重-->
             <include
                 layout="@layout/weight_scale"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--水分率-->
             <include
                 layout="@layout/moisture_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--脂肪率-->
             <include
                 layout="@layout/bft"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--骨量-->
             <include
                 layout="@layout/bone_mass"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--BMI-->
             <include
                 layout="@layout/bmi_scale"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--内脏脂肪-->
             <include
                 layout="@layout/visceral_fat"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--BMR-->
@@ -225,11 +237,15 @@
             <!--肌肉率-->
             <include
                 layout="@layout/muscle_rate"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--身体年龄-->
             <include
                 layout="@layout/physical_age"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

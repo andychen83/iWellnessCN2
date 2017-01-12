@@ -7,8 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="10dp"
         android:paddingTop="10dp">
 
@@ -48,14 +46,14 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+                android:id="@+id/bft_biaoz"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/grade_bg"
                 android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:paddingTop="5dp"
+                android:gravity="center"
                 android:text="标准"
                 android:textColor="@color/white" />
 
@@ -84,6 +82,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/bft_critical_point1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="18.5"
@@ -92,8 +91,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6" />
+                android:layout_weight="1" />
             <TextView
+                android:id="@+id/bft_critical_point2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="24.0"
@@ -102,9 +102,21 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6" />
+                android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/bft_critical_point3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="28.0"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/bft_critical_point4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="28.0"
@@ -120,12 +132,36 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/top_wa_bft"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/green_light_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="瘦" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_gravity="top"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/gray"></RelativeLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -228,16 +264,16 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/face_img_bft_ll"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="23dp"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/face_img_weight"
+                android:id="@+id/face_img_bft"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="120dp"
                 android:src="@drawable/hp_icon" />
         </LinearLayout>
     </RelativeLayout>
