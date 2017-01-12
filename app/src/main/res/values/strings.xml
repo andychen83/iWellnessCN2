@@ -386,4 +386,7 @@
     <string name="choice_a_baby">请选择一个需要测量的婴儿</string>
     <string name="please_choice_a_baby">请选择</string>
     <string name="add_title">添加</string>
+
+    <string name="adult_onscale_waring">大人先上秤</string>
+    <string name="harm_baby_onscale_waring">抱着婴儿上秤</string>
 </resources>

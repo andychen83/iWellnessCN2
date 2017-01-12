@@ -173,6 +173,7 @@
                 android:text="@string/scale_target_weight" />
 
             <TextView
+                android:id="@+id/targe_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0kg" />
@@ -191,6 +192,7 @@
                 android:text="@string/scale_weight_compare" />
 
             <TextView
+                android:id="@+id/compare_last_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0kg" />

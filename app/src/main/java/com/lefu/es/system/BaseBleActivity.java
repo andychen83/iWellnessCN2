@@ -85,8 +85,6 @@ public abstract class BaseBleActivity extends Activity {
 
     protected Records receiveRecod = null;
 
-    protected Records  secondRecod = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
