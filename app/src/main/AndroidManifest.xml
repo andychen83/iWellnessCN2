@@ -177,6 +177,8 @@
         <activity
             android:name="com.lefu.es.system.BabyChoiceActivity"
             android:theme="@style/dialog" />
+        <activity android:name="com.lefu.es.system.TestActivity">
+        </activity>
     </application>
 
 </manifest>
