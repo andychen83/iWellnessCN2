@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,8 +35,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.lefu.iwellness.newes.cn.system.R.style.dialog;
 
 public class BodyFatNewActivity extends BaseBleActivity {
 
@@ -96,29 +93,14 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
             if(null==babys || babys.size()==0){
                 //添加一个用户组
+                startActivity(BabyAddActivity.creatIntent(BodyFatNewActivity.this));
             }else{
                 //弹出选择用户组
+                startActivity(BabyChoiceActivity.creatIntent(BodyFatNewActivity.this));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        view = LayoutInflater.from(BodyFatNewActivity.this).inflate(R.layout.baby_dialog_gridview, null);
-        dialog = new Dialog(BodyFatNewActivity.this);
-        dialog.setContentView(view);
-        dialog.setTitle("请选择");
-        GridView gridview = (GridView) view.findViewById(R.id.gview);
-        BabyGirdViewAdpter adpter = new BabyGirdViewAdpter(getLayoutInflater(),getData());
-        gridview.setAdapter(adpter);
-
-        // 添加点击事件
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getApplicationContext(), "你选择了：" + getData().get(arg2).getName(), Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
         //startActivity(BabyScaleNewActivity.creatIntent(BodyFatNewActivity.this));
     }
 

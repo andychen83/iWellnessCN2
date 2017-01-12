@@ -1,5 +1,6 @@
 package com.lefu.es.util;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -513,6 +514,15 @@ public class MyUtil {
 		bo = bo * 0.01 * (weight * 0.1);
 		return UtilTooth.myroundString(bo + "");
 	}
-	
-	
+
+	/**
+	 * 四舍五入 保留一位小数
+	 * @param f
+	 * @return
+     */
+	public static double onePoint(double f) {
+		BigDecimal b = new BigDecimal(f);
+		double f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return f1;
+	}
 }
