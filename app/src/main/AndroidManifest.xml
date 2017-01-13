@@ -41,10 +41,7 @@
             android:name="com.lefu.es.system.LoadingActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+
         </activity>
 
         <!-- BT连接服务服务 -->
@@ -53,7 +50,6 @@
         <service
             android:name="com.lefu.es.ble.BluetoothLeService"
             android:enabled="true" />
-
         <service
             android:name="com.lefu.es.blenew.service.BluetoothLeService1"
             android:enabled="true" />
@@ -140,40 +136,47 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
+        <!-- 新脂肪秤界面 -->
         <activity
             android:name="com.lefu.es.system.BodyFatNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 添加婴儿信息界面 -->
+        <activity
+            android:name="com.lefu.es.system.BabyAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleBar" />
         <!-- 人体秤 -->
         <activity
             android:name="com.lefu.es.system.BodyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <!-- 婴儿秤 -->
         <activity
             android:name="com.lefu.es.system.BabyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!-- 婴儿秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BabySetScaleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!-- 脂肪秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BodyFatScaleSetActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name="com.lefu.es.system.TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="com.lefu.es.system.TestActivity"></activity>
+        <!-- 婴儿选择页面 -->
+        <activity
+            android:name="com.lefu.es.system.BabyChoiceActivity"
+            android:theme="@style/dialog" />
     </application>
 
 </manifest>

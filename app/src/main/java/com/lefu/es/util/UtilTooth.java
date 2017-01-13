@@ -240,6 +240,12 @@ public class UtilTooth {
 		float lb = (float) (kg * 0.1574803);
 		return myround2(lb) + "";
 	}
+
+	public static String keep1Point(float kg) {
+		BigDecimal b = new BigDecimal(kg);
+		float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+		return String.valueOf(f1);
+	}
 	
 	public static String keep0Point(float kg) {
 		BigDecimal b = new BigDecimal(kg);

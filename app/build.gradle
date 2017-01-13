@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'android.keystore'
             keyPassword '123456'
-            storeFile file('E:/AndroidStudioProjects/iWellnessCN2/app/src/main/assets/android.keystore')
+            storeFile file('F:/Dropbox/iwellnewCN/iWellnessCN2/app/src/main/assets/android.keystore')
             storePassword '123456'
         }
     }
@@ -53,5 +53,6 @@ dependencies {
     compile project(':library')
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.facebook.fresco:fresco:1.0.0'
     //compile 'com.github.tajchert:nammu:1.1.1'
 }

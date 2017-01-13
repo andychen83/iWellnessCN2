@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -28,11 +29,13 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin">
 
-                <android.support.v7.widget.AppCompatImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/user_header"
                     android:layout_width="@dimen/main_scale_btn_size"
                     android:layout_height="@dimen/main_scale_btn_size"
-                    android:background="@drawable/user_default" />
+                    fresco:placeholderImage="@drawable/baby_default"
+                    fresco:failureImage="@drawable/baby_default"
+                    android:background="@drawable/baby_default" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/user_name"
@@ -170,6 +173,7 @@
                 android:text="@string/scale_target_weight" />
 
             <TextView
+                android:id="@+id/targe_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0kg" />
@@ -188,6 +192,7 @@
                 android:text="@string/scale_weight_compare" />
 
             <TextView
+                android:id="@+id/compare_last_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0kg" />
@@ -373,10 +378,11 @@
     <!--底部功能按钮-->
     <LinearLayout
         android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_bar_height"
         android:layout_alignParentBottom="true"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/bottom_bar_height">
 
         <RelativeLayout
             android:id="@+id/history_menu"
@@ -399,11 +405,10 @@
 
         <RelativeLayout
             android:id="@+id/harmbaby_menu"
-            android:background="@drawable/harmbaby"
+            android:background="@drawable/onscale_menu"
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="match_parent">
-
         </RelativeLayout>
 
     </LinearLayout>
