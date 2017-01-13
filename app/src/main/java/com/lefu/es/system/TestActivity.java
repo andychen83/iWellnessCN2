@@ -57,6 +57,34 @@ public class TestActivity extends AppCompatActivity {
     private TextView bmi_critical_point2;
     private TextView bmi_critical_point3;
     private AppCompatTextView bmi_biaoz;
+
+    /*内脏脂肪指数
+    *-----------------
+     */
+    private ImageView face_img_visceral;
+    private LinearLayout face_img_visceral_ll;
+    private TextView visceral_critical_point1;
+    private TextView visceral_critical_point2;
+    private AppCompatTextView visceral_biaoz;
+
+    /*BMR基础代谢率
+    *-----------------
+     */
+    private ImageView face_img_bmr;
+    private LinearLayout face_img_bmr_ll;
+    private TextView bmr_critical_point1;
+    private TextView bmr_critical_point2;
+    private AppCompatTextView bmr_biaoz;
+
+    /*肌肉率
+    *-----------------
+     */
+    private ImageView face_img_muscle;
+    private LinearLayout face_img_muscle_ll;
+    private TextView muscle_critical_point1;
+    private TextView muscle_critical_point2;
+    private AppCompatTextView muscle_biaoz;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +122,8 @@ public class TestActivity extends AppCompatActivity {
         bone_critical_point2 = (TextView) findViewById(R.id.bone_critical_point2);
         bone_biaoz = (AppCompatTextView) findViewById(R.id.bone_biaoz);
         face_img_bone = (ImageView) findViewById(R.id.face_img_bone);
-        // 脂肪率
-        MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.5);
+        // 骨量
+        MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7);
 
 
         face_img_bmi_ll = (LinearLayout) findViewById(R.id.face_img_bmi_ll);
@@ -105,7 +133,33 @@ public class TestActivity extends AppCompatActivity {
         bmi_biaoz = (AppCompatTextView) findViewById(R.id.bmi_biaoz);
         face_img_bmi = (ImageView) findViewById(R.id.face_img_bmi);
         // BMI
-        MoveView.bmi(TestActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,29);
+        MoveView.bmi(TestActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,18.5);
+
+
+        face_img_visceral_ll = (LinearLayout) findViewById(R.id.face_img_visceral_ll);
+        visceral_critical_point1 = (TextView) findViewById(R.id.visceral_critical_point1);
+        visceral_critical_point2 = (TextView) findViewById(R.id.visceral_critical_point2);
+        visceral_biaoz = (AppCompatTextView) findViewById(R.id.visceral_biaoz);
+        face_img_visceral = (ImageView) findViewById(R.id.face_img_visceral);
+        // 内脏脂肪指数
+        MoveView.visceralFat(TestActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,8);
+
+
+        face_img_bmr_ll = (LinearLayout) findViewById(R.id.face_img_bmr_ll);
+        bmr_critical_point1 = (TextView) findViewById(R.id.bmr_critical_point1);
+        bmr_biaoz = (AppCompatTextView) findViewById(R.id.bmr_biaoz);
+        face_img_bmr = (ImageView) findViewById(R.id.face_img_bmr);
+        // BMR 基础代谢率
+        MoveView.bmr(TestActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
+
+
+        face_img_muscle_ll = (LinearLayout) findViewById(R.id.face_img_muscle_ll);
+        muscle_critical_point1 = (TextView) findViewById(R.id.muscle_critical_point1);
+        muscle_critical_point2 = (TextView) findViewById(R.id.muscle_critical_point2);
+        muscle_biaoz = (AppCompatTextView) findViewById(R.id.muscle_biaoz);
+        face_img_muscle = (ImageView) findViewById(R.id.face_img_muscle);
+        // 肌肉率
+        MoveView.muscle(TestActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
 
 
 
