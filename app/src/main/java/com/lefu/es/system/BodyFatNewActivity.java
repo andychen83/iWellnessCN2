@@ -172,6 +172,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Override
     public void reveiveBleData(String readMessage) {
         System.out.println("检测读取到数据：" + readMessage);
+        if(!mActivty)return ;
         if(TextUtils.isEmpty(readMessage)) return;
         //测脂错误
         if (readMessage.equals(UtilConstants.ERROR_CODE)) {

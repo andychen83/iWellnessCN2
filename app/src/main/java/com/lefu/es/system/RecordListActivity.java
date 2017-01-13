@@ -1,5 +1,6 @@
 package com.lefu.es.system;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -50,6 +52,7 @@ import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.constant.imageUtil;
 import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
 import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
@@ -62,6 +65,8 @@ import com.lefu.es.view.GuideView;
 import com.lefu.es.view.guideview.HighLightGuideView;
 import com.lefu.es.view.guideview.HighLightGuideView.OnDismissListener;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import static com.lefu.iwellness.newes.cn.system.R.drawable.baby;
 
 /**
  * 测量记录列表
@@ -101,6 +106,8 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	private ListView lv;
 
 	private RecordService recordService;
+
+	protected UserModel user = null; //需要展示的用户
 	
 	private void showTipMask() {
 		HighLightGuideView.builder(this)
@@ -135,11 +142,23 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		}).show();
 	}
 
+	public static Intent creatIntent(Context context, UserModel user){
+		Intent intent = new Intent(context,RecordListActivity.class);
+		intent.putExtra("user",user);
+		return intent;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail_new);
-
+		Serializable serializable = getIntent().getSerializableExtra("baby");
+		if(null==serializable){
+			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_baby), Toast.LENGTH_LONG).show();
+			finish();
+		}else{
+			user = (UserModel)serializable;
+		}
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {

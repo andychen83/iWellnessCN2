@@ -19,14 +19,19 @@ import com.lefu.es.blenew.constant.BLEConstant1;
 public class BluetoothUtils1 {
     private final Activity mActivity;
     private final BluetoothAdapter mBluetoothAdapter;
-    private final BluetoothManager mBluetoothManager;
+    private BluetoothManager mBluetoothManager;
     private BluetoothLeScannerInterface mScanner;
     public final static int REQUEST_ENABLE_BT = 2001;
 
     public BluetoothUtils1(Activity activity){
         mActivity = activity;
-        mBluetoothManager = (BluetoothManager) mActivity.getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = mBluetoothManager.getAdapter();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            //mBluetoothManager = (BluetoothManager) mActivity.getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }else{
+            mBluetoothManager = (BluetoothManager) mActivity.getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = mBluetoothManager.getAdapter();
+        }
     }
 
     /**

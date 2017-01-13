@@ -123,6 +123,8 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         }else{
             babyUser = (UserModel)serializable;
             initView(babyUser);
+
+            Toast.makeText(BabyScaleNewActivity.this, getString(R.string.click_onscale_waring), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -185,6 +187,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
     protected  void initBabyData(Records records){
         if(null!=records){
+          weithValueTx.setText(UtilTooth.keep1Point(records.getRweight()));
           compareLastTx.setText(records.getCompareRecord());
         }
     }
@@ -390,6 +393,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                             return ;
                         }else{
                             float weight  = data.getRweight()-receiveRecod.getRweight();
+                            ToastUtils.ToastCenter(BabyScaleNewActivity.this, "接收到抱着婴儿测量的数据了****:"+weight);
                             if(weight>0){
                                 //保存 婴体重
                                 try {

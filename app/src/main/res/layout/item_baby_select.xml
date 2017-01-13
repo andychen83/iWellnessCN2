@@ -12,9 +12,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
-        fresco:placeholderImage="@drawable/user_default"
+        fresco:placeholderImage="@drawable/baby_default"
         fresco:roundAsCircle="true"
-        fresco:failureImage="@drawable/user_default"
+        fresco:failureImage="@drawable/baby_default"
         android:scaleType="centerCrop" />
 
     <TextView

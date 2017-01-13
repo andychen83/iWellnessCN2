@@ -33,9 +33,9 @@
                     android:id="@+id/user_header"
                     android:layout_width="@dimen/main_scale_btn_size"
                     android:layout_height="@dimen/main_scale_btn_size"
-                    fresco:placeholderImage="@drawable/user_default"
-                    fresco:failureImage="@drawable/user_default"
-                    android:background="@drawable/user_default" />
+                    fresco:placeholderImage="@drawable/baby_default"
+                    fresco:failureImage="@drawable/baby_default"
+                    android:background="@drawable/baby_default" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/user_name"
@@ -378,10 +378,11 @@
     <!--底部功能按钮-->
     <LinearLayout
         android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_bar_height"
         android:layout_alignParentBottom="true"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/bottom_bar_height">
 
         <RelativeLayout
             android:id="@+id/history_menu"
@@ -404,11 +405,10 @@
 
         <RelativeLayout
             android:id="@+id/harmbaby_menu"
-            android:background="@drawable/harmbaby"
+            android:background="@drawable/onscale_menu"
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="match_parent">
-
         </RelativeLayout>
 
     </LinearLayout>
