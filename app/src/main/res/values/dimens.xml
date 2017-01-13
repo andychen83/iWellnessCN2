@@ -15,7 +15,7 @@
 
     <dimen name="main_scale_btn_size">80dp</dimen>
     <dimen name="main_scale_btn_pad">120dp</dimen>
-    <dimen name="main_scale_btn_pad2">240dp</dimen>
+    <dimen name="main_scale_btn_pad2">220dp</dimen>
 
     <dimen name="dialog_four_items">480dp</dimen>
 </resources>
