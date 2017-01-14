@@ -29,6 +29,7 @@ import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
+import com.lefu.es.util.MoveView;
 import com.lefu.es.util.MyUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
@@ -101,89 +102,89 @@ public class BodyFatNewActivity extends BaseBleActivity {
     *-----------------
      */
     @Bind(R.id.face_img_bft)
-    private ImageView face_img_bft;
+     ImageView face_img_bft;
     @Bind(R.id.face_img_bft_ll)
-    private LinearLayout face_img_bft_ll;
+     LinearLayout face_img_bft_ll;
     @Bind(R.id.bft_critical_point1)
-    private TextView bft_critical_point1;
+     TextView bft_critical_point1;
     @Bind(R.id.bft_critical_point2)
-    private TextView bft_critical_point2;
+     TextView bft_critical_point2;
     @Bind(R.id.bft_critical_point3)
-    private TextView bft_critical_point3;
+     TextView bft_critical_point3;
     @Bind(R.id.bft_critical_point4)
-    private TextView bft_critical_point4;
+     TextView bft_critical_point4;
     @Bind(R.id.bft_biaoz)
-    private AppCompatTextView bft_biaoz;
+     AppCompatTextView bft_biaoz;
 
     /*骨量
     *-----------------
      */
     @Bind(R.id.face_img_bone)
-    private ImageView face_img_bone;
+     ImageView face_img_bone;
     @Bind(R.id.face_img_bone_ll)
-    private LinearLayout face_img_bone_ll;
+     LinearLayout face_img_bone_ll;
     @Bind(R.id.bone_critical_point1)
-    private TextView bone_critical_point1;
+     TextView bone_critical_point1;
     @Bind(R.id.bone_critical_point2)
-    private TextView bone_critical_point2;
+     TextView bone_critical_point2;
     @Bind(R.id.bone_biaoz)
-    private AppCompatTextView bone_biaoz;
+     AppCompatTextView bone_biaoz;
 
     /*BMI
     *-----------------
      */
     @Bind(R.id.face_img_bmi)
-    private ImageView face_img_bmi;
+     ImageView face_img_bmi;
     @Bind(R.id.face_img_bmi_ll)
-    private LinearLayout face_img_bmi_ll;
+     LinearLayout face_img_bmi_ll;
     @Bind(R.id.bmi_critical_point1)
-    private TextView bmi_critical_point1;
+     TextView bmi_critical_point1;
     @Bind(R.id.bmi_critical_point2)
-    private TextView bmi_critical_point2;
+     TextView bmi_critical_point2;
     @Bind(R.id.bmi_critical_point3)
-    private TextView bmi_critical_point3;
+     TextView bmi_critical_point3;
     @Bind(R.id.bmi_biaoz)
-    private AppCompatTextView bmi_biaoz;
+     AppCompatTextView bmi_biaoz;
 
     /*内脏脂肪指数
     *-----------------
      */
     @Bind(R.id.face_img_visceral)
-    private ImageView face_img_visceral;
+     ImageView face_img_visceral;
     @Bind(R.id.face_img_visceral_ll)
-    private LinearLayout face_img_visceral_ll;
+     LinearLayout face_img_visceral_ll;
     @Bind(R.id.visceral_critical_point1)
-    private TextView visceral_critical_point1;
+     TextView visceral_critical_point1;
     @Bind(R.id.visceral_critical_point2)
-    private TextView visceral_critical_point2;
+     TextView visceral_critical_point2;
     @Bind(R.id.visceral_biaoz)
-    private AppCompatTextView visceral_biaoz;
+     AppCompatTextView visceral_biaoz;
 
     /*BMR基础代谢率
     *-----------------
      */
     @Bind(R.id.face_img_bmr)
-    private ImageView face_img_bmr;
+     ImageView face_img_bmr;
     @Bind(R.id.face_img_bmr_ll)
-    private LinearLayout face_img_bmr_ll;
+     LinearLayout face_img_bmr_ll;
     @Bind(R.id.bmr_critical_point1)
-    private TextView bmr_critical_point1;
+     TextView bmr_critical_point1;
     @Bind(R.id.bmr_biaoz)
-    private AppCompatTextView bmr_biaoz;
+     AppCompatTextView bmr_biaoz;
 
     /*肌肉率
     *-----------------
      */
     @Bind(R.id.face_img_muscle)
-    private ImageView face_img_muscle;
+     ImageView face_img_muscle;
     @Bind(R.id.face_img_muscle_ll)
-    private LinearLayout face_img_muscle_ll;
+     LinearLayout face_img_muscle_ll;
     @Bind(R.id.muscle_critical_point1)
-    private TextView muscle_critical_point1;
+     TextView muscle_critical_point1;
     @Bind(R.id.muscle_critical_point2)
-    private TextView muscle_critical_point2;
+     TextView muscle_critical_point2;
     @Bind(R.id.muscle_biaoz)
-    private AppCompatTextView muscle_biaoz;
+     AppCompatTextView muscle_biaoz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,8 +197,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
     }
 
 
+    /**
+     * 初始化界面参数
+     */
     private void initView() {
-
         if(null!=UtilConstants.CURRENT_USER){
             try {
                 userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
@@ -209,6 +212,31 @@ public class BodyFatNewActivity extends BaseBleActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 初始化界面所有的进度条
+     * @param record
+     */
+    public void initBodyBar(UserModel user, Records record){
+        if(null!=record){
+            // 体重
+            MoveView.weight(BodyFatNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,58);
+            // 水分率
+            MoveView.moisture(BodyFatNewActivity.this,face_img_moisture_ll,face_img_moisture,moistrue_critical_point1,moistrue_critical_point2,biaoz_moistrue,0,59);
+            // 脂肪率
+            MoveView.bft(BodyFatNewActivity.this,face_img_bft_ll,face_img_bft,bft_critical_point1,bft_critical_point2,bft_critical_point3,bft_critical_point4,bft_biaoz,1,28,10);
+            // 骨量
+            MoveView.bone(BodyFatNewActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7);
+            // BMI
+            MoveView.bmi(BodyFatNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,25);
+            // 内脏脂肪指数
+            MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,12);
+            // BMR 基础代谢率
+            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
+            // 肌肉率
+            MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
         }
     }
 
