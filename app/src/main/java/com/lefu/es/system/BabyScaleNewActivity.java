@@ -137,6 +137,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             userNameTx.setText(babyUser.getUserName());
             targetTx.setText(UtilTooth.keep1Point3(babyUser.getTargweight())+"");
             //初始化界面参数
+            initViewData(babyUser);
         }
     }
 
@@ -202,12 +203,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.history_menu)
     public void  historyMenuClick(){
-        Intent intent = new Intent();
-        intent.setClass(BabyScaleNewActivity.this, RecordListActivity.class);
-        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
-        intent.putExtra("id", 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityForResult(intent, 0);
+        startActivityForResult(RecordListActivity.creatIntent(BabyScaleNewActivity.this,babyUser),0);
     }
 
     @OnClick(R.id.harmbaby_menu)
@@ -222,7 +218,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.setting_menu)
     public void setMenuClick(){
-        startActivity(BodyFatScaleSetActivity.creatIntent(BabyScaleNewActivity.this));
+        startActivity(BodyFatScaleSetActivity.creatIntent(BabyScaleNewActivity.this,babyUser));
     }
 
 
@@ -393,7 +389,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                             return ;
                         }else{
                             float weight  = data.getRweight()-receiveRecod.getRweight();
-                            ToastUtils.ToastCenter(BabyScaleNewActivity.this, "接收到抱着婴儿测量的数据了****:"+weight);
+                            //ToastUtils.ToastCenter(BabyScaleNewActivity.this, "接收到抱着婴儿测量的数据了****:"+weight);
                             if(weight>0){
                                 //保存 婴体重
                                 try {

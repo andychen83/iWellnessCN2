@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +32,8 @@ import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import static android.R.attr.tag;
+
 /**
  * 用户列表界面
  * @author Leon
@@ -39,6 +42,8 @@ import com.lefu.iwellness.newes.cn.system.R;
  */
 @SuppressLint("HandlerLeak")
 public class UserListActivity extends Activity {
+	private static String TAG = UserListActivity.class.getSimpleName();
+
 	private UserlistviewAdapter userAdapter;
 	private ListView brithListview;
 
@@ -61,15 +66,30 @@ public class UserListActivity extends Activity {
 		ExitApplication.getInstance().addActivity(this);
 	}
 
+	public void viewInit() {
+		addphoto_imageView = (ImageView) findViewById(R.id.addphoto_imageView);
+		addphoto_imageView.setOnClickListener(imgOnClickListener);
+		brithListview = (ListView) this.findViewById(R.id.user_listview);
+		brithListview.setOnItemClickListener(onItemClickListener);
+		editText = (TextView) findViewById(R.id.useredit_textView);
+		editText.setOnClickListener(imgOnClickListener);
+		backText = (TextView) findViewById(R.id.back_tv);
+		backText.setOnClickListener(imgOnClickListener);
+		dataInit();
+		userAdapter = new UserlistviewAdapter(getApplicationContext(), R.layout.user_list_item, users);
+		brithListview.setAdapter(userAdapter);
+	}
+
 	public void dataInit() {
-		if (null == uservice) {
-			uservice = new UserService(this);
-		}
-		users.clear();
 		try {
+			if (null == uservice) {
+				uservice = new UserService(this);
+			}
+			users.clear();
 			users = this.uservice.getAllUserByScaleType();
 		} catch (Exception e) {
-			e.printStackTrace();
+			users = new ArrayList<>();
+			Log.e(TAG,"用户列表程序失败"+e.getMessage());
 		}
 	}
 
@@ -102,19 +122,7 @@ public class UserListActivity extends Activity {
 		super.onResume();
 	}
 
-	public void viewInit() {
-		addphoto_imageView = (ImageView) findViewById(R.id.addphoto_imageView);
-		addphoto_imageView.setOnClickListener(imgOnClickListener);
-		brithListview = (ListView) this.findViewById(R.id.user_listview);
-		brithListview.setOnItemClickListener(onItemClickListener);
-		editText = (TextView) findViewById(R.id.useredit_textView);
-		editText.setOnClickListener(imgOnClickListener);
-		backText = (TextView) findViewById(R.id.back_tv);
-		backText.setOnClickListener(imgOnClickListener);
-		dataInit();
-		userAdapter = new UserlistviewAdapter(getApplicationContext(), R.layout.user_list_item, users);
-		brithListview.setAdapter(userAdapter);
-	}
+
 
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {

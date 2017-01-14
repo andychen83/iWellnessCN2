@@ -26,11 +26,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="身体年龄"
+                android:text="@string/bar_age_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/age_index_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -54,12 +55,12 @@
                 android:background="@drawable/grade_bg"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="标准"
+                android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:visibility="invisible"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>

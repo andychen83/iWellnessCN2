@@ -392,4 +392,28 @@
     <string name="harm_baby_onscale_waring">抱着婴儿上秤</string>
 
     <string name="click_onscale_waring">每次测量请先点击  上秤  菜单</string>
+
+    <string name="bar_weight_title">体重</string>
+    <string name="bar_bodywater_title">水分率</string>
+    <string name="bar_bodyfat_title">脂肪</string>
+    <string name="bar_bone_title">骨量</string>
+    <string name="bar_bmi_title">BMI</string>
+    <string name="bar_visalfat_title">内脏脂肪</string>
+    <string name="bar_bmr_title">BMR</string>
+    <string name="bar_muscal_title">肌肉率</string>
+    <string name="bar_age_title">身体年龄</string>
+
+    <string name="bar_zhengchang_title">正常</string>
+    <string name="bar_biaozhun_title">标准</string>
+    <string name="bar_piandi_title">偏低</string>
+    <string name="bar_piangao_title">偏高</string>
+    <string name="bar_buzu_title">不足</string>
+    <string name="bar_you_title">优</string>
+    <string name="bar_shou_title">瘦</string>
+    <string name="bar_pianshou_title">偏瘦</string>
+    <string name="bar_pianpang_title">偏胖</string>
+    <string name="bar_pang_title">胖</string>
+    <string name="bar_jiankang_title">健康</string>
+    <string name="bar_jinti_title">警惕</string>
+    <string name="bar_weixian_title">危险</string>
 </resources>

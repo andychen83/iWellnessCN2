@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/white"
@@ -17,11 +18,13 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/reviseHead"
                 android:layout_width="75.0dip"
                 android:layout_height="75.0dip"
-                android:background="@drawable/user_pic"
+                android:background="@drawable/user_default"
+                fresco:placeholderImage="@drawable/user_default"
+                fresco:failureImage="@drawable/user_default"
                 android:scaleType="fitXY" />
 
             <TextView

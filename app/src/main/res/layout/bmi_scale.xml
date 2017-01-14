@@ -26,11 +26,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="BMI"
+                android:text="@string/bar_bmi_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/bmi_index_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -54,12 +55,13 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:gravity="center"
-                android:text="标准"
+                android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/bmi_jiantou"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
@@ -141,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="偏瘦" />
+                    android:text="@string/bar_pianshou_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -168,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="健康" />
+                    android:text="@string/bar_jiankang_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -195,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="偏胖" />
+                    android:text="@string/bar_pianpang_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -222,7 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="胖" />
+                    android:text="@string/bar_pang_title" />
             </LinearLayout>
         </LinearLayout>
 

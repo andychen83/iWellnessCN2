@@ -3,6 +3,7 @@ package com.lefu.es.system;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +14,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.blenew.constant.BluetoolUtil1;
 import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.UserService;
@@ -27,6 +30,9 @@ import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import java.io.File;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +47,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     AppCompatTextView bluetoothStatusTx;
 
     @Bind(R.id.user_header)
-    AppCompatImageView userHeaderImg;
+    SimpleDraweeView userHeadImg;
 
     @Bind(R.id.user_name)
     AppCompatTextView userNameTx;
@@ -59,15 +65,44 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body_scale_new);
         ButterKnife.bind(this);
-
         uservice = new UserService(this);
 
         initView();
     }
 
+
+
+    private void initView() {
+        if(null!=UtilConstants.CURRENT_USER){
+            userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
+            if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
+                userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
+            }
+            try {
+                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
+                if(null!=lastRecords)localData(lastRecords);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    List<UserModel> babys = null;
     @OnClick(R.id.harmbaby_menu)
     public void harmBabyMenuClick(){
-//        startActivity(BabyScaleNewActivity.creatIntent(BodyScaleNewActivity.this));
+        try {
+            if(null==babys || babys.size()==0) babys=uservice.getAllBabys();
+
+            if(null==babys || babys.size()==0){
+                //添加一个用户组
+                startActivity(BabyAddActivity.creatIntent(BodyScaleNewActivity.this));
+            }else{
+                //弹出选择用户组
+                startActivity(BabyChoiceActivity.creatIntent(BodyScaleNewActivity.this));
+            }
+        } catch (Exception e) {
+            Log.e(TAG,"脂肪秤页面点击抱婴按钮异常==>"+e.getMessage());
+        }
     }
 
     @OnClick(R.id.setting_menu)
@@ -77,24 +112,22 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.history_menu)
     public void  historyMenuClick(){
-        Intent intent = new Intent();
-        intent.setClass(BodyScaleNewActivity.this, RecordListActivity.class);
-        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
-        intent.putExtra("id", 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityForResult(intent, 0);
+        if(null==UtilConstants.CURRENT_USER){
+            //调到用户列表选择页面
+            Intent intent1 = new Intent();
+            intent1.setClass(BodyScaleNewActivity.this, UserListActivity.class);
+            BodyScaleNewActivity.this.startActivity(intent1);
+        }else{
+            startActivityForResult(RecordListActivity.creatIntent(BodyScaleNewActivity.this,UtilConstants.CURRENT_USER),0);
+        }
     }
 
-    private void initView() {
-        if(null!=UtilConstants.CURRENT_USER){
-            userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
-            try {
-                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
-                if(null!=lastRecords)localData(lastRecords);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    @OnClick(R.id.user_header)
+    public void  userHeaderClick(){
+        //调到用户列表选择页面
+        Intent intent1 = new Intent();
+        intent1.setClass(BodyScaleNewActivity.this, UserListActivity.class);
+        BodyScaleNewActivity.this.startActivity(intent1);
     }
 
     @Override
