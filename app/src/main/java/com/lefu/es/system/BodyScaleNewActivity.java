@@ -12,6 +12,9 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -25,10 +28,13 @@ import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.UserService;
+import com.lefu.es.util.MoveView;
 import com.lefu.es.util.MyUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
+import com.lefu.es.util.UtilTooth;
+import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.io.File;
@@ -53,12 +59,50 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     AppCompatTextView userNameTx;
 
     @Bind(R.id.weith_value_tx)
-    AppCompatTextView weithValueTx;
+    MyTextView5 weithValueTx;
 
     @Bind(R.id.weight_index_tx)
     AppCompatTextView weightIndexTx;
 
+    @Bind(R.id.weith_status)
+    TextView weithStatus;
+
+    @Bind(R.id.unti_tv)
+    TextView unit_tv;
+
     private UserService uservice;
+
+    /*体重
+  * ---------*/
+    @Bind(R.id.face_img_weight)
+    ImageView face_img_weight;
+    @Bind(R.id.face_img_weight_ll)
+    LinearLayout face_img_weight_ll;
+    @Bind(R.id.weight_critical_point1)
+    TextView weight_critical_point1;
+    @Bind(R.id.weight_critical_point2)
+    TextView weight_critical_point2;
+    @Bind(R.id.biaoz)
+    AppCompatTextView biaoz;
+    @Bind(R.id.weight_index_tx)
+    AppCompatTextView weightIndex;
+    /*BMI
+   *-----------------
+    */
+    @Bind(R.id.face_img_bmi)
+    ImageView face_img_bmi;
+    @Bind(R.id.face_img_bmi_ll)
+    LinearLayout face_img_bmi_ll;
+    @Bind(R.id.bmi_critical_point1)
+    TextView bmi_critical_point1;
+    @Bind(R.id.bmi_critical_point2)
+    TextView bmi_critical_point2;
+    @Bind(R.id.bmi_critical_point3)
+    TextView bmi_critical_point3;
+    @Bind(R.id.bmi_biaoz)
+    AppCompatTextView bmi_biaoz;
+    @Bind(R.id.bmi_index_tx)
+    AppCompatTextView bmiIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +124,74 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             }
             try {
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
-                if(null!=lastRecords)localData(lastRecords);
+                if(null!=lastRecords){
+                    localData(lastRecords,UtilConstants.CURRENT_USER);
+                    initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 初始化 圆圈参数
+     * @param
+     */
+    private  void localData(Records record,UserModel user){
+        if(null==user || null==record)return;
+        if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+            if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
+                String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
+
+                weithValueTx.setTexts(tempS[0], tempS[1]);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.stlb_danwei));
+                }
+            } else {
+                weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.stlb_danwei));
+                }
+            }
+        } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+            weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            if (null != unit_tv) {
+                unit_tv.setText(this.getText(R.string.lb_danwei));
+            }
+        } else {
+            weithValueTx.setTexts(record.getRweight() + "", null);
+            if (null != unit_tv) {
+                unit_tv.setText(this.getText(R.string.kg_danwei));
+            }
+        }
+        String sex = user.getSex();
+        if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+        int gender = Integer.parseInt(sex);
+        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
+    }
+
+    /**
+     * 初始化界面所有的进度条
+     * @param record
+     */
+    public void initBodyBar(UserModel user, Records record){
+        if(null!=record && null!=user){
+            String sex = user.getSex();
+            if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+            int gender = Integer.parseInt(sex);
+            // 体重
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
+                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRweight()) + "lb");
+            }else{
+                weightIndex.setText(UtilTooth.keep1Point(record.getRweight())+ "kg");
+            }
+            MoveView.weight(BodyScaleNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),record.getRweight(),user.getDanwei());
+
+            // BMI
+            bmiIndex.setText(UtilTooth.keep1Point(record.getRbmi()));
+            MoveView.bmi(BodyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,record.getRbmi());
+
         }
     }
 
@@ -315,14 +423,12 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         }
     }
 
-    /**
-     * 锁定数据显示
-     * @param data
-     */
-    private  void localData(Records data){
-        weithValueTx.setText(String.valueOf(data.getRweight()));
-
+    @Override
+    protected  void saveDataCallBack(Records records){
+        initBodyBar(UtilConstants.CURRENT_USER,records);
     }
+
+
 
     /**
      * 数据处理
@@ -343,7 +449,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
 
-            weithValueTx.setText(String.valueOf(weight));
+            weithValueTx.setTexts(String.valueOf(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -361,7 +467,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                     Records data  = (Records)msg.obj;
                     if(null!=data){
                         playSound();
-                        localData(data);
+                        weithValueTx.setTexts(String.valueOf(data.getRweight()),null);
                         showReceiveDataDialog();
                     }
                     break;

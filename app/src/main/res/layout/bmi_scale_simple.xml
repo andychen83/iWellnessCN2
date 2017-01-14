@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <!--BMI-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,27 +15,29 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/bmr_icon" />
+                android:src="@drawable/bmi_icon" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="@string/bar_bmr_title"
+                android:text="@string/bar_bmi_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/bmr_index_tx"
+            android:id="@+id/bmi_index_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="1320kcal"
+            android:text="19"
+            android:visibility="gone"
             android:textColor="@color/main_text_color" />
 
         <LinearLayout
@@ -44,22 +46,23 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/bmr_biaoz"
+                android:id="@+id/bmi_biaoz"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/grade_bg"
                 android:paddingBottom="5dp"
-                android:gravity="center"
                 android:paddingTop="5dp"
+                android:gravity="center"
                 android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/bmr_jiantou"
+                android:id="@+id/bmi_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/down_arrow" />
@@ -67,35 +70,62 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/status_bar_bmr"
+        android:id="@+id/status_bar_bmi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/top_wa2"
+            android:id="@+id/top_wa_bmi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <TextView
-                android:id="@+id/bmr_critical_point1"
+                android:id="@+id/bmi_critical_point1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1261Kcal"
-                android:textSize="12sp"/>
+                android:text="18.5"
+                android:textSize="12sp" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/bmi_critical_point2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24.0"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/bmi_critical_point3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="28.0"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_below="@+id/top_wa2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_below="@+id/top_wa_bmi"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -110,13 +140,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="@color/red" />
+                    android:background="@color/green_light_color" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/bar_piandi_title" />
+                    android:text="@string/bar_pianshou_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -143,20 +173,76 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/bar_you_title" />
+                    android:text="@string/bar_jiankang_title" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_gravity="top"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/gray"></RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/red_med_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/bar_pianpang_title" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_gravity="top"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/gray"></RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/red_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/bar_pang_title" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
-            android:id="@+id/face_img_bmr_ll"
+            android:id="@+id/face_img_bmi_ll"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="23dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <ImageView
-                android:id="@+id/face_img_bmr"
+                android:id="@+id/face_img_bmi"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/hp_icon"/>
+                android:src="@drawable/hp_icon" />
         </LinearLayout>
     </RelativeLayout>
 

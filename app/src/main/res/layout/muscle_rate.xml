@@ -67,7 +67,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/status_bar_moisture"
+        android:id="@+id/status_bar_muscial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible">

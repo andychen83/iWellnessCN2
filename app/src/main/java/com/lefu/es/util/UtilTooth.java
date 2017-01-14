@@ -264,6 +264,12 @@ public class UtilTooth {
 		return f1;
 	}
 
+	public static float keep1Point3(float kg) {
+		BigDecimal b = new BigDecimal(kg);
+		float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+		return f1;
+	}
+
 	public static float kgToLB_F(float kg) {
 		float templb = ((kg * 10 * 10 * 0x2B0F / 0xC350 + 1) / 2) * 2 / 10;
 		BigDecimal b = new BigDecimal(templb);

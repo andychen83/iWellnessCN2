@@ -405,7 +405,7 @@ public abstract class BaseBleActivity extends Activity {
                             } else {
                                 RecordDao.handleData2(recordService, receiveRecod);
                             }
-
+                            saveDataCallBack(receiveRecod);
                             if (!BluetoolUtil.bleflag){
                                 TimeService.setIsdoing(false);
                             }else{
@@ -423,6 +423,12 @@ public abstract class BaseBleActivity extends Activity {
             }
         }
     };
+
+    /**
+     * 保存后回调
+     * @param records
+     */
+    protected abstract  void saveDataCallBack(Records records);
 
 
     /**

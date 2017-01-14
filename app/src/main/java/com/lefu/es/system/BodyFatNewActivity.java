@@ -34,6 +34,9 @@ import com.lefu.es.util.MyUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
+import com.lefu.es.util.UtilTooth;
+import com.lefu.es.view.MyTextView;
+import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.io.File;
@@ -42,6 +45,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.R.attr.data;
+import static com.lefu.iwellness.newes.cn.system.R.id.textView1;
+import static com.lefu.iwellness.newes.cn.system.R.id.textView2;
 
 public class BodyFatNewActivity extends BaseBleActivity {
 
@@ -52,7 +59,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
     TextView bluetoothStatusTx;
 
     @Bind(R.id.weith_value_tx)
-    TextView weithValueTx;
+    MyTextView5 weithValueTx;
+
+    @Bind(R.id.weith_status)
+    TextView weithStatus;
 
     @Bind(R.id.user_name)
     TextView userNameTx;
@@ -60,11 +70,20 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.bmi_value_tx)
     TextView bmTx;
 
+    @Bind(R.id.bmi_status)
+    TextView bmiStatus;
+
     @Bind(R.id.visal_value_tx)
     TextView visalTx;
 
+    @Bind(R.id.visal_status)
+    TextView visalStatus;
+
     @Bind(R.id.user_header)
     SimpleDraweeView userHeadImg;
+
+    @Bind(R.id.unti_tv)
+    TextView unit_tv;
 
     private UserService uservice;
 
@@ -83,7 +102,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView weight_critical_point2;
     @Bind(R.id.biaoz)
      AppCompatTextView biaoz;
-
+    @Bind(R.id.weight_index_tx)
+    AppCompatTextView weightIndex;
+    @Bind(R.id.status_bar2)
+    RelativeLayout status_bar2;
     /*水分率
     *-----------------
      */
@@ -97,7 +119,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView moistrue_critical_point2;
     @Bind(R.id.biaoz_moistrue)
      AppCompatTextView biaoz_moistrue;
-
+    @Bind(R.id.water_index_tx)
+    AppCompatTextView waterIndex;
+    @Bind(R.id.status_bar_moisture)
+    RelativeLayout status_bar_moisture;
     /*脂肪率
     *-----------------
      */
@@ -115,7 +140,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView bft_critical_point4;
     @Bind(R.id.bft_biaoz)
      AppCompatTextView bft_biaoz;
-
+    @Bind(R.id.fat_index_tx)
+    AppCompatTextView fatIndex;
+    @Bind(R.id.status_bar_bft)
+    RelativeLayout status_bar_bft;
     /*骨量
     *-----------------
      */
@@ -129,7 +157,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView bone_critical_point2;
     @Bind(R.id.bone_biaoz)
      AppCompatTextView bone_biaoz;
-
+    @Bind(R.id.bone_index_tx)
+    AppCompatTextView boneIndex;
+    @Bind(R.id.status_bar_bone)
+    RelativeLayout status_bar_bone;
     /*BMI
     *-----------------
      */
@@ -145,7 +176,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView bmi_critical_point3;
     @Bind(R.id.bmi_biaoz)
      AppCompatTextView bmi_biaoz;
-
+    @Bind(R.id.bmi_index_tx)
+    AppCompatTextView bmiIndex;
+    @Bind(R.id.status_bar_bmi)
+    RelativeLayout status_bar_bmi;
     /*内脏脂肪指数
     *-----------------
      */
@@ -159,7 +193,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView visceral_critical_point2;
     @Bind(R.id.visceral_biaoz)
      AppCompatTextView visceral_biaoz;
-
+    @Bind(R.id.visalfat_index_tx)
+    AppCompatTextView visalfatIndex;
+    @Bind(R.id.status_bar_visalfat)
+    RelativeLayout status_bar_visalfat;
     /*BMR基础代谢率
     *-----------------
      */
@@ -171,7 +208,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView bmr_critical_point1;
     @Bind(R.id.bmr_biaoz)
      AppCompatTextView bmr_biaoz;
-
+    @Bind(R.id.bmr_index_tx)
+    AppCompatTextView bmrIndex;
+    @Bind(R.id.status_bar_bmr)
+    RelativeLayout status_bar_bmr;
     /*肌肉率
     *-----------------
      */
@@ -185,6 +225,17 @@ public class BodyFatNewActivity extends BaseBleActivity {
      TextView muscle_critical_point2;
     @Bind(R.id.muscle_biaoz)
      AppCompatTextView muscle_biaoz;
+    @Bind(R.id.muscal_index_tx)
+    AppCompatTextView muscalIndex;
+    @Bind(R.id.status_bar_muscial)
+    RelativeLayout status_bar_muscial;
+    /*身体年龄
+    *-----------------
+     */
+    @Bind(R.id.age_biaoz)
+    AppCompatTextView age_biaoz;
+    @Bind(R.id.age_index_tx)
+    AppCompatTextView ageIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +259,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
                     userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
                 }
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
-                if(null!=lastRecords)localData(lastRecords);
+                if(null!=lastRecords){
+                    localData(lastRecords,UtilConstants.CURRENT_USER);
+                    initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -216,27 +270,91 @@ public class BodyFatNewActivity extends BaseBleActivity {
     }
 
     /**
+     * 初始化 圆圈参数
+     * @param
+     */
+    private  void localData(Records record,UserModel user){
+        if(null==user || null==record)return;
+        if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+            if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
+                String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
+
+                weithValueTx.setTexts(tempS[0], tempS[1]);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.stlb_danwei));
+                }
+            } else {
+                weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.stlb_danwei));
+                }
+            }
+        } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+            weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            if (null != unit_tv) {
+                unit_tv.setText(this.getText(R.string.lb_danwei));
+            }
+        } else {
+            weithValueTx.setTexts(record.getRweight() + "", null);
+            if (null != unit_tv) {
+                unit_tv.setText(this.getText(R.string.kg_danwei));
+            }
+        }
+        String sex = user.getSex();
+        if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+        int gender = Integer.parseInt(sex);
+        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
+        bmTx.setText(String.valueOf(record.getRbmi()));
+        visalTx.setText(String.valueOf(record.getRvisceralfat()));
+        bmiStatus.setText(MoveView.bmiString(record.getRbmi()));
+        visalStatus.setText(MoveView.visceralFatString(record.getRvisceralfat()));
+    }
+
+    /**
      * 初始化界面所有的进度条
      * @param record
      */
     public void initBodyBar(UserModel user, Records record){
-        if(null!=record){
+        if(null!=record && null!=user){
+            String sex = user.getSex();
+            if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+            int gender = Integer.parseInt(sex);
             // 体重
-            MoveView.weight(BodyFatNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,58);
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
+                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRweight()) + "lb");
+            }else{
+                weightIndex.setText(UtilTooth.keep1Point(record.getRweight())+ "kg");
+            }
+
+            MoveView.weight(BodyFatNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),record.getRweight(),user.getDanwei());
             // 水分率
-            MoveView.moisture(BodyFatNewActivity.this,face_img_moisture_ll,face_img_moisture,moistrue_critical_point1,moistrue_critical_point2,biaoz_moistrue,0,59);
+            waterIndex.setText(UtilTooth.keep1Point(record.getRbodywater())+"%");
+            MoveView.moisture(BodyFatNewActivity.this,face_img_moisture_ll,face_img_moisture,moistrue_critical_point1,moistrue_critical_point2,biaoz_moistrue,gender,record.getRbodywater());
             // 脂肪率
-            MoveView.bft(BodyFatNewActivity.this,face_img_bft_ll,face_img_bft,bft_critical_point1,bft_critical_point2,bft_critical_point3,bft_critical_point4,bft_biaoz,1,28,10);
+            fatIndex.setText(UtilTooth.keep1Point(record.getRbodyfat())+"%");
+            MoveView.bft(BodyFatNewActivity.this,face_img_bft_ll,face_img_bft,bft_critical_point1,bft_critical_point2,bft_critical_point3,bft_critical_point4,bft_biaoz,gender,user.getAgeYear(),record.getRbodyfat());
             // 骨量
-            MoveView.bone(BodyFatNewActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7);
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
+                boneIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRbone()) + "lb");
+            }else{
+                boneIndex.setText(UtilTooth.keep1Point(record.getRbone())+ "kg");
+            }
+            MoveView.bone(BodyFatNewActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,record.getRbone(),user.getDanwei());
             // BMI
-            MoveView.bmi(BodyFatNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,25);
+            bmiIndex.setText(UtilTooth.keep1Point(record.getRbmi()));
+            MoveView.bmi(BodyFatNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,record.getRbmi());
             // 内脏脂肪指数
-            MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,12);
+            visalfatIndex.setText(UtilTooth.keep1Point(record.getRvisceralfat()));
+            MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,record.getRvisceralfat());
             // BMR 基础代谢率
-            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
+            bmrIndex.setText(UtilTooth.keep1Point(record.getRbmr()));
+            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,record.getRbmr());
             // 肌肉率
-            MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
+            float muscal = UtilTooth.keep1Point3(record.getRmuscle()/record.getRweight()*100);
+            muscalIndex.setText(UtilTooth.keep1Point(muscal));
+            MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,muscal);
+            //身体年龄
+            ageIndex.setText(UtilTooth.keep0Point(record.getBodyAge()));
         }
     }
 
@@ -468,6 +586,11 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
     }
 
+    @Override
+    protected  void saveDataCallBack(Records records){
+        initBodyBar(UtilConstants.CURRENT_USER,records);
+    }
+
     /**
      * 数据处理
      * @param readMessage
@@ -486,7 +609,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
-            weithValueTx.setText(String.valueOf(weight));
+            weithValueTx.setTexts(String.valueOf(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -495,16 +618,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
     }
 
-    /**
-     * 锁定数据显示
-     * @param data
-     */
-    private  void localData(Records data){
-        weithValueTx.setText(String.valueOf(data.getRweight()));
-        bmTx.setText(String.valueOf(data.getRbmi()));
-        visalTx.setText(String.valueOf(data.getRvisceralfat()));
 
-    }
 
     Handler handler = new Handler() {
         @Override
@@ -514,8 +628,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 case 0 :
                     Records data  = (Records)msg.obj;
                     if(null!=data){
+                        weithValueTx.setTexts(String.valueOf(data.getRweight()),null);
                         playSound();
-                        localData(data);
                         showReceiveDataDialog();
                     }
                     break;

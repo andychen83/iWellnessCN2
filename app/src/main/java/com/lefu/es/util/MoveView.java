@@ -6,7 +6,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lefu.es.constant.UtilConstants;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import static com.lefu.iwellness.newes.cn.system.R.id.bft_biaoz;
+import static com.lefu.iwellness.newes.cn.system.R.id.textView1;
+import static com.lefu.iwellness.newes.cn.system.R.id.textView2;
+import static com.lefu.iwellness.newes.cn.system.R.id.textView3;
 
 /**
  * 控制笑脸在水平上的偏移
@@ -29,27 +35,27 @@ public class MoveView {
      * @param height    身高
      * @param weight    体重
      */
-    public static void weight(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, int gender, int height, double weight) {
+    public static void weight(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, int gender, float height, float weight,String danwei) {
         // 标准体重
-        double standard_weight;
+        float standard_weight;
         // 从左到右第一个分割线
-        double critical_point1;
+        float critical_point1;
         // 从左到右第二个分割线
-        double critical_point2;
+        float critical_point2;
         // 终点分割线
-        double critical_point3;
+        float critical_point3;
         // 笑脸偏移量
         int deviation = 0;
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
         if (gender == 0) {
-            standard_weight = (height - 80) * 0.7;
+            standard_weight = (height - 80) * 0.7f;
         } else {
-            standard_weight = (height - 70) * 0.6;
+            standard_weight = (height - 70) * 0.6f;
         }
-        critical_point1 = standard_weight - standard_weight * 0.1;
-        critical_point2 = standard_weight + standard_weight * 0.1;
-        critical_point3 = standard_weight + standard_weight * 0.2;
+        critical_point1 = standard_weight - standard_weight * 0.1f;
+        critical_point2 = standard_weight + standard_weight * 0.1f;
+        critical_point3 = standard_weight + standard_weight * 0.2f;
 
         if (weight < critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (weight / critical_point1));
@@ -67,13 +73,48 @@ public class MoveView {
             textView3.setText("偏高");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         }
-        textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
-        textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
+        if (danwei.equals(UtilConstants.UNIT_LB) || danwei.equals(UtilConstants.UNIT_FATLB) || danwei.equals(UtilConstants.UNIT_ST)){
+            textView1.setText(UtilTooth.kgToLB_ForFatScale(critical_point1) + "lb");
+            textView2.setText(UtilTooth.kgToLB_ForFatScale(critical_point2) + "lb");
+        }else{
+            textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
+            textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
+        }
+
         int margin = deviation - 50;
         if (margin > screenwidth - 140) {
             margin = screenwidth - 140;
         }
         view.setPadding(margin, 0, 0, 0);
+    }
+
+    public static String weightString(int gender, float height, float weight) {
+        // 标准体重
+        float standard_weight;
+        // 从左到右第一个分割线
+        float critical_point1;
+        // 从左到右第二个分割线
+        float critical_point2;
+        // 终点分割线
+        //float critical_point3;
+
+        if (gender == 0) {
+            standard_weight = (height - 80) * 0.7f;
+        } else {
+            standard_weight = (height - 70) * 0.6f;
+        }
+        critical_point1 = standard_weight - standard_weight * 0.1f;
+        critical_point2 = standard_weight + standard_weight * 0.1f;
+        //critical_point3 = standard_weight + standard_weight * 0.2f;
+
+        if (weight < critical_point1) {
+            return "偏低";
+        } else if (weight >= critical_point1 && weight < critical_point2) {
+            return "标准";
+        } else {
+            return"偏高";
+        }
+
     }
 
     /**
@@ -88,7 +129,7 @@ public class MoveView {
      * @param gender       性别：0男，1女
      * @param waterPercent 当前用户水分率
      */
-    public static void moisture(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, int gender, double waterPercent) {
+    public static void moisture(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, int gender, float waterPercent) {
         // 从左到右第一个分割线
         double critical_point1;
         // 从左到右第二个分割线
@@ -151,7 +192,7 @@ public class MoveView {
      * @param fatPercent 当前人的脂肪率
      */
     public static void bft(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2,
-                           TextView textView3, TextView textView4, TextView bft_biaoz, int gender, int age, double fatPercent) {
+                           TextView textView3, TextView textView4, TextView bft_biaoz, int gender, int age, float fatPercent) {
         // 从左到右第一个分割线
         double critical_point1 = 0;
         // 从左到右第二个分割线
@@ -255,13 +296,13 @@ public class MoveView {
      * @param textView3 是否标准
      * @param bone      当前人的骨量
      */
-    public static void bone(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, double bone) {
+    public static void bone(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float bone,String danwei) {
         // 从左到右第一个分割线
-        double critical_point1 = 2.4;
+        float critical_point1 = 2.4f;
         // 从左到右第二个分割线
-        double critical_point2 = 2.6;
+        float critical_point2 = 2.6f;
         // 终点分割线
-        double critical_point3 = 1.0;
+        float critical_point3 = 1.0f;
         // 笑脸偏移量
         int deviation = 0;
         // 屏幕宽度
@@ -283,8 +324,14 @@ public class MoveView {
             textView3.setText("优");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
         }
-        textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
-        textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
+        if (danwei.equals(UtilConstants.UNIT_LB) || danwei.equals(UtilConstants.UNIT_FATLB) || danwei.equals(UtilConstants.UNIT_ST)){
+            textView1.setText(UtilTooth.kgToLB_ForFatScale(critical_point1) + "lb");
+            textView2.setText(UtilTooth.kgToLB_ForFatScale(critical_point2) + "lb");
+        }else{
+            textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
+            textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
+        }
+
         int margin = deviation - 50;
         if (margin > screenwidth - 140) {
             margin = screenwidth - 140;
@@ -305,7 +352,7 @@ public class MoveView {
      * @param bft_biaoz 是否标准
      * @param bmi       当前人的BMI值
      */
-    public static void bmi(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, TextView bft_biaoz, double bmi) {
+    public static void bmi(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, TextView bft_biaoz, float bmi) {
         // 从左到右第一个分割线
         double critical_point1 = 18.5;
         // 从左到右第二个分割线
@@ -351,6 +398,27 @@ public class MoveView {
         view.setPadding(margin, 0, 0, 0);
     }
 
+    public static String bmiString(float bmi) {
+        // 从左到右第一个分割线
+        double critical_point1 = 18.5;
+        // 从左到右第二个分割线
+        double critical_point2 = 24.0;
+        // 从左到右第三个分割线
+        double critical_point3 = 28.0;
+        // 终点分割线
+        double critical_point5 = 22;
+
+        if (bmi <= critical_point1) {
+           return "偏瘦";
+        } else if (bmi > critical_point1 && bmi <= critical_point2) {
+            return"健康";
+        } else if (bmi > critical_point2 && bmi <= critical_point3) {
+            return"偏胖";
+        } else{
+            return"胖";
+        }
+    }
+
 
     /**
      * 内脏脂肪指数
@@ -363,7 +431,7 @@ public class MoveView {
      * @param textView3
      * @param bone
      */
-    public static void visceralFat(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, double bone) {
+    public static void visceralFat(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float bone) {
         // 从左到右第一个分割线
         double critical_point1 = 8.0;
         // 从左到右第二个分割线
@@ -400,6 +468,22 @@ public class MoveView {
         view.setPadding(margin, 0, 0, 0);
     }
 
+    public static String visceralFatString(float bone) {
+        // 从左到右第一个分割线
+        double critical_point1 = 8.0;
+        // 从左到右第二个分割线
+        double critical_point2 = 14.0;
+        // 终点分割线
+        double critical_point3 = 16;
+
+        if (bone <= critical_point1) {
+            return "标准";
+        } else if (bone > critical_point1 && bone <= critical_point2) {
+            return"警惕";
+        } else {
+            return"危险";
+        }
+    }
 
     /**
      * BMR基础代谢率
@@ -411,7 +495,7 @@ public class MoveView {
      * @param textView3 是否标准
      * @param bmr       当前人的BMr值
      */
-    public static void bmr(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView3, double bmr) {
+    public static void bmr(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView3, float bmr) {
         // 从左到右第一个分割线
         double critical_point1 = 1261;
         // 终点分割线
@@ -440,7 +524,7 @@ public class MoveView {
         view.setPadding(margin, 0, 0, 0);
     }
 
-    public static void muscle(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, double muscle) {
+    public static void muscle(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float muscle) {
         // 从左到右第一个分割线
         double critical_point1 = 72;
         // 从左到右第二个分割线

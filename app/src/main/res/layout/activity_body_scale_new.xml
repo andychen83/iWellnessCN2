@@ -45,20 +45,34 @@
                     android:text="@string/bar_weight_title"
                     android:textColor="@color/main_text_color"
                     android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/weith_value_tx"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="0kg"
-                    android:textColor="@color/main_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content">
+                    <com.lefu.es.view.MyTextView5
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/weith_value_tx"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="0kg"
+                        android:textSize="30sp"
+                        android:textColor="@color/main_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"  >
+                    </com.lefu.es.view.MyTextView5>
+                    <TextView
+                        android:id="@+id/unti_tv"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="16sp"
+                        android:text="kg" />
+                </LinearLayout>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/weith_status"
