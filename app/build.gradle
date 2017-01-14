@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'android.keystore'
             keyPassword '123456'
-            storeFile file('F:/Dropbox/iwellnewCN/iWellnessCN2/app/src/main/assets/android.keystore')
+            storeFile file('E:/AndroidStudioProjects/iWellnessCN2/app/src/main/assets/android.keystore')
             storePassword '123456'
         }
     }
