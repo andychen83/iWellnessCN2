@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_body_fat_scale_set"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,16 +21,20 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/user_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/user_default" />
+                fresco:placeholderImage="@drawable/baby_default"
+                fresco:failureImage="@drawable/baby_default"
+                android:background="@drawable/baby_default" />
 
             <TextView
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="健康"
+                android:text="@string/user_info_name"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -51,6 +56,7 @@
 
                 <!--我的信息-->
                 <RelativeLayout
+                    android:id="@+id/info_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -66,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="我的信息" />
+                        android:text="@string/scale_setting_myInformation" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -75,34 +81,10 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/qzone_list_icon_arrow" />
                 </RelativeLayout>
-                <!--切换秤-->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/blue_item_bg"
-                    android:clickable="true"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:text="切换秤" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/qzone_list_icon_arrow" />
-                </RelativeLayout>
                 <!--另存为-->
                 <RelativeLayout
+                    android:id="@+id/save_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -118,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="另存为" />
+                        android:text="@string/scale_setting_save_as"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -127,34 +109,10 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/qzone_list_icon_arrow" />
                 </RelativeLayout>
-                <!--信息-->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/blue_item_bg"
-                    android:clickable="true"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:text="信息" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/qzone_list_icon_arrow" />
-                </RelativeLayout>
                 <!--关于健康管理专家-->
                 <RelativeLayout
+                    android:id="@+id/about_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -170,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="关于健康管理专家" />
+                        android:text="@string/scale_setting_about"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -181,6 +139,7 @@
                 </RelativeLayout>
                 <!--意见反馈-->
                 <RelativeLayout
+                    android:id="@+id/linke_contract"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -196,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="意见反馈" />
+                        android:text="@string/contact_us" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -214,6 +173,7 @@
             android:background="#6EC7D7"
             android:layout_alignParentBottom="true">
             <Button
+                android:id="@+id/home_img_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"

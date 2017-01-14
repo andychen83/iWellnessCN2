@@ -26,11 +26,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="内脏脂肪"
+                android:text="@string/bar_visalfat_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/visalfat_index_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -54,12 +55,13 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:gravity="center"
-                android:text="标准"
+                android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/visalfat_jiantou"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
@@ -124,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="标准" />
+                    android:text="@string/bar_biaozhun_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -151,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="警惕" />
+                    android:text="@string/bar_jinti_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -178,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="危险" />
+                    android:text="@string/bar_weixian_title" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

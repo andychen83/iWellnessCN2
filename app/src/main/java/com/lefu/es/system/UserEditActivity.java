@@ -3,6 +3,7 @@ package com.lefu.es.system;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,11 +60,14 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
+
+import static com.lefu.iwellness.newes.cn.system.R.drawable.baby;
 
 /**
  * 编辑用户信息
@@ -141,7 +145,14 @@ public class UserEditActivity extends AppCompatActivity {
 	private String mTempPhotoPath;
 	// 剪切后图像文件
 	private Uri mDestinationUri;
-	
+
+	protected UserModel user = null; //需要编辑的用户
+
+	public static Intent creatIntent(Context context, UserModel user){
+		Intent intent = new Intent(context,UserEditActivity.class);
+		intent.putExtra("user",user);
+		return intent;
+	}
 	
 	private void showAlertDailog(String title){
         new com.lefu.es.view.AlertDialog(UserEditActivity.this).builder()
@@ -177,7 +188,12 @@ public class UserEditActivity extends AppCompatActivity {
 			AppData.isCheckScale=true;
 			UtilConstants.CURRENT_USER= JSONObject.parseObject((String) UtilConstants.su.readbackUp("lefuconfig", "addUser", ""),UserModel.class);
 		}
-
+		Serializable serializable = getIntent().getSerializableExtra("user");
+		if(null!=serializable){
+			user = (UserModel)serializable;
+		}else{
+			user = UtilConstants.CURRENT_USER;
+		}
 		initView();
 	}
 
@@ -234,22 +250,22 @@ public class UserEditActivity extends AppCompatActivity {
 		ib_upphoto.setOnClickListener(photoClickListener);
 
 		UtilConstants.CHOICE_KG = UtilConstants.UNIT_KG;
-		if (null != UtilConstants.CURRENT_USER) {
-			UtilConstants.CHOICE_KG = UtilConstants.CURRENT_USER.getDanwei();
+		if (null != user) {
+			UtilConstants.CHOICE_KG = user.getDanwei();
 			if(UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_LB) || UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST) || UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_FATLB)){
 
 			}else{
 				UtilConstants.CHOICE_KG = UtilConstants.UNIT_KG;
 			}
-			this.nameET.setText(UtilConstants.CURRENT_USER.getUserName());
-			if (null != UtilConstants.CURRENT_USER.getSex() && UtilConstants.CURRENT_USER.getSex().equals("0")) {
+			this.nameET.setText(user.getUserName());
+			if (null != user.getSex() && user.getSex().equals("0")) {
 				femaleBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.womend));
 			} else {
 				maleBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.mand));
 			}
-			if (null != UtilConstants.CURRENT_USER.getPer_photo() && !"".equals(UtilConstants.CURRENT_USER.getPer_photo()) && !UtilConstants.CURRENT_USER.getPer_photo().equals("null")) {
-				photoImg = UtilConstants.CURRENT_USER.getPer_photo();
-				Bitmap bitmap = imageUtil.getBitmapfromPath(UtilConstants.CURRENT_USER.getPer_photo());
+			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
+				photoImg = user.getPer_photo();
+				Bitmap bitmap = imageUtil.getBitmapfromPath(user.getPer_photo());
 				ib_upphoto.setImageBitmap(bitmap);
 			}
 			if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST)) {
@@ -283,20 +299,20 @@ public class UserEditActivity extends AppCompatActivity {
 				target_danwei_tv.setText(this.getText(R.string.kg_danwei));
 			}
 
-			if (null != UtilConstants.CURRENT_USER) {
-				this.org_hei = UtilConstants.CURRENT_USER.getBheigth();
-				this.org_hei1 = UtilTooth.cm2FT_INArray(UtilConstants.CURRENT_USER.getBheigth())[0];
-				this.org_hei2 = UtilTooth.cm2FT_INArray(UtilConstants.CURRENT_USER.getBheigth())[0];
+			if (null != user) {
+				this.org_hei = user.getBheigth();
+				this.org_hei1 = UtilTooth.cm2FT_INArray(user.getBheigth())[0];
+				this.org_hei2 = UtilTooth.cm2FT_INArray(user.getBheigth())[0];
 			}
-			this.targ_old = UtilConstants.CURRENT_USER.getTargweight();
+			this.targ_old = user.getTargweight();
 			this.targ_new = this.targ_old;
 			if (isKG) {
-				heightET.setText((int) UtilConstants.CURRENT_USER.getBheigth() + "");
+				heightET.setText((int) user.getBheigth() + "");
 
-				target_edittv.setText(UtilTooth.toOnePonit(UtilConstants.CURRENT_USER.getTargweight())  + "");
+				target_edittv.setText(UtilTooth.toOnePonit(user.getTargweight())  + "");
 			} else {
-				heightET.setText(UtilTooth.cm2FT_INArray(UtilConstants.CURRENT_USER.getBheigth())[0]);
-				heightET2.setText(UtilTooth.cm2FT_INArray(UtilConstants.CURRENT_USER.getBheigth())[1]);
+				heightET.setText(UtilTooth.cm2FT_INArray(user.getBheigth())[0]);
+				heightET2.setText(UtilTooth.cm2FT_INArray(user.getBheigth())[1]);
 
 				target_edittv2.setVisibility(View.GONE);
 				heng_tv2.setVisibility(View.GONE);
@@ -304,13 +320,13 @@ public class UserEditActivity extends AppCompatActivity {
 				if (null == wei || "".equals(wei)) {
 					wei = "0";
 				}
-				float ftin = UtilTooth.kgToLB_target(UtilConstants.CURRENT_USER.getTargweight());
+				float ftin = UtilTooth.kgToLB_target(user.getTargweight());
 				target_edittv.setText(UtilTooth.onePoint(ftin) + "");
 			}
 
-			ageET.setText(UtilConstants.CURRENT_USER.getBirth());
+			ageET.setText(user.getBirth());
 
-			if (UtilConstants.CURRENT_USER.getSex().equals("1")) {
+			if (user.getSex().equals("1")) {
 				maleBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.mand));
 				femaleBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.women));
 				sex = "1";
@@ -324,14 +340,14 @@ public class UserEditActivity extends AppCompatActivity {
 				sex_female_checkbox.setChecked(true);
 			}
 
-			if ("1".equals(UtilConstants.CURRENT_USER.getLevel())) {
+			if ("1".equals(user.getLevel())) {
 				userType = "1";
 				this.amatuerBtn.setBackgroundDrawable(getResources()
 						.getDrawable(R.drawable.pyeyud));
 				 ordinary_btn_checkbox.setChecked(false);
 	                amateur_btn_checkbox.setChecked(true);
 	                profess_btn_checkbox.setChecked(false);
-			} else if ("2".equals(UtilConstants.CURRENT_USER.getLevel())) {
+			} else if ("2".equals(user.getLevel())) {
 				userType = "2";
 				this.professBtn.setBackgroundDrawable(getResources()
 						.getDrawable(R.drawable.pyundongd));
@@ -1057,7 +1073,7 @@ public class UserEditActivity extends AppCompatActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 				case SAVE_ATION :
-					if (null != UtilConstants.CURRENT_USER) {
+					if (null != user) {
 						/* 判断是否是识别界面进入 */
 						UserModel user=creatUserModel();
 						if (!AppData.isCheckScale) {
@@ -1067,28 +1083,31 @@ public class UserEditActivity extends AppCompatActivity {
 									user.setDanwei(UtilConstants.UNIT_KG);
 								}
 								uservice.update(user);
-								UtilConstants.CURRENT_USER = uservice.find(UtilConstants.CURRENT_USER.getId());
-								UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
+								user = uservice.find(user.getId());
+								UtilConstants.SELECT_USER = user.getId();
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-
-							/* 跳转 */
-							Intent intent1 = new Intent();
-							if (UtilConstants.BATHROOM_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-								intent1.setClass(UserEditActivity.this, BathScaleActivity.class);
-							} else if (UtilConstants.BABY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-								intent1.setClass(UserEditActivity.this, BabyScaleActivity.class);
-							} else if (UtilConstants.BODY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-								intent1.setClass(UserEditActivity.this, BodyFatScaleActivity.class);
-							}else if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-								intent1.setClass(UserEditActivity.this, KitchenScaleActivity.class);
-							}
-							intent1.putExtra("ItemID", UtilConstants.SELECT_USER);
-							intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-							UserEditActivity.this.startActivityForResult(intent1, 99);
-							if (null != SettingActivity.detailActivty) {
-								SettingActivity.detailActivty.finish();
+							if(user.getGroup().equals("P999")){
+								UserEditActivity.this.finish();//抱婴直接关闭页面
+							}else{
+								/* 跳转 */
+								Intent intent1 = new Intent();
+								if (UtilConstants.BATHROOM_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+									intent1.setClass(UserEditActivity.this, BathScaleActivity.class);
+								} else if (UtilConstants.BABY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+									intent1.setClass(UserEditActivity.this, BabyScaleActivity.class);
+								} else if (UtilConstants.BODY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+									intent1.setClass(UserEditActivity.this, BodyFatScaleActivity.class);
+								}else if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+									intent1.setClass(UserEditActivity.this, KitchenScaleActivity.class);
+								}
+								intent1.putExtra("ItemID", UtilConstants.SELECT_USER);
+								intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+								UserEditActivity.this.startActivityForResult(intent1, 99);
+								if (null != SettingActivity.detailActivty) {
+									SettingActivity.detailActivty.finish();
+								}
 							}
 						} else {
 							/*跳转到指定的扫描界面*/
@@ -1111,20 +1130,20 @@ public class UserEditActivity extends AppCompatActivity {
 
 	/** 创建用户 */
 	public UserModel creatUserModel() {
-		if (null != UtilConstants.CURRENT_USER) {
-			UtilConstants.CURRENT_USER.setUserName(nameET.getText().toString());
-			UtilConstants.CURRENT_USER.setLevel(userType);
-			UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
-			UtilConstants.CURRENT_USER.setDanwei(UtilConstants.CHOICE_KG);
+		if (null != user) {
+			user.setUserName(nameET.getText().toString());
+			user.setLevel(userType);
+			user.setScaleType(UtilConstants.CURRENT_SCALE);
+			user.setDanwei(UtilConstants.CHOICE_KG);
 			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
 				if(UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_LB) || UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST) || UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_FATLB)){
-					UtilConstants.CURRENT_USER.setDanwei(UtilConstants.UNIT_FATLB);
+					user.setDanwei(UtilConstants.UNIT_FATLB);
 				}else{
-					UtilConstants.CURRENT_USER.setDanwei(UtilConstants.UNIT_KG);
+					user.setDanwei(UtilConstants.UNIT_KG);
 				}
 			} 
-			UtilConstants.CURRENT_USER.setPer_photo(photoImg);
-			UtilConstants.CURRENT_USER.setSex(sex);
+			user.setPer_photo(photoImg);
+			user.setSex(sex);
 			String hei = this.heightET.getText().toString().trim();
 			String hei2 = this.heightET2.getText().toString().trim();
 			if (null == hei || "".equals(hei)) {
@@ -1148,9 +1167,9 @@ public class UserEditActivity extends AppCompatActivity {
 			if (null != monthET) {
 				String mont = monthET.getText().toString();
 				if ("".equals(mont.trim())) {
-					UtilConstants.CURRENT_USER.setAgeMonth(0);
+					user.setAgeMonth(0);
 				} else {
-					UtilConstants.CURRENT_USER.setAgeMonth(Integer.parseInt(mont));
+					user.setAgeMonth(Integer.parseInt(mont));
 				}
 			}
 			if (null != target_edittv) {
@@ -1162,23 +1181,23 @@ public class UserEditActivity extends AppCompatActivity {
 				if (tg < 1)
 					tg = 0f;
 				if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_KG)) {
-					UtilConstants.CURRENT_USER.setTargweight(tg);
+					user.setTargweight(tg);
 				} else {
-					UtilConstants.CURRENT_USER.setTargweight(UtilTooth.lbToKg_target(tg));
+					user.setTargweight(UtilTooth.lbToKg_target(tg));
 				}
 			}
 			if (isKG) {
-				UtilConstants.CURRENT_USER.setBheigth(Float.parseFloat(hei));
+				user.setBheigth(Float.parseFloat(hei));
 			} else {
-				UtilConstants.CURRENT_USER.setBheigth(UtilTooth.ft_in2CMArray(new String[]{hei, hei2}));
+				user.setBheigth(UtilTooth.ft_in2CMArray(new String[]{hei, hei2}));
 			}
 			if (isKG) {
-				UtilConstants.CURRENT_USER.setBheigth(Float.parseFloat(hei));
+				user.setBheigth(Float.parseFloat(hei));
 			} else {
-				UtilConstants.CURRENT_USER.setBheigth(UtilTooth.ft_in2CMArray(new String[]{hei, hei2}));
+				user.setBheigth(UtilTooth.ft_in2CMArray(new String[]{hei, hei2}));
 			}
 			su.editSharedPreferences("lefuconfig", "unit", UtilConstants.CHOICE_KG);
-			UtilConstants.CURRENT_USER.setBirth(age);
+			user.setBirth(age);
 			if (null != age && !"".equals(age)) {
 				if (age.lastIndexOf("-") > 0) {
 					String year = age.substring(age.lastIndexOf("-") + 1);
@@ -1186,10 +1205,10 @@ public class UserEditActivity extends AppCompatActivity {
 					age = year + "-" + mm;
 				}
 			}
-			UtilConstants.CURRENT_USER.setAgeYear(Tool.getAgeByBirthday(Tool.StringToDate(age, "yyyy-MM-dd")));
+			user.setAgeYear(Tool.getAgeByBirthday(Tool.StringToDate(age, "yyyy-MM-dd")));
 		}
 
-		return UtilConstants.CURRENT_USER;
+		return user;
 	}
 
 	private WheelMain wheelMain;

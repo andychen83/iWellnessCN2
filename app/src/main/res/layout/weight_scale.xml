@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="体重"
+                android:text="@string/bar_weight_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
@@ -55,12 +55,13 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:gravity="center"
-                android:text="标准"
+                android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/weight_jiantou"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
@@ -125,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="偏低" />
+                    android:text="@string/bar_piandi_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -152,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="标准" />
+                    android:text="@string/bar_biaozhun_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -179,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="偏高" />
+                    android:text="@string/bar_piangao_title" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

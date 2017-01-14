@@ -1,5 +1,6 @@
 package com.lefu.es.system;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.Format;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,9 +46,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.adapter.RecordDetailAdaptor;
 import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.constant.UtilConstants;
@@ -68,6 +72,7 @@ import com.lefu.iwellness.newes.cn.system.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.lefu.iwellness.newes.cn.system.R.drawable.baby;
 
@@ -91,7 +96,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 	private ImageView deleteImg;
 	private ImageView delallImg;
-	private ImageView headImage;
+	private SimpleDraweeView headImage;
 
 	private ImageView shareImage;
 
@@ -112,6 +117,45 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 	@Bind(R.id.body_menu_ly)
 	LinearLayout menuLy;
+
+	@Bind(R.id.weight_menu)
+	RadioButton weightMenu;
+
+	@Bind(R.id.water_menu)
+	RadioButton waterMenu;
+
+	@Bind(R.id.fat_menu)
+	RadioButton fatMenu;
+
+	@Bind(R.id.bone_menu)
+	RadioButton boneMenu;
+
+	@Bind(R.id.bmi_menu)
+	RadioButton bmiMenu;
+
+	@Bind(R.id.visfat_menu)
+	RadioButton visfatMenu;
+
+	@Bind(R.id.bmr_menu)
+	RadioButton bmrMenu;
+
+	@Bind(R.id.muscial_menu)
+	RadioButton muscialMenu;
+
+	protected UserModel user = null; //选择的婴儿
+
+
+	/**
+	 * 构建实例
+	 * @param context
+	 * @param user
+	 * @return
+	 */
+	public static Intent creatIntent(Context context,UserModel user){
+		Intent intent = new Intent(context,RecordListActivity.class);
+		intent.putExtra("user",user);
+		return intent;
+	}
 	
 	private void showTipMask() {
 		HighLightGuideView.builder(this)
@@ -151,40 +195,48 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail_new);
 		ButterKnife.bind(this);
-
-		handler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				switch (msg.what) {
-					case 1 :
-						break;
-					case 2 :
-						if (lv != null && recordAdaptor != null && recordAdaptor.selectedPosition >= 0) {
-							lv.setSelection(recordAdaptor.selectedPosition);
-						}
-						break;
-				}
-				super.handleMessage(msg);
+		Serializable serializable = getIntent().getSerializableExtra("baby");
+		if(null==serializable){
+			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
+			finish();
+		}else{
+			user = (UserModel)serializable;
+			//只有脂肪秤才显示
+			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)){
+				menuLy.setVisibility(View.VISIBLE);
+			}else{
+				menuLy.setVisibility(View.GONE);
 			}
+			handler = new Handler() {
+				@Override
+				public void handleMessage(Message msg) {
+					switch (msg.what) {
+						case 1 :
+							break;
+						case 2 :
+							if (lv != null && recordAdaptor != null && recordAdaptor.selectedPosition >= 0) {
+								lv.setSelection(recordAdaptor.selectedPosition);
+							}
+							break;
+					}
+					super.handleMessage(msg);
+				}
 
-		};
-		Bundle bundle = this.getIntent().getExtras();
-		type = bundle.getInt("type");
-		recordid = bundle.getInt("id");
-		initView();
+			};
+			type = UtilConstants.WEIGHT_SINGLE;
+			recordid = 0;
+			initView();
+		}
 	}
 
 	private void initView() {
 		recordService = new RecordService(this);
 		username_tv = (TextView) this.findViewById(R.id.user_name_tv);
-		headImage = (ImageView) this.findViewById(R.id.reviseHead);
-		if (null != UtilConstants.CURRENT_USER) {
-			username_tv.setText(UtilConstants.CURRENT_USER.getUserName());
-			if (null != UtilConstants.CURRENT_USER.getPer_photo() && !"".equals(UtilConstants.CURRENT_USER.getPer_photo()) && !UtilConstants.CURRENT_USER.getPer_photo().equals("null")) {
-				Bitmap bitmap = new imageUtil().getBitmapTodifferencePath(UtilConstants.CURRENT_USER.getPer_photo() + "", this);
-				Bitmap bbb = Image.toRoundCorner(bitmap, 8);
-				headImage.setImageBitmap(bbb);
-
+		headImage = (SimpleDraweeView) this.findViewById(R.id.reviseHead);
+		if (null != user) {
+			username_tv.setText(user.getUserName());
+			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
+				headImage.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
 			}
 		}
 		back_tv = (TextView) this.findViewById(R.id.back_textView);
@@ -259,13 +311,69 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		}
 		return i;
 	}
+
+	@OnClick(R.id.weight_menu)
+	public void weightMenuClick(){
+		type = UtilConstants.WEIGHT_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.water_menu)
+	public void waterMenuClick(){
+		type = UtilConstants.BODYWATER_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.fat_menu)
+	public void fatMenuClick(){
+		type = UtilConstants.WEIGHT_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.bone_menu)
+	public void boneMenuClick(){
+		type = UtilConstants.BONE_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.bmi_menu)
+	public void bmiMenuClick(){
+		type = UtilConstants.BMI_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.visfat_menu)
+	public void visfatMenuClick(){
+		type = UtilConstants.VISCALEFAT_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.bmr_menu)
+	public void bmrMenuClick(){
+		type = UtilConstants.BMR_SINGLE;
+		recordid = 0;
+		initChart();
+	}
+
+	@OnClick(R.id.muscial_menu)
+	public void muscialMenuClick(){
+		type = UtilConstants.MUSCALE_SINGLE;
+		recordid = 0;
+		initChart();
+	}
 	
 	private void loadData() {
 		try {
-			if (null != UtilConstants.CURRENT_USER) {
+			if (null != user) {
 				//[Records [scaleType=cf, ugroup=P1, recordTime=2016-09-20 00:02:55, compareRecord=-33.0, rweight=27.0, rbmi=0.0, rbone=1.0, rbodyfat=5.0, rmuscle=24.4, rbodywater=85.0, rvisceralfat=1.0, rbmr=1457.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null], Records [scaleType=cf, ugroup=P1, recordTime=2016-09-19 23:33:06, compareRecord=60.0, rweight=60.0, rbmi=20.8, rbone=2.8, rbodyfat=13.2, rmuscle=47.6, rbodywater=58.2, rvisceralfat=2.0, rbmr=1516.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null]]
-				CacheHelper.recordListDesc = this.recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), 167f);
-				CacheHelper.recordList = this.recordService.getAllDatasByScaleAndIDAsc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), 167f);
+				CacheHelper.recordListDesc = this.recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, user.getId(), 167f);
+				CacheHelper.recordList = this.recordService.getAllDatasByScaleAndIDAsc(UtilConstants.CURRENT_SCALE, user.getId(), 167f);
 				initChart();
 			}
 		} catch (Exception e) {
@@ -312,22 +420,22 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						} else if (type == UtilConstants.BODYWATER_SINGLE) {
 							views[i] = UtilTooth.myround(recor.getRbodywater());
 						} else if (type == UtilConstants.BONE_SINGLE) {
-							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								views[i] = UtilTooth.myround(recor.getRbone());
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
 							} else {
 								views[i] = UtilTooth.myround(recor.getRbone());
 							}
 						} else if (type == UtilConstants.MUSCALE_SINGLE) {
 //					views[i] = UtilTooth.myround(recor.getRmuscle());
-							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								views[i] = UtilTooth.myround(recor.getRmuscle());
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
 							} else {
 								views[i] = UtilTooth.myround(recor.getRmuscle());
@@ -387,7 +495,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			int weightType = 1;
 
 			String scaleT = UtilConstants.CURRENT_SCALE;
-			UtilConstants.CHOICE_KG = UtilConstants.CURRENT_USER.getDanwei();
+			UtilConstants.CHOICE_KG = user.getDanwei();
 			if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_KG)) {
 				weightType = 1;
 			} else if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_LB)) {
@@ -679,47 +787,47 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					
 						//婴儿秤，分享数据只需显示体重和BMI，其他数据去掉
 						if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
-							if (null != UtilConstants.CURRENT_USER) {
-								str.append(UtilConstants.CURRENT_USER.getUserName());
+							if (null != user) {
+								str.append(user.getUserName());
 								str.append("\n");
 							}
 
 							str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 							str.append("\n");
 							
-							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								str.append(getString(R.string.export_weight) + lastRecod.getRweight() + "");
 								str.append(getText(R.string.kg_danwei));
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
 								str.append(getText(R.string.lb_danwei));
-							}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+							}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 								str.append(getString(R.string.export_weight) + UtilTooth.lbozToString(lastRecod.getRweight()));
 								//str.append(getText(R.string.lboz_danwei));
 							}
 							str.append("\n");
 							
-							float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
+							float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
 							bmi = UtilTooth.myround(bmi);
 
 							str.append(getString(R.string.export_BMI) + bmi + "\n");
 							
 						}else{
-						if (null != UtilConstants.CURRENT_USER) {
-							str.append(UtilConstants.CURRENT_USER.getUserName());
+						if (null != user) {
+							str.append(user.getUserName());
 							str.append("\n");
 						}
 
 						str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 						str.append("\n");
 
-						if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+						if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 							str.append(getString(R.string.export_weight) + lastRecod.getRweight() + "");
 							str.append(getText(R.string.kg_danwei));
-						} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+						} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 							str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
 							str.append(getText(R.string.lb_danwei));
-						}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+						}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 							str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
 							str.append(getText(R.string.lb_danwei));
 						}
@@ -730,13 +838,13 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						} else {
 							str.append(getString(R.string.export_body_Water) + lastRecod.getRbodywater() + "%\n");
 							str.append(getString(R.string.export_body_Fat) + lastRecod.getRbodyfat() + "%\n");
-							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								str.append(getString(R.string.export_bone) + lastRecod.getRbone() + "");
 								str.append(getText(R.string.kg_danwei) + "\n");
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								str.append(getString(R.string.export_bone) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRbone() + ""))));
 								str.append(getText(R.string.lb_danwei) + "\n");
-							}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+							}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 								str.append(getString(R.string.export_bone) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRbone() + ""))));
 								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
 									str.append(getText(R.string.lboz_danwei) + "\n");
@@ -748,7 +856,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 								str.append(getText(R.string.kg_danwei) + "\n");
 							}
 						}
-						float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
+						float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
 						bmi = UtilTooth.myround(bmi);
 
 						str.append(getString(R.string.export_BMI) + bmi + "\n");
@@ -757,13 +865,13 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						} else {
 							str.append(getString(R.string.export_visceral_fat) + lastRecod.getRvisceralfat() + "\n");
 							str.append(getString(R.string.export_BMR) + lastRecod.getRbmr() + " kcal\n");
-							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								str.append(getString(R.string.export_muscle_mass) + lastRecod.getRmuscle() + "");
 								str.append(getText(R.string.kg_danwei) + "\n");
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								str.append(getString(R.string.export_muscle_mass) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRmuscle() + ""))));
 								str.append(getText(R.string.lb_danwei) + "\n");
-							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+							} else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 								str.append(getString(R.string.export_muscle_mass) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRmuscle() + ""))));
 								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
 									str.append(getText(R.string.lboz_danwei) + "\n");
@@ -807,9 +915,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 				try {
 					switch (id) {
 						case R.id.del_img_btn :
-							if (null != lastRecod && null != UtilConstants.CURRENT_USER) {
+							if (null != lastRecod && null != user) {
 								recordService.delete(lastRecod);
-								CacheHelper.recordListDesc = recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), UtilConstants.CURRENT_USER.getBheigth());
+								CacheHelper.recordListDesc = recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, user.getId(), user.getBheigth());
 								if (null != CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() > 0) {
 									lastRecod = CacheHelper.recordListDesc.get(0);
 									recordid = lastRecod.getId();
@@ -821,9 +929,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 							break;
 						case R.id.delall_img_btn :
-							if (null != UtilConstants.CURRENT_USER) {
-								recordService.deleteByUseridAndScale(UtilConstants.CURRENT_USER.getId() + "", UtilConstants.CURRENT_SCALE);
-								CacheHelper.recordListDesc = recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), UtilConstants.CURRENT_USER.getBheigth());
+							if (null != user) {
+								recordService.deleteByUseridAndScale(user.getId() + "", UtilConstants.CURRENT_SCALE);
+								CacheHelper.recordListDesc = recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, user.getId(), user.getBheigth());
 
 								lastRecod = null;
 								recordid = -1;

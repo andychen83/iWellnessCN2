@@ -26,11 +26,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="肌肉率"
+                android:text="@string/bar_muscal_title"
                 android:textColor="@color/main_text_color" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/muscal_index_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -54,12 +55,13 @@
                 android:background="@drawable/grade_bg"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="标准"
+                android:text="@string/bar_biaozhun_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/muscal_jiantou"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
@@ -130,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="不足" />
+                    android:text="@string/bar_buzu_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -157,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="标准" />
+                    android:text="@string/bar_biaozhun_title" />
             </LinearLayout>
 
             <RelativeLayout
@@ -184,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="优" />
+                    android:text="@string/bar_you_title" />
             </LinearLayout>
         </LinearLayout>
 

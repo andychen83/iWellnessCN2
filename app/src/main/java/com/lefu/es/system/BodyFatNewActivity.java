@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,12 +70,126 @@ public class BodyFatNewActivity extends BaseBleActivity {
     //private Dialog dialog;
     View view;
 
+    /*体重
+   * ---------*/
+    @Bind(R.id.face_img_weight)
+    ImageView face_img_weight;
+    @Bind(R.id.face_img_weight_ll)
+     LinearLayout face_img_weight_ll;
+    @Bind(R.id.weight_critical_point1)
+     TextView weight_critical_point1;
+    @Bind(R.id.weight_critical_point2)
+     TextView weight_critical_point2;
+    @Bind(R.id.biaoz)
+     AppCompatTextView biaoz;
+
+    /*水分率
+    *-----------------
+     */
+    @Bind(R.id.face_img_moisture)
+     ImageView face_img_moisture;
+    @Bind(R.id.face_img_moisture_ll)
+     LinearLayout face_img_moisture_ll;
+    @Bind(R.id.moistrue_critical_point1)
+     TextView moistrue_critical_point1;
+    @Bind(R.id.moistrue_critical_point2)
+     TextView moistrue_critical_point2;
+    @Bind(R.id.biaoz_moistrue)
+     AppCompatTextView biaoz_moistrue;
+
+    /*脂肪率
+    *-----------------
+     */
+    @Bind(R.id.face_img_bft)
+    private ImageView face_img_bft;
+    @Bind(R.id.face_img_bft_ll)
+    private LinearLayout face_img_bft_ll;
+    @Bind(R.id.bft_critical_point1)
+    private TextView bft_critical_point1;
+    @Bind(R.id.bft_critical_point2)
+    private TextView bft_critical_point2;
+    @Bind(R.id.bft_critical_point3)
+    private TextView bft_critical_point3;
+    @Bind(R.id.bft_critical_point4)
+    private TextView bft_critical_point4;
+    @Bind(R.id.bft_biaoz)
+    private AppCompatTextView bft_biaoz;
+
+    /*骨量
+    *-----------------
+     */
+    @Bind(R.id.face_img_bone)
+    private ImageView face_img_bone;
+    @Bind(R.id.face_img_bone_ll)
+    private LinearLayout face_img_bone_ll;
+    @Bind(R.id.bone_critical_point1)
+    private TextView bone_critical_point1;
+    @Bind(R.id.bone_critical_point2)
+    private TextView bone_critical_point2;
+    @Bind(R.id.bone_biaoz)
+    private AppCompatTextView bone_biaoz;
+
+    /*BMI
+    *-----------------
+     */
+    @Bind(R.id.face_img_bmi)
+    private ImageView face_img_bmi;
+    @Bind(R.id.face_img_bmi_ll)
+    private LinearLayout face_img_bmi_ll;
+    @Bind(R.id.bmi_critical_point1)
+    private TextView bmi_critical_point1;
+    @Bind(R.id.bmi_critical_point2)
+    private TextView bmi_critical_point2;
+    @Bind(R.id.bmi_critical_point3)
+    private TextView bmi_critical_point3;
+    @Bind(R.id.bmi_biaoz)
+    private AppCompatTextView bmi_biaoz;
+
+    /*内脏脂肪指数
+    *-----------------
+     */
+    @Bind(R.id.face_img_visceral)
+    private ImageView face_img_visceral;
+    @Bind(R.id.face_img_visceral_ll)
+    private LinearLayout face_img_visceral_ll;
+    @Bind(R.id.visceral_critical_point1)
+    private TextView visceral_critical_point1;
+    @Bind(R.id.visceral_critical_point2)
+    private TextView visceral_critical_point2;
+    @Bind(R.id.visceral_biaoz)
+    private AppCompatTextView visceral_biaoz;
+
+    /*BMR基础代谢率
+    *-----------------
+     */
+    @Bind(R.id.face_img_bmr)
+    private ImageView face_img_bmr;
+    @Bind(R.id.face_img_bmr_ll)
+    private LinearLayout face_img_bmr_ll;
+    @Bind(R.id.bmr_critical_point1)
+    private TextView bmr_critical_point1;
+    @Bind(R.id.bmr_biaoz)
+    private AppCompatTextView bmr_biaoz;
+
+    /*肌肉率
+    *-----------------
+     */
+    @Bind(R.id.face_img_muscle)
+    private ImageView face_img_muscle;
+    @Bind(R.id.face_img_muscle_ll)
+    private LinearLayout face_img_muscle_ll;
+    @Bind(R.id.muscle_critical_point1)
+    private TextView muscle_critical_point1;
+    @Bind(R.id.muscle_critical_point2)
+    private TextView muscle_critical_point2;
+    @Bind(R.id.muscle_biaoz)
+    private AppCompatTextView muscle_biaoz;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body_fat_new);
         ButterKnife.bind(this);
-
         uservice = new UserService(this);
 
         initView();
@@ -80,6 +197,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
 
     private void initView() {
+
         if(null!=UtilConstants.CURRENT_USER){
             try {
                 userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
@@ -125,12 +243,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             intent1.setClass(BodyFatNewActivity.this, UserListActivity.class);
             BodyFatNewActivity.this.startActivity(intent1);
         }else{
-            Intent intent = new Intent();
-            intent.setClass(BodyFatNewActivity.this, RecordListActivity.class);
-            intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
-            intent.putExtra("id", 0);
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityForResult(intent, 0);
+            startActivityForResult(RecordListActivity.creatIntent(BodyFatNewActivity.this,UtilConstants.CURRENT_USER),0);
         }
     }
 
