@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
@@ -30,6 +32,7 @@ import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,9 +59,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.visal_value_tx)
     TextView visalTx;
 
+    @Bind(R.id.user_header)
+    SimpleDraweeView userHeadImg;
+
     private UserService uservice;
 
-    private Dialog dialog;
+    //private Dialog dialog;
     View view;
 
     @Override
@@ -75,8 +81,11 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     private void initView() {
         if(null!=UtilConstants.CURRENT_USER){
-            userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
             try {
+                userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
+                if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
+                    userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
+                }
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
                 if(null!=lastRecords)localData(lastRecords);
             } catch (Exception e) {
@@ -99,9 +108,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 startActivity(BabyChoiceActivity.creatIntent(BodyFatNewActivity.this));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           Log.e(TAG,"脂肪秤页面点击抱婴按钮异常==>"+e.getMessage());
         }
-        //startActivity(BabyScaleNewActivity.creatIntent(BodyFatNewActivity.this));
     }
 
     @OnClick(R.id.setting_menu)
@@ -111,14 +119,28 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.history_menu)
     public void  historyMenuClick(){
-        Intent intent = new Intent();
-        intent.setClass(BodyFatNewActivity.this, RecordListActivity.class);
-        intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
-        intent.putExtra("id", 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityForResult(intent, 0);
+        if(null==UtilConstants.CURRENT_USER){
+            //调到用户列表选择页面
+            Intent intent1 = new Intent();
+            intent1.setClass(BodyFatNewActivity.this, UserListActivity.class);
+            BodyFatNewActivity.this.startActivity(intent1);
+        }else{
+            Intent intent = new Intent();
+            intent.setClass(BodyFatNewActivity.this, RecordListActivity.class);
+            intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
+            intent.putExtra("id", 0);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityForResult(intent, 0);
+        }
     }
 
+    @OnClick(R.id.user_header)
+    public void  userHeaderClick(){
+        //调到用户列表选择页面
+        Intent intent1 = new Intent();
+        intent1.setClass(BodyFatNewActivity.this, UserListActivity.class);
+        BodyFatNewActivity.this.startActivity(intent1);
+    }
 
     @Override
     public void updateConnectionState(int resourceId) {
@@ -338,7 +360,6 @@ public class BodyFatNewActivity extends BaseBleActivity {
      */
     private  void localData(Records data){
         weithValueTx.setText(String.valueOf(data.getRweight()));
-
         bmTx.setText(String.valueOf(data.getRbmi()));
         visalTx.setText(String.valueOf(data.getRvisceralfat()));
 

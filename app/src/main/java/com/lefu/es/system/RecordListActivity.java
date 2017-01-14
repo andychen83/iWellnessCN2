@@ -66,6 +66,9 @@ import com.lefu.es.view.guideview.HighLightGuideView;
 import com.lefu.es.view.guideview.HighLightGuideView.OnDismissListener;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import static com.lefu.iwellness.newes.cn.system.R.drawable.baby;
 
 /**
@@ -107,7 +110,8 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 	private RecordService recordService;
 
-	protected UserModel user = null; //需要展示的用户
+	@Bind(R.id.body_menu_ly)
+	LinearLayout menuLy;
 	
 	private void showTipMask() {
 		HighLightGuideView.builder(this)
@@ -142,23 +146,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		}).show();
 	}
 
-	public static Intent creatIntent(Context context, UserModel user){
-		Intent intent = new Intent(context,RecordListActivity.class);
-		intent.putExtra("user",user);
-		return intent;
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail_new);
-		Serializable serializable = getIntent().getSerializableExtra("baby");
-		if(null==serializable){
-			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_baby), Toast.LENGTH_LONG).show();
-			finish();
-		}else{
-			user = (UserModel)serializable;
-		}
+		ButterKnife.bind(this);
+
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -273,80 +266,90 @@ public class RecordListActivity extends Activity implements android.view.View.On
 				//[Records [scaleType=cf, ugroup=P1, recordTime=2016-09-20 00:02:55, compareRecord=-33.0, rweight=27.0, rbmi=0.0, rbone=1.0, rbodyfat=5.0, rmuscle=24.4, rbodywater=85.0, rvisceralfat=1.0, rbmr=1457.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null], Records [scaleType=cf, ugroup=P1, recordTime=2016-09-19 23:33:06, compareRecord=60.0, rweight=60.0, rbmi=20.8, rbone=2.8, rbodyfat=13.2, rmuscle=47.6, rbodywater=58.2, rvisceralfat=2.0, rbmr=1516.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null]]
 				CacheHelper.recordListDesc = this.recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), 167f);
 				CacheHelper.recordList = this.recordService.getAllDatasByScaleAndIDAsc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), 167f);
+				initChart();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		if (null != CacheHelper.recordList) {
-			//[Records [scaleType=cf, ugroup=P1, recordTime=2016-09-20 00:02:55, compareRecord=-33.0, rweight=27.0, rbmi=9.3, rbone=1.0, rbodyfat=5.0, rmuscle=24.4, rbodywater=85.0, rvisceralfat=1.0, rbmr=1457.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null], Records [scaleType=cf, ugroup=P1, recordTime=2016-09-19 23:33:06, compareRecord=60.0, rweight=60.0, rbmi=20.8, rbone=2.8, rbodyfat=13.2, rmuscle=47.6, rbodywater=58.2, rvisceralfat=2.0, rbmr=1516.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null]]
-			Date[] dt = new Date[CacheHelper.recordList.size()];
-			double[] views = new double[CacheHelper.recordList.size()];
-			Records recor = null;
-			intiListView(CacheHelper.recordListDesc);
-			if (null != CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() > 0) {
-				lastRecod = CacheHelper.recordListDesc.get(0);
-			}
-			for (int i = 0; i < CacheHelper.recordList.size(); i++) {
-				recor = CacheHelper.recordList.get(i);
-				Log.i(TAG, "record time: "+String.valueOf(recor.getRecordTime()));
-				dt[i] = UtilTooth.stringToTime(recor.getRecordTime());
-				if (type == UtilConstants.WEIGHT_SINGLE) {
-					UtilConstants.isWeight = true;
-				} else {
-					UtilConstants.isWeight = false;
-				}
-				
-				
-				if (type == UtilConstants.WEIGHT_SINGLE) {
-
-					if (recor.getScaleType().contains(UtilConstants.BABY_SCALE)) {
-						views[i] = UtilTooth.myround2(recor.getRweight());
-					} else {
-						views[i] = recor.getRweight();
-					}
-				} else if (type == UtilConstants.BMI_SINGLE) {
-					views[i] = recor.getRbmi();
-				} else if (type == UtilConstants.BMR_SINGLE) {
-					views[i] = UtilTooth.myround(recor.getRbmr());
-				} else if (type == UtilConstants.BODYFAT_SINGLE) {
-					views[i] = UtilTooth.myround(recor.getRbodyfat());
-				} else if (type == UtilConstants.BODYWATER_SINGLE) {
-					views[i] = UtilTooth.myround(recor.getRbodywater());
-				} else if (type == UtilConstants.BONE_SINGLE) {
-					if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
-						views[i] = UtilTooth.myround(recor.getRbone());
-					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-						views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
-					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
-						views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
-					} else {
-						views[i] = UtilTooth.myround(recor.getRbone());
-					}
-				} else if (type == UtilConstants.MUSCALE_SINGLE) {
-//					views[i] = UtilTooth.myround(recor.getRmuscle());
-					if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
-						views[i] = UtilTooth.myround(recor.getRmuscle());
-					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-						views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
-					} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
-						views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
-					} else {
-						views[i] = UtilTooth.myround(recor.getRmuscle());
-					}
-				} else if (type == UtilConstants.VISCALEFAT_SINGLE) {
-					views[i] = UtilTooth.myround(recor.getRvisceralfat());
-				}
-
-			}
-			openChart(dt, views);
-		}else{
-			//
-			chartContainer.removeAllViews();
-
-			intiListView(null);
+			Log.e(TAG,"图标加载失败"+e.getMessage());
 		}
 	}
+
+
+	private void initChart(){
+		try {
+				if (null != CacheHelper.recordList) {
+					//[Records [scaleType=cf, ugroup=P1, recordTime=2016-09-20 00:02:55, compareRecord=-33.0, rweight=27.0, rbmi=9.3, rbone=1.0, rbodyfat=5.0, rmuscle=24.4, rbodywater=85.0, rvisceralfat=1.0, rbmr=1457.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null], Records [scaleType=cf, ugroup=P1, recordTime=2016-09-19 23:33:06, compareRecord=60.0, rweight=60.0, rbmi=20.8, rbone=2.8, rbodyfat=13.2, rmuscle=47.6, rbodywater=58.2, rvisceralfat=2.0, rbmr=1516.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null]]
+					Date[] dt = new Date[CacheHelper.recordList.size()];
+					double[] views = new double[CacheHelper.recordList.size()];
+					Records recor = null;
+					intiListView(CacheHelper.recordListDesc);
+					if (null != CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() > 0) {
+						lastRecod = CacheHelper.recordListDesc.get(0);
+					}
+					for (int i = 0; i < CacheHelper.recordList.size(); i++) {
+						recor = CacheHelper.recordList.get(i);
+						Log.i(TAG, "record time: "+String.valueOf(recor.getRecordTime()));
+						dt[i] = UtilTooth.stringToTime(recor.getRecordTime());
+						if (type == UtilConstants.WEIGHT_SINGLE) {
+							UtilConstants.isWeight = true;
+						} else {
+							UtilConstants.isWeight = false;
+						}
+
+
+						if (type == UtilConstants.WEIGHT_SINGLE) {
+
+							if (recor.getScaleType().contains(UtilConstants.BABY_SCALE)) {
+								views[i] = UtilTooth.myround2(recor.getRweight());
+							} else {
+								views[i] = recor.getRweight();
+							}
+						} else if (type == UtilConstants.BMI_SINGLE) {
+							views[i] = recor.getRbmi();
+						} else if (type == UtilConstants.BMR_SINGLE) {
+							views[i] = UtilTooth.myround(recor.getRbmr());
+						} else if (type == UtilConstants.BODYFAT_SINGLE) {
+							views[i] = UtilTooth.myround(recor.getRbodyfat());
+						} else if (type == UtilConstants.BODYWATER_SINGLE) {
+							views[i] = UtilTooth.myround(recor.getRbodywater());
+						} else if (type == UtilConstants.BONE_SINGLE) {
+							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+								views[i] = UtilTooth.myround(recor.getRbone());
+							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
+							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
+							} else {
+								views[i] = UtilTooth.myround(recor.getRbone());
+							}
+						} else if (type == UtilConstants.MUSCALE_SINGLE) {
+//					views[i] = UtilTooth.myround(recor.getRmuscle());
+							if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+								views[i] = UtilTooth.myround(recor.getRmuscle());
+							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
+							} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
+							} else {
+								views[i] = UtilTooth.myround(recor.getRmuscle());
+							}
+						} else if (type == UtilConstants.VISCALEFAT_SINGLE) {
+							views[i] = UtilTooth.myround(recor.getRvisceralfat());
+						}
+
+					}
+					openChart(dt, views);
+				}else{
+					//
+					chartContainer.removeAllViews();
+
+					intiListView(null);
+				}
+		} catch (Exception e) {
+			Log.e(TAG,"图标加载失败"+e.getMessage());
+		}
+	}
+
+
 
 	private void intiListView(List<Records> list2) {
 		if (null != list2 && list2.size() > 0) {
@@ -639,6 +642,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					delist.setVisibility(View.GONE);
 					lv.setVisibility(View.GONE);
 					charcontainer.setVisibility(View.VISIBLE);
+					menuLy.setVisibility(View.VISIBLE);
 					break;
 
 				case R.id.list_textview :
@@ -646,6 +650,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					delist.setVisibility(View.VISIBLE);
 					lv.setVisibility(View.VISIBLE);
 					charcontainer.setVisibility(View.GONE);
+					menuLy.setVisibility(View.GONE);
 //					if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_SHARE)) {
 //						showTipMask2();
 //					}
@@ -884,4 +889,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void onClick(View v) {
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ButterKnife.unbind(this);
+	}
 }

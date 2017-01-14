@@ -384,6 +384,7 @@
     <string name="open_harmbaby_scale">测量婴儿体重请先点击  上秤  菜单，打开抱婴模式</string>
     <string name="mesure_error_harmbaby">测量错误：抱婴后重量比之前更轻了</string>
     <string name="choice_a_baby">请选择一个需要测量的婴儿</string>
+    <string name="choice_a_user">请选择一个用户组</string>
     <string name="please_choice_a_baby">请选择</string>
     <string name="add_title">添加</string>
 

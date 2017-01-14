@@ -96,7 +96,7 @@ public class TestActivity extends AppCompatActivity {
         face_img_weight = (ImageView) findViewById(R.id.face_img_weight);
 
         // 体重
-        MoveView.weight(TestActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,199);
+        MoveView.weight(TestActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,58);
 
         face_img_moisture_ll = (LinearLayout) findViewById(R.id.face_img_moisture_ll);
         moistrue_critical_point1 = (TextView) findViewById(R.id.moistrue_critical_point1);
@@ -133,7 +133,7 @@ public class TestActivity extends AppCompatActivity {
         bmi_biaoz = (AppCompatTextView) findViewById(R.id.bmi_biaoz);
         face_img_bmi = (ImageView) findViewById(R.id.face_img_bmi);
         // BMI
-        MoveView.bmi(TestActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,18.5);
+        MoveView.bmi(TestActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,25);
 
 
         face_img_visceral_ll = (LinearLayout) findViewById(R.id.face_img_visceral_ll);
@@ -142,7 +142,7 @@ public class TestActivity extends AppCompatActivity {
         visceral_biaoz = (AppCompatTextView) findViewById(R.id.visceral_biaoz);
         face_img_visceral = (ImageView) findViewById(R.id.face_img_visceral);
         // 内脏脂肪指数
-        MoveView.visceralFat(TestActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,8);
+        MoveView.visceralFat(TestActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,12);
 
 
         face_img_bmr_ll = (LinearLayout) findViewById(R.id.face_img_bmr_ll);

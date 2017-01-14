@@ -58,7 +58,9 @@
             android:scaleY="1"
             android:src="@drawable/shar" />
     </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/body_menu_ly"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -68,7 +70,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="3dp" >
@@ -121,6 +122,10 @@
                     android:textColor="@color/white"
                     android:textSize="14sp" />
         </RadioGroup>
+        <View
+            android:background="?android:attr/listDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"/>
         <RadioGroup
             android:id="@id/tongji_group"
             android:layout_width="match_parent"
@@ -130,7 +135,7 @@
             android:paddingBottom="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="3dp" >
+             >
 
                 <RadioButton
                     android:id="@+id/bmi_menu"

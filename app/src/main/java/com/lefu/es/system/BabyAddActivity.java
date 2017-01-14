@@ -971,9 +971,9 @@ public class BabyAddActivity extends AppCompatActivity {
 
 	}
 
-	private String maxGroup = "P0";
+	private String maxGroup = "P999";
 	public UserModel creatUserModel() {
-		String group = this.uservice.getAddUserGroup(null);
+		String group = "P999";
 		Log.e("UserAddActivity", "當前創立用戶的用戶組:"+group);
 		UserModel mPerson = new UserModel();
 		try {
