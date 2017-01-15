@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.constant.ActivityVolues;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.entity.UserModel;
@@ -111,7 +112,7 @@ public class UserAddActivity extends AppCompatActivity {
 	private LinearLayout birth_layout = null;
 
 	/** 修改头像 */
-	private ImageView ib_upphoto;
+	private SimpleDraweeView ib_upphoto;
 	/** 修改头像自定义Dialog中的按钮 **/
 	private Button rb_dialog[] = new Button[3];
 	private int RadioButtonID[] = {R.id.rb_setPhoto1, R.id.rb_setPhoto2, R.id.rb_setPhoto3};
@@ -243,7 +244,7 @@ public class UserAddActivity extends AppCompatActivity {
 		//ageET.setOnClickListener(imgOnClickListener);
 		birth_layout.setOnClickListener(imgOnClickListener);
 
-		ib_upphoto = (ImageView) this.findViewById(R.id.reviseHead);
+		ib_upphoto = (SimpleDraweeView) this.findViewById(R.id.reviseHead);
 		ib_upphoto.setOnClickListener(photoClickListener);
 
 		ageET.setOnTouchListener(new View.OnTouchListener() {

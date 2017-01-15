@@ -59,14 +59,14 @@ public class MyTextView5 extends LinearLayout {
 				tvST.setTextSize(80);
 			}
 		}else{
-			tvST.setTextSize(30);
+			tvST.setTextSize(25);
 		}
 		tvST.setText(tLeft);
 		if(tLeft!=null && tLeft.equals(getContext().getString(R.string.nodata_waring))){
 			if(LoadingActivity.isPad){
 				tvST.setTextSize(30);
 			}else{
-				tvST.setTextSize(30);
+				tvST.setTextSize(25);
 			}
 		}
 		

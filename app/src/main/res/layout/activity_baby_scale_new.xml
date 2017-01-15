@@ -133,7 +133,7 @@
                         android:textColor="@color/main_text_color"
                         android:textSize="14sp" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -142,25 +142,26 @@
                             android:id="@+id/weith_value_tx"
                             android:layout_marginTop="5dp"
                             android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
                             android:text="0kg"
                             android:textSize="30sp"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/main_text_color"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"  >
                         </com.lefu.es.view.MyTextView5>
+
                         <TextView
                             android:id="@+id/unti_tv"
+                            android:layout_toRightOf="@id/weith_value_tx"
+                            android:layout_marginLeft="3dp"
                             android:layout_gravity="center_vertical"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/main_text_color"
-                            android:textSize="16sp"
+                            android:textSize="20sp"
                             android:text="kg" />
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/weith_status"

@@ -61,14 +61,49 @@
             android:scaleY="1"
             android:src="@drawable/shar" />
     </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/graphlist_group"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="3dp" >
 
+        <RadioButton
+            android:id="@+id/graph_radio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/left_corners_btn_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/scale_record_graph"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/list_radio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/left_corners_btn_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/scale_record_list"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RadioGroup>
     <LinearLayout
-        android:id="@+id/body_menu_ly"
         android:orientation="vertical"
+        android:id="@+id/menuGroup_bath_ly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RadioGroup
-            android:id="@+id/tongji_group"
+            android:id="@+id/tongji_bath_group"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_gravity="center"
@@ -76,6 +111,53 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="3dp" >
+
+            <RadioButton
+                android:id="@+id/weight_bath_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/left_corners_btn_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/weight_menu"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/bmi_bath_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/left_corners_btn_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/bmi_menu"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RadioGroup>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/body_menu_ly"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/menuGroup_ly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/tongji_group"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp" >
 
                 <RadioButton
                     android:id="@+id/weight_menu"
@@ -124,21 +206,21 @@
                     android:text="@string/bone_menu"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
-        </RadioGroup>
-        <View
-            android:background="?android:attr/listDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1sp"/>
-        <RadioGroup
-            android:id="@id/tongji_group"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="3dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-             >
+            </RadioGroup>
+            <View
+                android:background="?android:attr/listDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1sp"/>
+            <RadioGroup
+                android:id="@id/tongji_group"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
 
                 <RadioButton
                     android:id="@+id/bmi_menu"
@@ -174,6 +256,7 @@
                     android:text="@string/bmr_menu"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
+
                 <RadioButton
                     android:id="@+id/muscial_menu"
                     android:layout_width="match_parent"
@@ -186,56 +269,18 @@
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
-        </RadioGroup>
+            </RadioGroup>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" >
-
-        <TextView
-            android:id="@+id/graph_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/scale_record_graph"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <TextView
-                android:id="@+id/list_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/scale_record_list"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/line_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/line_graph"
-        android:orientation="horizontal" >
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/rl_delist_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bmi_title"
         android:orientation="horizontal"
@@ -288,8 +333,8 @@
             android:id="@+id/detailist_contains"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:layout_weight="0.52"
             android:background="@drawable/rounded_corners_whiteview"

@@ -151,7 +151,7 @@ public class TestActivity extends AppCompatActivity {
         bmr_biaoz = (AppCompatTextView) findViewById(R.id.bmr_biaoz);
         face_img_bmr = (ImageView) findViewById(R.id.face_img_bmr);
         // BMR 基础代谢率
-        MoveView.bmr(TestActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
+        //MoveView.bmr(TestActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
 
 
         face_img_muscle_ll = (LinearLayout) findViewById(R.id.face_img_muscle_ll);
@@ -160,7 +160,7 @@ public class TestActivity extends AppCompatActivity {
         muscle_biaoz = (AppCompatTextView) findViewById(R.id.muscle_biaoz);
         face_img_muscle = (ImageView) findViewById(R.id.face_img_muscle);
         // 肌肉率
-        MoveView.muscle(TestActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
+        //MoveView.muscle(TestActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
 
 
 

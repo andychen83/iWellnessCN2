@@ -81,14 +81,12 @@ public class BodyFatScaleSetActivity extends AppCompatActivity {
                 userHeadImg.setImageURI(Uri.fromFile(new File(babyUser.getPer_photo())));
             }
             userNameTx.setText(babyUser.getUserName());
-
-
         }
     }
 
     @OnClick(R.id.info_layout)
     public void infoLyClick(){
-        startActivityForResult(UserEditActivity.creatIntent(BodyFatScaleSetActivity.this,babyUser),0);
+        startActivityForResult(UserEditActivity.creatIntent(BodyFatScaleSetActivity.this,babyUser),2);
     }
 
     @OnClick(R.id.save_layout)
@@ -103,6 +101,32 @@ public class BodyFatScaleSetActivity extends AppCompatActivity {
         intent.putExtra("IsHelp", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case RESULT_OK:
+                Bundle b=data.getExtras(); //data为B中回传的Intent
+                if(null!=b){
+                    Serializable serializable = b.getSerializable("user");
+                    if(null!=serializable){
+                        UserModel userM = (UserModel)serializable;
+                        initView(userM);
+                    }
+                }
+                break;
+        }
+    }
+
+    @OnClick(R.id.infomation_ly)
+    public void infoClick(){
+       /* 跳转info界面 */
+        Intent intent0 = new Intent();
+        intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent0.setClass(BodyFatScaleSetActivity.this, InfoActivity.class);
+        BodyFatScaleSetActivity.this.startActivity(intent0);
     }
 
     @OnClick(R.id.linke_contract)

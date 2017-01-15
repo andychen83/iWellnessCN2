@@ -244,7 +244,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                 unit_tv.setText(this.getText(R.string.lb_danwei));
             }
         } else {
-            weithValueTx.setTexts(record.getRweight() + "", null);
+            weithValueTx.setTexts(UtilTooth.keep1Point(record.getRweight()), null);
             if (null != unit_tv) {
                 unit_tv.setText(this.getText(R.string.kg_danwei));
             }
@@ -429,7 +429,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         System.out.println("检测读取到数据：" + readMessage);
         if(TextUtils.isEmpty(readMessage)) return;
         if(!isOpenBabyScale) {
-            Toast.makeText(BabyScaleNewActivity.this, getString(R.string.open_harmbaby_scale), Toast.LENGTH_LONG).show();
+            //Toast.makeText(BabyScaleNewActivity.this, getString(R.string.open_harmbaby_scale), Toast.LENGTH_SHORT).show();
             return;
         }
         //测脂错误
@@ -515,7 +515,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             records = MyUtil.parseZuKangMeaage(this.recordService, readMessage,babyUser);
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
-            weithValueTx.setTexts(String.valueOf(weight),null);
+            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             records = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,babyUser);
         }
@@ -552,6 +552,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
                                     data.setRweight(weight);
                                     data.setSweight(String.valueOf(weight));
+                                    data.setScaleType(UtilConstants.BABY_SCALE);
                                     //更新界面
                                     if(null!=lastRecord){
                                         data.setCompareRecord((UtilTooth.myround(data.getRweight() - lastRecord.getRweight())) + "");

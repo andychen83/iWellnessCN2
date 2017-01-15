@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +41,7 @@ import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -104,8 +106,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
      AppCompatTextView biaoz;
     @Bind(R.id.weight_index_tx)
     AppCompatTextView weightIndex;
+
     @Bind(R.id.status_bar2)
     RelativeLayout status_bar2;
+    @Bind(R.id.weight_jiantou)
+    AppCompatImageView weight_jiantou;
+
     /*水分率
     *-----------------
      */
@@ -123,6 +129,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView waterIndex;
     @Bind(R.id.status_bar_moisture)
     RelativeLayout status_bar_moisture;
+
+    @Bind(R.id.water_jiantou)
+    AppCompatImageView water_jiantou;
     /*脂肪率
     *-----------------
      */
@@ -144,6 +153,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView fatIndex;
     @Bind(R.id.status_bar_bft)
     RelativeLayout status_bar_bft;
+
+    @Bind(R.id.fat_jiantou)
+    AppCompatImageView fat_jiantou;
     /*骨量
     *-----------------
      */
@@ -161,6 +173,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView boneIndex;
     @Bind(R.id.status_bar_bone)
     RelativeLayout status_bar_bone;
+    @Bind(R.id.bone_jiantou)
+    AppCompatImageView bone_jiantou;
     /*BMI
     *-----------------
      */
@@ -180,6 +194,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView bmiIndex;
     @Bind(R.id.status_bar_bmi)
     RelativeLayout status_bar_bmi;
+    @Bind(R.id.bmi_jiantou)
+    AppCompatImageView bmi_jiantou;
     /*内脏脂肪指数
     *-----------------
      */
@@ -197,6 +213,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView visalfatIndex;
     @Bind(R.id.status_bar_visalfat)
     RelativeLayout status_bar_visalfat;
+    @Bind(R.id.visalfat_jiantou)
+    AppCompatImageView visalfat_jiantou;
     /*BMR基础代谢率
     *-----------------
      */
@@ -212,6 +230,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView bmrIndex;
     @Bind(R.id.status_bar_bmr)
     RelativeLayout status_bar_bmr;
+    @Bind(R.id.bmr_jiantou)
+    AppCompatImageView bmr_jiantou;
     /*肌肉率
     *-----------------
      */
@@ -229,6 +249,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView muscalIndex;
     @Bind(R.id.status_bar_muscial)
     RelativeLayout status_bar_muscial;
+    @Bind(R.id.muscal_jiantou)
+    AppCompatImageView muscal_jiantou;
     /*身体年龄
     *-----------------
      */
@@ -236,6 +258,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
     AppCompatTextView age_biaoz;
     @Bind(R.id.age_index_tx)
     AppCompatTextView ageIndex;
+
+
+    public static int SELCET_USER=100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,13 +283,36 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
                     userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
                 }
-                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
+                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
                 if(null!=lastRecords){
                     localData(lastRecords,UtilConstants.CURRENT_USER);
                     initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == SELCET_USER) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel user = (UserModel) serializable;
+                    //保存用户
+                    UtilConstants.CURRENT_USER = user;
+                    if(user.getId()!=UtilConstants.CURRENT_USER.getId()){
+                        RecordDao.handleData2(recordService, receiveRecod);
+                        initView();
+                    }else{
+                        RecordDao.handleData2(recordService, receiveRecod);
+                    }
+                }
             }
         }
     }
@@ -305,9 +353,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
         int gender = Integer.parseInt(sex);
         weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
         bmTx.setText(String.valueOf(record.getRbmi()));
-        visalTx.setText(String.valueOf(record.getRvisceralfat()));
+        visalTx.setText(UtilTooth.keep1Point(record.getRbodyfat())+"%");
         bmiStatus.setText(MoveView.bmiString(record.getRbmi()));
-        visalStatus.setText(MoveView.visceralFatString(record.getRvisceralfat()));
+        visalStatus.setText(MoveView.bftString(gender,user.getAgeYear(),record.getRbodyfat()));
     }
 
     /**
@@ -347,12 +395,16 @@ public class BodyFatNewActivity extends BaseBleActivity {
             visalfatIndex.setText(UtilTooth.keep1Point(record.getRvisceralfat()));
             MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,record.getRvisceralfat());
             // BMR 基础代谢率
-            bmrIndex.setText(UtilTooth.keep1Point(record.getRbmr()));
-            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,record.getRbmr());
-            // 肌肉率
-            float muscal = UtilTooth.keep1Point3(record.getRmuscle()/record.getRweight()*100);
-            muscalIndex.setText(UtilTooth.keep1Point(muscal));
-            MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,muscal);
+            bmrIndex.setText(UtilTooth.keep1Point(record.getRbmr())+"kcal");
+            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,gender,user.getAgeYear(),record.getRweight(),record.getRbmr());
+            // 肌肉含量
+            float muscal = UtilTooth.keep1Point3(record.getRmuscle());
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
+                muscalIndex.setText(UtilTooth.kgToLB_ForFatScale(muscal) + "lb");
+            }else{
+                muscalIndex.setText(UtilTooth.keep1Point(muscal)+ "kg");
+            }
+            MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,gender,user.getBheigth(),muscal,user.getDanwei());
             //身体年龄
             ageIndex.setText(UtilTooth.keep0Point(record.getBodyAge()));
         }
@@ -370,11 +422,17 @@ public class BodyFatNewActivity extends BaseBleActivity {
             }else{
                 //弹出选择用户组
                 startActivity(BabyChoiceActivity.creatIntent(BodyFatNewActivity.this));
+                if(null!=mBluetoothLeService){
+                    mScanner.stopScane();
+                    mBluetoothLeService.disconnect();
+                }
             }
         } catch (Exception e) {
            Log.e(TAG,"脂肪秤页面点击抱婴按钮异常==>"+e.getMessage());
         }
     }
+
+
 
     @OnClick(R.id.setting_menu)
     public void setMenuClick(){
@@ -515,7 +573,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
-                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
                         UtilConstants.receiveDataTime = System.currentTimeMillis();
                         dueDate(readMessage,3);
                     }
@@ -524,7 +582,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 }
             }else{
                 /**判断是不是两次连续的数据*/
-                if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
                     UtilConstants.receiveDataTime=System.currentTimeMillis();
 
                     if(newScale){
@@ -588,7 +646,26 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     @Override
     protected  void saveDataCallBack(Records records){
-        initBodyBar(UtilConstants.CURRENT_USER,records);
+        if(records.getScaleType().startsWith(UtilConstants.BATHROOM_SCALE)){
+									/*人体秤*/
+            UtilConstants.CURRENT_SCALE=UtilConstants.BATHROOM_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else if(records.getScaleType().startsWith(UtilConstants.BABY_SCALE)){
+									/*婴儿秤*/
+            UtilConstants.CURRENT_SCALE=UtilConstants.BABY_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+									/*保存测量数据*/
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else if (records.getScaleType().startsWith(UtilConstants.KITCHEN_SCALE)) {
+									/* 厨房秤 */
+            UtilConstants.CURRENT_SCALE = UtilConstants.KITCHEN_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else{
+            localData(records,UtilConstants.CURRENT_USER);
+            initBodyBar(UtilConstants.CURRENT_USER,records);
+        }
     }
 
     /**
@@ -609,7 +686,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
-            weithValueTx.setTexts(String.valueOf(weight),null);
+            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -628,7 +705,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 case 0 :
                     Records data  = (Records)msg.obj;
                     if(null!=data){
-                        weithValueTx.setTexts(String.valueOf(data.getRweight()),null);
+                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
                         playSound();
                         showReceiveDataDialog();
                     }
@@ -667,6 +744,375 @@ public class BodyFatNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+
+    @OnClick(R.id.weight_jiantou)
+    public void menuWeightOpenClick(){
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar2.setVisibility(View.VISIBLE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.muscal_jiantou)
+    public void menuMuscalOpenClick(){
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_muscial.setVisibility(View.VISIBLE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.visalfat_jiantou)
+    public void menuVisalfatOpenClick(){
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_visalfat.setVisibility(View.VISIBLE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.bmi_jiantou)
+    public void menuBmiOpenClick(){
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_bmi.setVisibility(View.VISIBLE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.bone_jiantou)
+    public void menuBoneOpenClick(){
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_bone.setVisibility(View.VISIBLE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.fat_jiantou)
+    public void menuFatOpenClick(){
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_bft.setVisibility(View.VISIBLE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.water_jiantou)
+    public void menuWaterOpenClick(){
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_moisture.setVisibility(View.VISIBLE);
+            water_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.bmr_jiantou)
+    public void menuBmrOpenClick(){
+        if(status_bar_bmr.getVisibility()==View.VISIBLE){
+            status_bar_bmr.setVisibility(View.GONE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_bmr.setVisibility(View.VISIBLE);
+            bmr_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_muscial.getVisibility()==View.VISIBLE){
+            status_bar_muscial.setVisibility(View.GONE);
+            muscal_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_visalfat.getVisibility()==View.VISIBLE){
+            status_bar_visalfat.setVisibility(View.GONE);
+            visalfat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bone.getVisibility()==View.VISIBLE){
+            status_bar_bone.setVisibility(View.GONE);
+            bone_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_bft.getVisibility()==View.VISIBLE){
+            status_bar_bft.setVisibility(View.GONE);
+            fat_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar_moisture.getVisibility()==View.VISIBLE){
+            status_bar_moisture.setVisibility(View.GONE);
+            water_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
     }
 
 }

@@ -114,7 +114,7 @@
         <activity
             android:name="com.lefu.es.system.SettingActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/NoTitleBar" />
         <activity
             android:name="com.lefu.es.system.UserListActivity"
             android:screenOrientation="portrait"
@@ -176,6 +176,10 @@
         <!-- 婴儿选择页面 -->
         <activity
             android:name="com.lefu.es.system.BabyChoiceActivity"
+            android:theme="@style/dialog" />
+        <!-- 大人选择页面 -->
+        <activity
+            android:name="com.lefu.es.system.AdultChoiceActivity"
             android:theme="@style/dialog" />
     </application>
 

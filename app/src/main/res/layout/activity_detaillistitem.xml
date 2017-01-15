@@ -239,6 +239,7 @@
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tvdetail_bmi_status"
                         android:layout_height="match_parent"
@@ -267,6 +268,7 @@
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tvdetail_bmr_status"
                         android:layout_height="match_parent"
@@ -301,7 +303,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingLeft="10dp"
-                        android:text="@string/biaozhun_cloun"
+                        android:text=""
                         android:textColor="@color/black" />
                 </TableRow>
             </TableLayout>

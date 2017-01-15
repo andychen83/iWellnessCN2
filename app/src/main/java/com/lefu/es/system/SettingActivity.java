@@ -1,5 +1,6 @@
 package com.lefu.es.system;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -11,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.constant.imageUtil;
@@ -39,15 +42,16 @@ import com.lefu.iwellness.newes.cn.system.R;
  * @author Leon
  * 2015-11-19
  */
-public class SettingActivity extends Activity {
+public class SettingActivity extends AppCompatActivity {
 	private RelativeLayout info_layout;
 	private RelativeLayout scale_layout;
 	private RelativeLayout save_layout;
 	private RelativeLayout about_layout;
 	private RelativeLayout langue_layout;
 	private RelativeLayout linke_contract;
+	private RelativeLayout infomation_ly;
 	private ImageView home_img_btn;
-	private ImageView head_img;
+	private SimpleDraweeView head_img;
 	private TextView name_tv;
 	private Button bodyfat_btn, bathroom_btn,babyScale_btn,kitchenScale_btn,chinesetw_btn,english_btn;
 	private AlertDialog scaleAlertDialog;
@@ -91,21 +95,32 @@ public class SettingActivity extends Activity {
 		langue_layout = (RelativeLayout) findViewById(R.id.langue_layout);
 		home_img_btn = (ImageView) findViewById(R.id.home_img_btn);
 		linke_contract = (RelativeLayout) findViewById(R.id.linke_contract);
+		infomation_ly = (RelativeLayout) findViewById(R.id.infomation_ly);
 		langue_layout.setOnClickListener(itemOnClickListener);
 		info_layout.setOnClickListener(itemOnClickListener);
 		scale_layout.setOnClickListener(itemOnClickListener);
 		save_layout.setOnClickListener(itemOnClickListener);
 		about_layout.setOnClickListener(itemOnClickListener);
 		home_img_btn.setOnClickListener(imgOnClickListener);
+		infomation_ly.setOnClickListener(imgOnClickListener);
 		linke_contract.setOnClickListener(imgOnClickListener);
-		head_img = (ImageView) findViewById(R.id.reviseHead);
+		head_img = (SimpleDraweeView) findViewById(R.id.reviseHead);
 		name_tv = (TextView) findViewById(R.id.username_tv);
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initUIinfo();
+	}
+
+	private void initUIinfo(){
 		/*设置用户名和头像*/
 		if (null != UtilConstants.CURRENT_USER) {
 			this.name_tv.setText(UtilConstants.CURRENT_USER.getUserName());
 			if (null != UtilConstants.CURRENT_USER.getPer_photo() && !"".equals(UtilConstants.CURRENT_USER.getPer_photo()) && !UtilConstants.CURRENT_USER.getPer_photo().equals("null")) {
-				Bitmap bitmap = imageUtil.getBitmapfromPath(UtilConstants.CURRENT_USER.getPer_photo());
-				head_img.setImageBitmap(bitmap);
+				head_img.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
 			}
 		}
 	}
@@ -151,7 +166,7 @@ public class SettingActivity extends Activity {
 		// 初始化自定义布局参数
 		LayoutInflater layoutInflater = getLayoutInflater();
 		// 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
-		View customLayout = layoutInflater.inflate(R.layout.scale_chioce, (ViewGroup) findViewById(R.id.customDialog));
+		View customLayout = layoutInflater.inflate(R.layout.scale_chioce, (ViewGroup) findViewById(R.id.selectScaleDialog));
 
 		bodyfat_btn = (Button) customLayout.findViewById(R.id.bodyfat_button);
 		bathroom_btn = (Button) customLayout.findViewById(R.id.bathroom_button);
@@ -204,6 +219,13 @@ public class SettingActivity extends Activity {
 		@SuppressWarnings("deprecation")
 		public void onClick(View v) {
 			switch (v.getId()) {
+				case R.id.infomation_ly:
+					/* 跳转info界面 */
+					Intent intent0 = new Intent();
+					intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent0.setClass(SettingActivity.this, InfoActivity.class);
+					SettingActivity.this.startActivity(intent0);
+					break;
 				case R.id.home_img_btn :
 					home_img_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.home_id));
 					/*返回跳转*/

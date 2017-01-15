@@ -12,8 +12,10 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,9 +63,6 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     @Bind(R.id.weith_value_tx)
     MyTextView5 weithValueTx;
 
-    @Bind(R.id.weight_index_tx)
-    AppCompatTextView weightIndexTx;
-
     @Bind(R.id.weith_status)
     TextView weithStatus;
 
@@ -73,7 +72,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     private UserService uservice;
 
     /*体重
-  * ---------*/
+    * ---------*/
     @Bind(R.id.face_img_weight)
     ImageView face_img_weight;
     @Bind(R.id.face_img_weight_ll)
@@ -86,9 +85,14 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     AppCompatTextView biaoz;
     @Bind(R.id.weight_index_tx)
     AppCompatTextView weightIndex;
+
+    @Bind(R.id.status_bar2)
+    RelativeLayout status_bar2;
+    @Bind(R.id.weight_jiantou)
+    AppCompatImageView weight_jiantou;
     /*BMI
-   *-----------------
-    */
+    *-----------------
+     */
     @Bind(R.id.face_img_bmi)
     ImageView face_img_bmi;
     @Bind(R.id.face_img_bmi_ll)
@@ -103,6 +107,10 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     AppCompatTextView bmi_biaoz;
     @Bind(R.id.bmi_index_tx)
     AppCompatTextView bmiIndex;
+    @Bind(R.id.status_bar_bmi)
+    RelativeLayout status_bar_bmi;
+    @Bind(R.id.bmi_jiantou)
+    AppCompatImageView bmi_jiantou;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +131,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                 userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
             }
             try {
-                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId());
+                Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"ce");
                 if(null!=lastRecords){
                     localData(lastRecords,UtilConstants.CURRENT_USER);
                     initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
@@ -352,7 +360,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
-                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
                         UtilConstants.receiveDataTime = System.currentTimeMillis();
                         dueDate(readMessage,3);
                     }
@@ -425,7 +433,26 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
     @Override
     protected  void saveDataCallBack(Records records){
-        initBodyBar(UtilConstants.CURRENT_USER,records);
+        if(records.getScaleType().startsWith(UtilConstants.BODY_SCALE)){
+									/*脂肪秤*/
+            UtilConstants.CURRENT_SCALE=UtilConstants.BODY_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else if(records.getScaleType().startsWith(UtilConstants.BABY_SCALE)){
+									/*婴儿秤*/
+            UtilConstants.CURRENT_SCALE=UtilConstants.BABY_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+									/*保存测量数据*/
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else if (records.getScaleType().startsWith(UtilConstants.KITCHEN_SCALE)) {
+									/* 厨房秤 */
+            UtilConstants.CURRENT_SCALE = UtilConstants.KITCHEN_SCALE;
+            UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
+            handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
+        }else{
+            localData(records,UtilConstants.CURRENT_USER);
+            initBodyBar(UtilConstants.CURRENT_USER,records);
+        }
     }
 
 
@@ -449,7 +476,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         }else if(2==i){//新称过程数据
             float weight = MyUtil.getWeightData(readMessage);
 
-            weithValueTx.setTexts(String.valueOf(weight),null);
+            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -467,7 +494,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                     Records data  = (Records)msg.obj;
                     if(null!=data){
                         playSound();
-                        weithValueTx.setTexts(String.valueOf(data.getRweight()),null);
+                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
                         showReceiveDataDialog();
                     }
                     break;
@@ -505,5 +532,37 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.weight_jiantou)
+    public void menuWeightOpenClick(){
+        if(status_bar2.getVisibility()== View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar2.setVisibility(View.VISIBLE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
+    }
+
+    @OnClick(R.id.bmi_jiantou)
+    public void menuBmiOpenClick(){
+        if(status_bar_bmi.getVisibility()==View.VISIBLE){
+            status_bar_bmi.setVisibility(View.GONE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }else{
+            status_bar_bmi.setVisibility(View.VISIBLE);
+            bmi_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+        }
+
+        if(status_bar2.getVisibility()==View.VISIBLE){
+            status_bar2.setVisibility(View.GONE);
+            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+        }
     }
 }

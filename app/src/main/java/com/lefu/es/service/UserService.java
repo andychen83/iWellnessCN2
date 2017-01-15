@@ -79,8 +79,8 @@ public class UserService {
 	/**根据称类型获取用户组*/
 	public List<String> getAllUserGroupByScaleType(String scale)throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user order where ugroup<>P999 by ugroup ";
-		Cursor cursor = dbs.rawQuery(sql,null);
+		String sql="select * from user order where ugroup<>? by ugroup ";
+		Cursor cursor = dbs.rawQuery(sql,new String[]{"P999"});
 		List<String> pes = new ArrayList<String>();
 		while (cursor.moveToNext()) {
 			String group = cursor.getString(cursor.getColumnIndex("ugroup"));
@@ -94,8 +94,8 @@ public class UserService {
 	/**查询所有用户*/
 	public List<UserModel> getAllUserByScaleType()throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user where ugroup<>P999";
-		Cursor cursor = dbs.rawQuery(sql,null);
+		String sql="select * from user where ugroup<>?";
+		Cursor cursor = dbs.rawQuery(sql,new String[]{"P999"});
 		List<UserModel> pes = new ArrayList<UserModel>();
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -127,8 +127,8 @@ public class UserService {
      */
 	public List<UserModel> getAllBabys()throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user where ugroup=P999";
-		Cursor cursor = dbs.rawQuery(sql,null);
+		String sql="select * from user where ugroup=?";
+		Cursor cursor = dbs.rawQuery(sql,new String[]{"P999"});
 		List<UserModel> pes = new ArrayList<UserModel>();
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -211,7 +211,7 @@ public class UserService {
 	/**根据称的类型和组号查询用户 */
 	public UserModel findUserByGupandScale(String ugroup,String scale) throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		Cursor cursor = dbs.rawQuery("select * from user where ugroup=? and scaletype=? and ugroup<>P999", new String[]{ugroup,scale});
+		Cursor cursor = dbs.rawQuery("select * from user where ugroup=? and scaletype=? and ugroup<>?", new String[]{ugroup,scale,"P999"});
 		UserModel pes = null;
 		if(cursor.moveToFirst()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -239,7 +239,7 @@ public class UserService {
 	/**获取用户数量*/
 	public Long getCount()throws Exception{
 		dbs = dbHelper.getReadableDatabase();
-		Cursor cursor = dbs.rawQuery("select count(*) from user where ugroup<>P999", null);
+		Cursor cursor = dbs.rawQuery("select count(*) from user where ugroup<>?", new String[]{"P999"});
 		cursor.moveToFirst();
 		Long result = cursor.getLong(0);
 		cursor.close();
@@ -249,7 +249,7 @@ public class UserService {
 	/**获取最大的用户id*/
 	public int maxid()throws Exception{
 		dbs = dbHelper.getReadableDatabase();
-		Cursor cursor = dbs.rawQuery("select max(id) from user where ugroup<>P999", null);
+		Cursor cursor = dbs.rawQuery("select max(id) from user where ugroup<>?", new String[]{"P999"});
 		cursor.moveToFirst();
 		int result = cursor.getInt(0);
 		cursor.close();
@@ -259,8 +259,8 @@ public class UserService {
 	/**分页查找用户数据*/
 	public List<UserModel> getScrollData(int offset, int maxResult)throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user where ugroup<>P999 limit ?,? ";
-		Cursor cursor = dbs.rawQuery(sql, new String[]{String.valueOf(offset),String.valueOf(maxResult)});
+		String sql="select * from user where ugroup<>? limit ?,? ";
+		Cursor cursor = dbs.rawQuery(sql, new String[]{String.valueOf(offset),String.valueOf(maxResult),"P999"});
 		List<UserModel> pes = new ArrayList<UserModel>();
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -287,8 +287,8 @@ public class UserService {
 	/**获取所有用户数据*/
 	public List<UserModel> getAllDatas()throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user where ugroup<>P999 ORDER BY id DESC limit 0,1 ";
-		Cursor cursor = dbs.rawQuery(sql, null);
+		String sql="select * from user where ugroup<>? ORDER BY id DESC limit 0,1 ";
+		Cursor cursor = dbs.rawQuery(sql, new String[]{"P999"});
 		List<UserModel> pes = new ArrayList<UserModel>();
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));

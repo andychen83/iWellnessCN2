@@ -48,7 +48,7 @@ public class MoveView {
         int deviation = 0;
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
-        if (gender == 0) {
+        if (gender == 1) {
             standard_weight = (height - 80) * 0.7f;
         } else {
             standard_weight = (height - 70) * 0.6f;
@@ -59,16 +59,16 @@ public class MoveView {
 
         if (weight < critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (weight / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("偏低");
             textView3.setBackground(activity.getDrawable(R.drawable.orange_bg));
         } else if (weight >= critical_point1 && weight < critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.25 + (weight - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.5);
             textView3.setText("标准");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
         } else if (weight >= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.75 + (weight - critical_point2) / critical_point3 * screenwidth * 0.25);
             textView3.setText("偏高");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
@@ -81,9 +81,12 @@ public class MoveView {
             textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
         }
 
-        int margin = deviation - 50;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        int margin = 0;
+        if(weight!=0){
+            margin = deviation - 50;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
         }
         view.setPadding(margin, 0, 0, 0);
     }
@@ -98,7 +101,7 @@ public class MoveView {
         // 终点分割线
         //float critical_point3;
 
-        if (gender == 0) {
+        if (gender == 1) {
             standard_weight = (height - 80) * 0.7f;
         } else {
             standard_weight = (height - 70) * 0.6f;
@@ -141,7 +144,7 @@ public class MoveView {
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
 
-        if (gender == 0) {
+        if (gender == 1) {
             // 男
             critical_point1 = 55;
             critical_point2 = 65;
@@ -152,27 +155,57 @@ public class MoveView {
         }
         if (waterPercent <= critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (waterPercent / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("不足");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (waterPercent > critical_point1 && waterPercent <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.25 + (waterPercent - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.5);
             textView3.setText("标准");
             textView3.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (waterPercent > critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.75 + (waterPercent - critical_point2) / critical_point3 * screenwidth * 0.25);
             textView3.setText("优");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
         }
         textView1.setText(MyUtil.onePoint(critical_point1) + "%");
         textView2.setText(MyUtil.onePoint(critical_point2) + "%");
-        int margin = deviation - 50;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        int margin = 0;
+        if(waterPercent!=0){
+            margin = deviation - 50;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
         }
+
         view.setPadding(margin, 0, 0, 0);
+    }
+
+    public static String moistureString(int gender, float waterPercent) {
+        // 从左到右第一个分割线
+        double critical_point1;
+        // 从左到右第二个分割线
+        double critical_point2;
+        // 终点分割线
+        double critical_point3 = 100;
+        if (gender == 1) {
+            // 男
+            critical_point1 = 55;
+            critical_point2 = 65;
+        } else {
+            // 女
+            critical_point1 = 45;
+            critical_point2 = 60;
+        }
+        if (waterPercent <= critical_point1) {
+            return "不足";
+        } else if (waterPercent > critical_point1 && waterPercent <= critical_point2) {
+            return "标准";
+        } else {
+            return "优";
+        }
+
     }
 
 
@@ -208,7 +241,7 @@ public class MoveView {
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
 
-        if (gender == 0) {
+        if (gender == 1) {
             // 男
             if (age < 40) {
                 critical_point1 = 10;
@@ -249,26 +282,26 @@ public class MoveView {
 
         if (fatPercent <= critical_point1) {
             deviation = (int) (screenwidth * 0.2 * (fatPercent / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             bft_biaoz.setText("瘦");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (fatPercent > critical_point1 && fatPercent <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.2 + (fatPercent - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.2);
             bft_biaoz.setText("偏瘦");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (fatPercent > critical_point2 && fatPercent <= critical_point3) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.4 + (fatPercent - critical_point2) / (critical_point3 - critical_point2) * screenwidth * 0.2);
             bft_biaoz.setText("标准");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.grade_bg));
         } else if (fatPercent > critical_point3 && fatPercent <= critical_point4) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.6 + (fatPercent - critical_point3) / (critical_point4 - critical_point3) * screenwidth * 0.2);
             bft_biaoz.setText("偏胖");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (fatPercent > critical_point4) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.8 + (fatPercent - critical_point4) / critical_point5 * screenwidth * 0.2);
             bft_biaoz.setText("胖");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.red_color_bg));
@@ -277,11 +310,78 @@ public class MoveView {
         textView2.setText(MyUtil.onePoint(critical_point2) + "%");
         textView3.setText(MyUtil.onePoint(critical_point3) + "%");
         textView4.setText(MyUtil.onePoint(critical_point4) + "%");
-        int margin = deviation - 50;
-        if (margin > screenwidth - 100) {
-            margin = screenwidth - 100;
+        int margin = 0;
+        if(fatPercent!=0){
+            margin = deviation - 50;
+            if (margin > screenwidth - 100) {
+                margin = screenwidth - 100;
+            }
         }
         view.setPadding(margin, 0, 0, 0);
+    }
+
+    public static String bftString(int gender, int age, float fatPercent) {
+        // 从左到右第一个分割线
+        double critical_point1 = 0;
+        // 从左到右第二个分割线
+        double critical_point2 = 0;
+        // 从左到右第三个分割线
+        double critical_point3 = 0;
+        // 从左到右第四个分割线
+        double critical_point4 = 0;
+        // 终点分割线
+        double critical_point5 = 100;
+
+        if (gender == 1) {
+            // 男
+            if (age < 40) {
+                critical_point1 = 10;
+                critical_point2 = 16;
+                critical_point3 = 21;
+                critical_point4 = 26;
+            } else if (age >= 40 && age < 60) {
+                critical_point1 = 11;
+                critical_point2 = 17;
+                critical_point3 = 22;
+                critical_point4 = 27;
+            } else if (age >= 60) {
+                critical_point1 = 13;
+                critical_point2 = 19;
+                critical_point3 = 24;
+                critical_point4 = 29;
+            }
+
+        } else {
+            // 女
+            if (age < 40) {
+                critical_point1 = 20;
+                critical_point2 = 27;
+                critical_point3 = 34;
+                critical_point4 = 39;
+            } else if (age >= 40 && age < 60) {
+                critical_point1 = 21;
+                critical_point2 = 28;
+                critical_point3 = 35;
+                critical_point4 = 40;
+            } else if (age >= 60) {
+                critical_point1 = 22;
+                critical_point2 = 29;
+                critical_point3 = 36;
+                critical_point4 = 41;
+            }
+        }
+
+        if (fatPercent <= critical_point1) {
+            return "瘦";
+        } else if (fatPercent > critical_point1 && fatPercent <= critical_point2) {
+            return "偏瘦";
+        } else if (fatPercent > critical_point2 && fatPercent <= critical_point3) {
+            return "标准";
+        } else if (fatPercent > critical_point3 && fatPercent <= critical_point4) {
+            return "偏胖";
+        } else {
+            return "胖";
+        }
     }
 
 
@@ -310,16 +410,16 @@ public class MoveView {
 
         if (bone <= critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (bone / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("不足");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (bone > critical_point1 && bone <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.25 + (bone - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.5);
             textView3.setText("标准");
             textView3.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (bone > critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.75 + (bone - critical_point2) / critical_point3 * screenwidth * 0.25);
             textView3.setText("优");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
@@ -331,12 +431,32 @@ public class MoveView {
             textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
             textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
         }
-
-        int margin = deviation - 50;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        int margin = 0;
+        if(bone!=0){
+            margin = deviation - 50;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
         }
         view.setPadding(margin, 0, 0, 0);
+    }
+
+    public static String boneString(float bone) {
+        // 从左到右第一个分割线
+        float critical_point1 = 2.4f;
+        // 从左到右第二个分割线
+        float critical_point2 = 2.6f;
+        // 终点分割线
+        float critical_point3 = 1.0f;
+
+        if (bone <= critical_point1) {
+            return "不足";
+        } else if (bone > critical_point1 && bone <= critical_point2) {
+            return "标准";
+        } else{
+            return "优";
+        }
+
     }
 
 
@@ -369,21 +489,21 @@ public class MoveView {
 
         if (bmi <= critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (bmi / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             bft_biaoz.setText("偏瘦");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (bmi > critical_point1 && bmi <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.25 + (bmi - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.25);
-            bft_biaoz.setText("健康");
+            bft_biaoz.setText("标准");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.grade_bg));
         } else if (bmi > critical_point2 && bmi <= critical_point3) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.5 + (bmi - critical_point2) / (critical_point3 - critical_point2) * screenwidth * 0.25);
             bft_biaoz.setText("偏胖");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (bmi > critical_point3) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.75 + (bmi - critical_point3) / critical_point5 * screenwidth * 0.25);
             bft_biaoz.setText("胖");
             bft_biaoz.setBackground(activity.getDrawable(R.drawable.red_color_bg));
@@ -391,10 +511,14 @@ public class MoveView {
         textView1.setText(MyUtil.onePoint(critical_point1) + "");
         textView2.setText(MyUtil.onePoint(critical_point2) + "");
         textView3.setText(MyUtil.onePoint(critical_point3) + "");
-        int margin = deviation - 50;
-        if (margin > screenwidth - 100) {
-            margin = screenwidth - 100;
+        int margin = 0;
+        if(bmi!=0){
+            margin = deviation - 50;
+            if (margin > screenwidth - 100) {
+                margin = screenwidth - 100;
+            }
         }
+
         view.setPadding(margin, 0, 0, 0);
     }
 
@@ -411,7 +535,7 @@ public class MoveView {
         if (bmi <= critical_point1) {
            return "偏瘦";
         } else if (bmi > critical_point1 && bmi <= critical_point2) {
-            return"健康";
+            return"标准";
         } else if (bmi > critical_point2 && bmi <= critical_point3) {
             return"偏胖";
         } else{
@@ -429,11 +553,11 @@ public class MoveView {
      * @param textView1
      * @param textView2
      * @param textView3
-     * @param bone
+     * @param visceral
      */
-    public static void visceralFat(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float bone) {
+    public static void visceralFat(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float visceral) {
         // 从左到右第一个分割线
-        double critical_point1 = 8.0;
+        double critical_point1 = 9.0;
         // 从左到右第二个分割线
         double critical_point2 = 14.0;
         // 终点分割线
@@ -443,34 +567,37 @@ public class MoveView {
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
 
-        if (bone <= critical_point1) {
-            deviation = (int) (screenwidth * 0.4 * (bone / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+        if (visceral <= critical_point1) {
+            deviation = (int) (screenwidth * 0.4 * (visceral / critical_point1));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("标准");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
-        } else if (bone > critical_point1 && bone <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
-            deviation = (int) (screenwidth * 0.4 + (bone - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.4);
+        } else if (visceral > critical_point1 && visceral <= critical_point2) {
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
+            deviation = (int) (screenwidth * 0.4 + (visceral - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.4);
             textView3.setText("警惕");
             textView3.setBackground(activity.getDrawable(R.drawable.orange_bg));
-        } else if (bone > critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
-            deviation = (int) (screenwidth * 0.8 + (bone - critical_point2) / critical_point3 * screenwidth * 0.2);
+        } else if (visceral > critical_point2) {
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
+            deviation = (int) (screenwidth * 0.8 + (visceral - critical_point2) / critical_point3 * screenwidth * 0.2);
             textView3.setText("危险");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         }
         textView1.setText(MyUtil.onePoint(critical_point1) + "");
         textView2.setText(MyUtil.onePoint(critical_point2) + "");
-        int margin = deviation - 80;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        int margin = 0;
+        if(visceral!=0){
+            margin = deviation - 80;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
         }
         view.setPadding(margin, 0, 0, 0);
     }
 
     public static String visceralFatString(float bone) {
         // 从左到右第一个分割线
-        double critical_point1 = 8.0;
+        double critical_point1 = 9.0;
         // 从左到右第二个分割线
         double critical_point2 = 14.0;
         // 终点分割线
@@ -495,70 +622,241 @@ public class MoveView {
      * @param textView3 是否标准
      * @param bmr       当前人的BMr值
      */
-    public static void bmr(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView3, float bmr) {
+    public static void bmr(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView3,int gender,int age,float weight, float bmr) {
         // 从左到右第一个分割线
-        double critical_point1 = 1261;
+        float critical_point1 = 1261;
         // 终点分割线
-        double critical_point3 = 1261;
+        float critical_point3 = 1261;
         // 笑脸偏移量
         int deviation = 0;
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
 
+        if(age<=29){
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 24.0f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 23.6f);
+                critical_point3 = critical_point1;
+            }
+        }else if(age>=30 && age<=49){
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 22.3f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 21.7f);
+                critical_point3 = critical_point1;
+            }
+        }else{
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 21.5f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 20.7f);
+                critical_point3 = critical_point1;
+            }
+        }
+
         if (bmr <= critical_point1) {
             deviation = (int) (screenwidth * 0.5 * (bmr / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("偏低");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (bmr > critical_point1) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.5 + (bmr - critical_point1) / critical_point3 * screenwidth * 0.5);
             textView3.setText("优");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
         }
         textView1.setText(MyUtil.onePoint(critical_point1) + "Kcal");
-        int margin = deviation - 70;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        int margin = 0;
+        if(bmr!=0){
+            margin = deviation - 70;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
         }
         view.setPadding(margin, 0, 0, 0);
     }
 
-    public static void muscle(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float muscle) {
+    public static String bmrString(int gender,int age,float weight, float bmr) {
         // 从左到右第一个分割线
-        double critical_point1 = 72;
-        // 从左到右第二个分割线
-        double critical_point2 = 82;
+        float critical_point1 = 1261;
         // 终点分割线
-        double critical_point3 = 18;
+        float critical_point3 = 1261;
+
+        if(age<=29){
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 24.0f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 23.6f);
+                critical_point3 = critical_point1;
+            }
+        }else if(age>=30 && age<=49){
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 22.3f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 21.7f);
+                critical_point3 = critical_point1;
+            }
+        }else{
+            if(gender==1){
+                critical_point1 = UtilTooth.keep1Point3(weight * 21.5f);
+                critical_point3 = critical_point1;
+            }else {
+                critical_point1 = UtilTooth.keep1Point3(weight * 20.7f);
+                critical_point3 = critical_point1;
+            }
+        }
+
+        if (bmr <= critical_point1) {
+            return "偏低";
+        } else {
+            return "优";
+        }
+    }
+
+    public static void muscle(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3,int gender, float height, float muscle,String danwei) {
+        // 从左到右第一个分割线
+        float critical_point1 = 1;
+        // 从左到右第二个分割线
+        float critical_point2 = 1;
+        // 终点分割线
+        float critical_point3 = 20;
         // 笑脸偏移量
         int deviation = 0;
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
+        if (gender == 1) {
+            // 男
+            if (height < 160) {
+                critical_point1 = 38.5f;
+                critical_point2 = 46.5f;
+                //critical_point3 = 21;
+
+            } else if (height >= 160 && height <= 170) {
+                critical_point1 = 44f;
+                critical_point2 = 52.4f;
+                //critical_point3 = 22;
+
+            } else {
+                critical_point1 = 49.4f;
+                critical_point2 = 59.4f;
+               // critical_point3 = 24;
+
+            }
+
+        } else {
+            // 女
+            if (height < 150) {
+                critical_point1 = 29.1f;
+                critical_point2 = 34.7f;
+                //critical_point3 = 21;
+
+            } else if (height >= 150 && height <= 160) {
+                critical_point1 = 32.9f;
+                critical_point2 = 37.5f;
+               // critical_point3 = 22;
+
+            } else {
+                critical_point1 = 36.5f;
+                critical_point2 = 42.5f;
+                //critical_point3 = 24;
+
+            }
+        }
 
         if (muscle <= critical_point1) {
             deviation = (int) (screenwidth * 0.25 * (muscle / critical_point1));
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.ag_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             textView3.setText("不足");
             textView3.setBackground(activity.getDrawable(R.drawable.red_color_bg));
         } else if (muscle > critical_point1 && muscle <= critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.25 + (muscle - critical_point1) / (critical_point2 - critical_point1) * screenwidth * 0.5);
             textView3.setText("标准");
             textView3.setBackground(activity.getDrawable(R.drawable.green_light_color_bg));
         } else if (muscle > critical_point2) {
-            imageView.setImageDrawable(activity.getDrawable(R.drawable.hp_icon));
+            imageView.setImageDrawable(activity.getDrawable(R.drawable.sunface));
             deviation = (int) (screenwidth * 0.75 + (muscle - critical_point2) / critical_point3 * screenwidth * 0.25);
             textView3.setText("优");
             textView3.setBackground(activity.getDrawable(R.drawable.grade_bg));
         }
-        textView1.setText(MyUtil.onePoint(critical_point1) + "%");
-        textView2.setText(MyUtil.onePoint(critical_point2) + "%");
-        int margin = deviation - 40;
-        if (margin > screenwidth - 140) {
-            margin = screenwidth - 140;
+        if (danwei.equals(UtilConstants.UNIT_LB) || danwei.equals(UtilConstants.UNIT_FATLB) || danwei.equals(UtilConstants.UNIT_ST)){
+            textView1.setText(UtilTooth.kgToLB_ForFatScale(critical_point1) + "lb");
+            textView2.setText(UtilTooth.kgToLB_ForFatScale(critical_point2) + "lb");
+        }else{
+            textView1.setText(MyUtil.onePoint(critical_point1) + "kg");
+            textView2.setText(MyUtil.onePoint(critical_point2) + "kg");
         }
+        int margin = 0;
+        if(muscle!=0){
+            margin = deviation - 40;
+            if (margin > screenwidth - 140) {
+                margin = screenwidth - 140;
+            }
+        }
+
         view.setPadding(margin, 0, 0, 0);
+    }
+
+    public static String muscleString(int gender, float height, float muscle) {
+        // 从左到右第一个分割线
+        float critical_point1 = 1;
+        // 从左到右第二个分割线
+        float critical_point2 = 1;
+        // 终点分割线
+        float critical_point3 = 20;
+        if (gender == 1) {
+            // 男
+            if (height < 160) {
+                critical_point1 = 38.5f;
+                critical_point2 = 46.5f;
+                //critical_point3 = 21;
+
+            } else if (height >= 160 && height <= 170) {
+                critical_point1 = 44f;
+                critical_point2 = 52.4f;
+                //critical_point3 = 22;
+
+            } else {
+                critical_point1 = 49.4f;
+                critical_point2 = 59.4f;
+                // critical_point3 = 24;
+
+            }
+
+        } else {
+            // 女
+            if (height < 150) {
+                critical_point1 = 29.1f;
+                critical_point2 = 34.7f;
+                //critical_point3 = 21;
+
+            } else if (height >= 150 && height <= 160) {
+                critical_point1 = 32.9f;
+                critical_point2 = 37.5f;
+                // critical_point3 = 22;
+
+            } else {
+                critical_point1 = 36.5f;
+                critical_point2 = 42.5f;
+                //critical_point3 = 24;
+
+            }
+        }
+
+        if (muscle <= critical_point1) {
+            return "不足";
+        } else if (muscle > critical_point1 && muscle <= critical_point2) {
+            return "标准";
+        } else {
+            return "优";
+        }
+
     }
 
 }

@@ -62,7 +62,7 @@
                 android:id="@+id/visalfat_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/down_arrow" />
+                android:background="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -70,7 +70,7 @@
         android:id="@+id/status_bar_visalfat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/top_wa2"

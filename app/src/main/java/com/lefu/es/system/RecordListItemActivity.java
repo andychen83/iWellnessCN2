@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,10 +15,15 @@ import android.widget.TextView;
 
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
+import com.lefu.es.util.MoveView;
 import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView4;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 测量记录详细
@@ -44,6 +50,26 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 	TextView tvdetail_bmr_title = null;
 	TextView tvdetail_phsicalage_title = null;
 	TextView tv_name_title = null;
+
+	@Bind(R.id.tvdetail_weight_status)
+	TextView tvdetail_weight_status ;
+	@Bind(R.id.tvdetail_bone_status)
+	TextView tvdetail_bone_status ;
+	@Bind(R.id.tvdetail_bodyfat_status)
+	TextView tvdetail_bodyfat_status ;
+	@Bind(R.id.tvdetail_muscle_status)
+	TextView tvdetail_muscle_status ;
+	@Bind(R.id.tvdetail_bodywater_status)
+	TextView tvdetail_bodywater_status ;
+	@Bind(R.id.tvdetail_visceral_status)
+	TextView tvdetail_visceral_status ;
+	@Bind(R.id.tvdetail_bmi_status)
+	TextView tvdetail_bmi_status ;
+	@Bind(R.id.tvdetail_bmr_status)
+	TextView tvdetail_bmr_status ;
+	@Bind(R.id.tvdetail_phsicalage_status)
+	TextView tvdetail_phsicalage_status ;
+
 	
 	private TableRow row_phsicalage = null;
 
@@ -55,14 +81,15 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		if(UtilConstants.BABY_SCALE.equals(UtilConstants.CURRENT_SCALE) || UtilConstants.BATHROOM_SCALE.equals(UtilConstants.CURRENT_SCALE)){
+		record = (Records) getIntent().getSerializableExtra("record");
+
+		if(UtilConstants.BABY_SCALE.equals(record.getScaleType()) || UtilConstants.BATHROOM_SCALE.equals(record.getScaleType())){
 			setContentView(R.layout.activity_detaillistitem2);
 		}else{
 			setContentView(R.layout.activity_detaillistitem);
 		}
-		
+		ButterKnife.bind(this);
 		initResourceRefs();
-		record = (Records) getIntent().getSerializableExtra("record");
 		creatView(record);
 	}
 
@@ -139,38 +166,6 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 					if (null != tvdetail_weight)
 						tvdetail_weight.setTexts(UtilTooth.keep2Point(record.getRweight()) + "",null);
 				}
-				
-				
-//				if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_LB)) {
-//					tvdetail_weight_title.setText(this.getText(R.string.Weightlboz_cloun).toString());
-//					if (null != tvdetail_weight)
-//						tvdetail_weight.setTexts(UtilTooth.kgToLBoz(record.getRweight()*0.001f) + "",null);
-//				} else if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST)) {
-//					tvdetail_weight_title.setText(this.getText(R.string.Weightstlb_cloun).toString());
-//					if (null != tvdetail_weight)
-//						tvdetail_weight.setTexts(UtilTooth.kgToStLb_B(record.getRweight()*0.001f) + "",null);
-//					String[] fatTemp=UtilTooth.kgToStLbForScaleFat2(record.getRweight()*0.001f);
-//					if(fatTemp[1]!=null && fatTemp[1].indexOf("/")>0){
-//						tvdetail_weight.setTexts(fatTemp[0],fatTemp[1]);
-//					}else{
-//						tvdetail_weight.setTexts(fatTemp[0]+getText(R.string.stlb_danwei),null);
-//					}
-//				}else if(UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_FATLB)){
-//					tvdetail_weight_title.setText(this.getText(R.string.Weightfloz_cloun).toString());
-//					if (null != tvdetail_weight)
-//						tvdetail_weight.setTexts(UtilTooth.kgToFloz(record.getRweight()) + "",null);
-//				}else if(UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ML)){
-//					tvdetail_weight_title.setText(this.getText(R.string.Weightml_cloun).toString());
-//					if (null != tvdetail_weight)
-//						tvdetail_weight.setTexts(UtilTooth.keep2Point(record.getRweight()) + "",null);
-//				}else{
-//					if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_KG)) {
-//						tvdetail_weight_title.setText(this.getText(R.string.Weightg_cloun).toString());
-//						if (null != tvdetail_weight)
-//							tvdetail_weight.setTexts(UtilTooth.keep2Point(record.getRweight()) + "",null);
-//					} 
-//				}
-				
 				tvdetail_bone_title.setText(this.getText(R.string.energ_cloun).toString());
 				tvdetail_bone.setText(UtilTooth.keep2Point(record.getRbodywater()) + "");
 				
@@ -199,17 +194,13 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 				
 				tvdetail_phsicalage_title.setText(this.getText(R.string.Carbohydrateg_cloun).toString());
 				tvdetail_phsicalage.setText(UtilTooth.keep2Point(record.getBodyAge())+"");
-				
-				
-				
-				
-				
+
 			}else{
 				tv_name_title.setText("");
 				if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
 					tvdetail_weight_title.setText(this.getText(R.string.Weightkg_cloun).toString());
 					if (null != tvdetail_weight)
-						tvdetail_weight.setTexts(record.getRweight() + "",null);
+						tvdetail_weight.setTexts(UtilTooth.keep1Point(record.getRweight()),null);
 				} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)) {
 					tvdetail_weight_title.setText(this.getText(R.string.Weightlb_cloun).toString());
 					if (null != tvdetail_weight)
@@ -238,7 +229,7 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 				}else{
 					tvdetail_weight_title.setText(this.getText(R.string.Weightkg_cloun).toString());
 					if (null != tvdetail_weight)
-						tvdetail_weight.setTexts(record.getRweight() + "",null);
+						tvdetail_weight.setTexts(UtilTooth.keep1Point(record.getRweight()),null);
 				}
 				
 				if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
@@ -284,7 +275,46 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
                     tvdetail_bmi.setText(UtilTooth.myround(bmi)+"");
 	            }
 			}
-			
+			countBodyParam(record,UtilConstants.CURRENT_USER);
+		}
+	}
+
+	/**
+	 * 计算人体参数各个标准
+	 */
+	private void countBodyParam(Records record, UserModel user){
+		if(null!=record && null!=user){
+			String sex = user.getSex();
+			if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+			int gender = Integer.parseInt(sex);
+
+			// 体重
+			tvdetail_weight_status.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
+			// 水分率
+			tvdetail_bodywater_status.setText(MoveView.moistureString(gender,record.getRbodywater()));
+
+			// 脂肪率
+			tvdetail_bodyfat_status.setText(MoveView.bftString(gender,user.getAgeYear(),record.getRbodyfat()));
+
+			// 骨量
+			tvdetail_bone_status.setText(MoveView.boneString(record.getRbone()));
+
+			// BMI
+			tvdetail_bmi_status.setText(MoveView.bmiString(record.getRbmi()));
+
+			// 内脏脂肪指数
+			tvdetail_visceral_status.setText(MoveView.visceralFatString(record.getRvisceralfat()));
+
+			// BMR 基础代谢率
+			tvdetail_bmr_status.setText(MoveView.bmrString(gender,user.getAgeYear(),record.getRweight(),record.getRbmr()));
+
+			// 肌肉含量
+			float muscal = UtilTooth.keep1Point3(record.getRmuscle());
+
+			tvdetail_muscle_status.setText(MoveView.muscleString(gender,user.getBheigth(),muscal));
+
+			//身体年龄
+
 		}
 	}
 
@@ -310,6 +340,12 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 			ExitApplication.getInstance().exit(this);
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ButterKnife.unbind(this);
 	}
 
 }

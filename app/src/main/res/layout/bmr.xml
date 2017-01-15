@@ -62,7 +62,7 @@
                 android:id="@+id/bmr_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/down_arrow" />
+                android:background="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -125,7 +125,10 @@
                 android:layout_gravity="top"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@color/gray"></RelativeLayout>
+                android:background="@color/gray">
+
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -158,6 +161,13 @@
                 android:layout_height="20dp"
                 android:src="@drawable/hp_icon"/>
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/bar_biaozhun_title"
+            android:layout_marginTop="47dp"
+        />
     </RelativeLayout>
 
     <LinearLayout
