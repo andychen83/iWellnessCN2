@@ -131,10 +131,43 @@ public class RecordService {
 	}
 
 	/**根据用户id获取最新一条记录*/
+	public Records findLastRecords(int useid,String scale) throws Exception {
+		dbs = dbHelper.getReadableDatabase();
+		Cursor cursor = dbs.rawQuery("select id, useid,scaleType,ugroup,datetime(recordtime,'localtime'),comparerecord,rweight, rbmi, rbone, rbodyfat, rmuscle, rbodywater,"
+				+ " rvisceralfat, rbmr,photo,max(datetime(recordtime,'localtime')),bodyage from userrecord where useid = ? and scaletype=?  group by scaletype order by recordtime desc", new String[]{String.valueOf(useid),scale});
+		Records pes = null;
+		if (cursor.moveToFirst()) {
+			int id = cursor.getInt(cursor.getColumnIndex("id"));
+			String scaletype = cursor.getString(cursor.getColumnIndex("scaleType"));
+			String ugroup = cursor.getString(cursor.getColumnIndex("ugroup"));
+			String recordtime = cursor.getString(cursor.getColumnIndex("datetime(recordtime,'localtime')"));
+			String comparerecord = cursor.getString(cursor.getColumnIndex("comparerecord"));
+
+			float rweight = cursor.getFloat(cursor.getColumnIndex("rweight"));
+			float rbmi = cursor.getFloat(cursor.getColumnIndex("rbmi"));
+			float rbone = cursor.getFloat(cursor.getColumnIndex("rbone"));
+			float rbodyfat = cursor.getFloat(cursor.getColumnIndex("rbodyfat"));
+			float rmuscle = cursor.getFloat(cursor.getColumnIndex("rmuscle"));
+			float rbodywater = cursor.getFloat(cursor.getColumnIndex("rbodywater"));
+			float rvisceralfat = cursor.getFloat(cursor.getColumnIndex("rvisceralfat"));
+			float rbmr = cursor.getFloat(cursor.getColumnIndex("rbmr"));
+			float bodyage = cursor.getFloat(cursor.getColumnIndex("bodyage"));
+			pes = new Records(id, useid, scaletype, ugroup, recordtime, comparerecord, rweight, rbmi, rbone, rbodyfat, rmuscle, rbodywater, rvisceralfat, rbmr, bodyage);
+			String photo = cursor.getString(cursor.getColumnIndex("photo"));
+			if (photo != null && photo.length() > 3) {
+				pes.setRphoto(photo);
+			}
+		}
+		cursor.close();
+		dbs.close();
+		return pes;
+	}
+
+	/**根据用户id获取最新一条记录*/
 	public Records findLastRecords(int useid) throws Exception {
 		dbs = dbHelper.getReadableDatabase();
 		Cursor cursor = dbs.rawQuery("select id, useid,scaleType,ugroup,datetime(recordtime,'localtime'),comparerecord,rweight, rbmi, rbone, rbodyfat, rmuscle, rbodywater,"
-				+ " rvisceralfat, rbmr,photo,max(datetime(recordtime,'localtime')),bodyage from userrecord where useid = ? group by scaletype order by recordtime desc", new String[]{String.valueOf(useid)});
+				+ " rvisceralfat, rbmr,photo,max(datetime(recordtime,'localtime')),bodyage from userrecord where useid = ?  group by scaletype order by recordtime desc", new String[]{String.valueOf(useid)});
 		Records pes = null;
 		if (cursor.moveToFirst()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));

@@ -137,6 +137,37 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/qzone_list_icon_arrow" />
                 </RelativeLayout>
+                <!-- 信息 -->
+                <RelativeLayout
+                    android:id="@+id/infomation_ly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/blue_item_bg"
+                    android:clickable="true"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dip"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:text="@string/info"
+                        android:textColor="@color/darkgray" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/qzone_list_icon_arrow" />
+                </RelativeLayout>
                 <!--意见反馈-->
                 <RelativeLayout
                     android:id="@+id/linke_contract"

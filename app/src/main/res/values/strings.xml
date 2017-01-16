@@ -380,7 +380,7 @@
     <string name="bmi_menu">BMI</string>
     <string name="visfat_menu">内脏脂肪</string>
     <string name="bmr_menu">BMR</string>
-    <string name="muscial_menu">肌肉率</string>
+    <string name="muscial_menu">肌肉含量</string>
     <string name="open_harmbaby_scale">测量婴儿体重请先点击  上秤  菜单，打开抱婴模式</string>
     <string name="mesure_error_harmbaby">测量错误：抱婴后重量比之前更轻了</string>
     <string name="choice_a_baby">请选择一个需要测量的婴儿</string>
@@ -395,12 +395,12 @@
 
     <string name="bar_weight_title">体重</string>
     <string name="bar_bodywater_title">水分率</string>
-    <string name="bar_bodyfat_title">脂肪</string>
+    <string name="bar_bodyfat_title">脂肪率</string>
     <string name="bar_bone_title">骨量</string>
     <string name="bar_bmi_title">BMI</string>
     <string name="bar_visalfat_title">内脏脂肪</string>
     <string name="bar_bmr_title">BMR</string>
-    <string name="bar_muscal_title">肌肉率</string>
+    <string name="bar_muscal_title">肌肉含量</string>
     <string name="bar_age_title">身体年龄</string>
 
     <string name="bar_zhengchang_title">正常</string>
@@ -416,4 +416,6 @@
     <string name="bar_jiankang_title">健康</string>
     <string name="bar_jinti_title">警惕</string>
     <string name="bar_weixian_title">危险</string>
+
+    <string name="receive_data_waring">检测到数据异常,是否保存?</string>
 </resources>

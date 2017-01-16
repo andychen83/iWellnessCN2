@@ -36,6 +36,11 @@ public class BluetoothLeScanner5 extends BluetoothLeScannerInterface {
     }
 
     @Override
+    public void stopScane(){
+        if(null!=mBluetoothUtils1)mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
+    }
+
+    @Override
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void scanLeDevice(final int duration, final boolean enable) {
         if (enable) {

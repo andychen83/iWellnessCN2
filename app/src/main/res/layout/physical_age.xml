@@ -47,7 +47,7 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/muscle_biaoz"
+                android:id="@+id/age_biaoz"
                 android:layout_width="50dp"
                 android:gravity="center"
                 android:layout_height="wrap_content"
@@ -59,6 +59,7 @@
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/age_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:visibility="invisible"

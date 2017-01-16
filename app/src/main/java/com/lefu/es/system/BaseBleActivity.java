@@ -48,9 +48,12 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -373,7 +376,9 @@ public abstract class BaseBleActivity extends Activity {
         cancleBtn.setOnClickListener(imgOnClickListener);
         saveBtn.setOnClickListener(imgOnClickListener);
 
-        receiveDataDialog = new AlertDialog.Builder(this).setView(customLayout).show();
+        receiveDataDialog = new AlertDialog.Builder(this).create();
+        receiveDataDialog.setView(customLayout, 0, 0, 0, 0);
+        receiveDataDialog .show();
 
         Window window = receiveDataDialog.getWindow();
         window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
@@ -385,7 +390,7 @@ public abstract class BaseBleActivity extends Activity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case cancle_datacbtn:
-                    receiveDataDialog.dismiss();
+                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
                     receiveDataDialog = null;
                     break;
                 case save_databtn:
@@ -396,24 +401,34 @@ public abstract class BaseBleActivity extends Activity {
                         else
                             BlueSingleton.setIsdoing(true);
                         if (null != receiveRecod && null != receiveRecod.getScaleType()) {
-                            if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-                                NutrientBo nutrient = null;
-                                if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
-                                    nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
-                                }
-                                RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
-                            } else {
-                                RecordDao.handleData2(recordService, receiveRecod);
+                            float compare = 0;
+                            if(!TextUtils.isEmpty(receiveRecod.getCompareRecord()) && !"null".equals(receiveRecod.getCompareRecord())){
+                                compare = Float.parseFloat(receiveRecod.getCompareRecord());
                             }
-
-                            if (!BluetoolUtil.bleflag){
-                                TimeService.setIsdoing(false);
+                            if(Math.abs(compare)>=3){
+                                dialogForBodyScale(getString(R.string.receive_data_waring), v.getId());
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                //receiveDataDialog = null;
                             }else{
-                                BlueSingleton.setIsdoing(false);
+                                if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                                    NutrientBo nutrient = null;
+                                    if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                                        nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                                    }
+                                    RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                                } else {
+                                    RecordDao.handleData2(recordService, receiveRecod);
+                                }
+                                saveDataCallBack(receiveRecod);
+                                if (!BluetoolUtil.bleflag){
+                                    TimeService.setIsdoing(false);
+                                }else{
+                                    BlueSingleton.setIsdoing(false);
+                                }
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                receiveDataDialog = null;
+                                receiveRecod = null;
                             }
-                            receiveDataDialog.dismiss();
-                            receiveDataDialog = null;
-                            receiveRecod = null;
                         }
 
                     } catch (Exception e) {
@@ -423,6 +438,12 @@ public abstract class BaseBleActivity extends Activity {
             }
         }
     };
+
+    /**
+     * 保存后回调
+     * @param records
+     */
+    protected abstract  void saveDataCallBack(Records records);
 
 
     /**
@@ -506,6 +527,45 @@ public abstract class BaseBleActivity extends Activity {
     class ViewHolder{
         ImageView image;
         TextView name;
+    }
+
+    protected void dialogForBodyScale(String title, final int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseBleActivity.this);
+        builder.setMessage(title);
+        builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                        NutrientBo nutrient = null;
+                        if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                            nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                        }
+                        RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                    } else {
+                        RecordDao.handleData2(recordService, receiveRecod);
+                    }
+                    saveDataCallBack(receiveRecod);
+                    if (!BluetoolUtil.bleflag){
+                        TimeService.setIsdoing(false);
+                    }else{
+                        BlueSingleton.setIsdoing(false);
+                    }
+                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                    receiveDataDialog = null;
+                    receiveRecod = null;
+                } catch (Exception e) {
+                }
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
 

@@ -8,7 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 @SuppressLint("SimpleDateFormat")
 public class UtilTooth {
@@ -17,7 +21,27 @@ public class UtilTooth {
 	public static final int BAR_WEIGHT_HEALTHY = 73;
 	public static final int BAR_WEIGHT_FAT = 40;
 	public static final int BAR_WEIGHT_OVERWEIGHT = 30;
-	
+	/**
+	 * 加载本地图片（drawable图片）
+	 * @param context
+	 * @param simpleDraweeView
+	 * @param id
+	 */
+	public static void loadResPic(Context context, SimpleDraweeView simpleDraweeView, int id) {
+		Uri uri = Uri.parse("res://" + context.getPackageName() + "/" + id);
+		simpleDraweeView.setImageURI(uri);
+	}
+
+	/**
+	 * 加载本地图片（assets图片）
+	 * @param context
+	 * @param simpleDraweeView
+	 * @param nameWithSuffix 带后缀的名称
+	 */
+	public static void loadAssetsPic(Context context, SimpleDraweeView simpleDraweeView, String nameWithSuffix) {
+		Uri uri = Uri.parse("asset:///" + nameWithSuffix);
+		simpleDraweeView.setImageURI(uri);
+	}
 	
 	/**
 	 * 计算身体年龄
@@ -261,6 +285,12 @@ public class UtilTooth {
 	public static float keep1Point2(float kg) {
 		BigDecimal b = new BigDecimal(kg);
 		float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+		return f1;
+	}
+
+	public static float keep1Point3(float kg) {
+		BigDecimal b = new BigDecimal(kg);
+		float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 		return f1;
 	}
 

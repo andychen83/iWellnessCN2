@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.util.MoveView;
 import com.lefu.iwellness.newes.cn.system.R;
 
@@ -96,7 +97,7 @@ public class TestActivity extends AppCompatActivity {
         face_img_weight = (ImageView) findViewById(R.id.face_img_weight);
 
         // 体重
-        MoveView.weight(TestActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,58);
+        MoveView.weight(TestActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,0,170,58, UtilConstants.UNIT_KG);
 
         face_img_moisture_ll = (LinearLayout) findViewById(R.id.face_img_moisture_ll);
         moistrue_critical_point1 = (TextView) findViewById(R.id.moistrue_critical_point1);
@@ -123,7 +124,7 @@ public class TestActivity extends AppCompatActivity {
         bone_biaoz = (AppCompatTextView) findViewById(R.id.bone_biaoz);
         face_img_bone = (ImageView) findViewById(R.id.face_img_bone);
         // 骨量
-        MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7);
+        MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7f,UtilConstants.UNIT_KG);
 
 
         face_img_bmi_ll = (LinearLayout) findViewById(R.id.face_img_bmi_ll);
@@ -150,7 +151,7 @@ public class TestActivity extends AppCompatActivity {
         bmr_biaoz = (AppCompatTextView) findViewById(R.id.bmr_biaoz);
         face_img_bmr = (ImageView) findViewById(R.id.face_img_bmr);
         // BMR 基础代谢率
-        MoveView.bmr(TestActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
+        //MoveView.bmr(TestActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,1562);
 
 
         face_img_muscle_ll = (LinearLayout) findViewById(R.id.face_img_muscle_ll);
@@ -159,7 +160,7 @@ public class TestActivity extends AppCompatActivity {
         muscle_biaoz = (AppCompatTextView) findViewById(R.id.muscle_biaoz);
         face_img_muscle = (ImageView) findViewById(R.id.face_img_muscle);
         // 肌肉率
-        MoveView.muscle(TestActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
+        //MoveView.muscle(TestActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,90);
 
 
 

@@ -42,6 +42,7 @@ import com.lefu.es.constant.BLEConstant;
 import com.lefu.es.constant.BluetoolUtil;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
+import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.progressbar.NumberProgressBar;
 import com.lefu.es.service.ExitApplication;
@@ -404,7 +405,10 @@ public class AutoBLEActivity extends BaseBleActivity {
 		}
 	}
 
+	@Override
+	protected void saveDataCallBack(Records records) {
 
+	}
 
 
 	/** 超时检测线程 */

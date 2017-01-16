@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.constant.ActivityVolues;
 import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.UtilConstants;
@@ -110,7 +111,7 @@ public class UserEditActivity extends AppCompatActivity {
 	private TextView target_danwei_tv;
 
 	/** 修改头像 */
-	private ImageView ib_upphoto;
+	private SimpleDraweeView ib_upphoto;
 	/** 修改头像自定义Dialog中的按钮 **/
 	private Button rb_dialog[] = new Button[3];
 	private int RadioButtonID[] = {R.id.rb_setPhoto1, R.id.rb_setPhoto2, R.id.rb_setPhoto3};
@@ -246,7 +247,7 @@ public class UserEditActivity extends AppCompatActivity {
 		imageSave.setOnClickListener(imgOnClickListener);
 		//ageET.setOnClickListener(imgOnClickListener);
 
-		ib_upphoto = (ImageView) this.findViewById(R.id.reviseHead);
+		ib_upphoto = (SimpleDraweeView) this.findViewById(R.id.reviseHead);
 		ib_upphoto.setOnClickListener(photoClickListener);
 
 		UtilConstants.CHOICE_KG = UtilConstants.UNIT_KG;
@@ -265,8 +266,11 @@ public class UserEditActivity extends AppCompatActivity {
 			}
 			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
 				photoImg = user.getPer_photo();
-				Bitmap bitmap = imageUtil.getBitmapfromPath(user.getPer_photo());
-				ib_upphoto.setImageBitmap(bitmap);
+				ib_upphoto.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
+			}else{
+				if("P999".equals(user.getGroup())){
+					UtilTooth.loadResPic(this,ib_upphoto,R.drawable.baby_default);
+				}
 			}
 			if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST)) {
 				isKG = false;
@@ -1088,27 +1092,12 @@ public class UserEditActivity extends AppCompatActivity {
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							if(user.getGroup().equals("P999")){
-								UserEditActivity.this.finish();//抱婴直接关闭页面
-							}else{
-								/* 跳转 */
-								Intent intent1 = new Intent();
-								if (UtilConstants.BATHROOM_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-									intent1.setClass(UserEditActivity.this, BathScaleActivity.class);
-								} else if (UtilConstants.BABY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-									intent1.setClass(UserEditActivity.this, BabyScaleActivity.class);
-								} else if (UtilConstants.BODY_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-									intent1.setClass(UserEditActivity.this, BodyFatScaleActivity.class);
-								}else if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-									intent1.setClass(UserEditActivity.this, KitchenScaleActivity.class);
-								}
-								intent1.putExtra("ItemID", UtilConstants.SELECT_USER);
-								intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-								UserEditActivity.this.startActivityForResult(intent1, 99);
-								if (null != SettingActivity.detailActivty) {
-									SettingActivity.detailActivty.finish();
-								}
-							}
+							Intent intent=new Intent();
+							Bundle bundle=new Bundle();
+							bundle.putSerializable("user",user);
+							intent.putExtras(bundle);
+							setResult(RESULT_OK, intent);
+							UserEditActivity.this.finish();
 						} else {
 							/*跳转到指定的扫描界面*/
 							int currentapiVersion = Build.VERSION.SDK_INT;

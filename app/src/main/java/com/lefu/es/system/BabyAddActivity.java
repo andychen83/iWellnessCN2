@@ -59,6 +59,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -163,10 +165,18 @@ public class BabyAddActivity extends AppCompatActivity {
 		return dateFormat.format(date) + ".jpg";
 	}
 
+	@OnClick(R.id.userCancel)
+	public void cancleBtnClick(){
+		this.finish();
+	}
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_add);
+		setContentView(R.layout.activity_baby_add);
+		ButterKnife.bind(this);
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -232,7 +242,7 @@ public class BabyAddActivity extends AppCompatActivity {
 		professBtn.setOnClickListener(leverOnClickListener);
 		imageCancel = (ImageView) findViewById(R.id.userCancel);
 		imageSave = (ImageView) findViewById(R.id.userSave);
-		imageCancel.setOnClickListener(imgOnClickListener);
+		//imageCancel.setOnClickListener(imgOnClickListener);
 		imageSave.setOnClickListener(imgOnClickListener);
 		//ageET.setOnClickListener(imgOnClickListener);
 		birth_layout.setOnClickListener(imgOnClickListener);
@@ -582,6 +592,7 @@ public class BabyAddActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		// Clear any configuration that was done!
 		EasyImage.clearConfiguration(this);
+		ButterKnife.unbind(this);
 		super.onDestroy();
 	}
 
@@ -850,9 +861,7 @@ public class BabyAddActivity extends AppCompatActivity {
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			switch (v.getId()) {
-				case (R.id.userCancel) :
-					exit();
-					break;
+
 				case (R.id.userSave) :
 					saveUser();
 					break;

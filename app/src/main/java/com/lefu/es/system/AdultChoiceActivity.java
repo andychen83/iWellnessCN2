@@ -3,14 +3,12 @@ package com.lefu.es.system;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.lefu.es.adapter.BabyGalleryAdapter;
 import com.lefu.es.entity.UserModel;
@@ -24,10 +22,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BabyChoiceActivity extends Activity {
+public class AdultChoiceActivity extends Activity {
 
     @Bind(R.id.id_recyclerview)
      RecyclerView mRecyclerView;
+
+    @Bind(R.id.addBtn)
+    TextView addBtn;
 
      BabyGalleryAdapter mAdapter;
      List<UserModel> mDatas;
@@ -35,7 +36,7 @@ public class BabyChoiceActivity extends Activity {
     private UserService uservice;
 
     public static Intent creatIntent(Context context){
-        Intent intent = new Intent(context,BabyChoiceActivity.class);
+        Intent intent = new Intent(context,AdultChoiceActivity.class);
         return intent;
     }
 
@@ -51,14 +52,14 @@ public class BabyChoiceActivity extends Activity {
         //设置布局管理器
         GridLayoutManager layoutManager=new GridLayoutManager(this,3);
         mRecyclerView.setLayoutManager(layoutManager);
-
+        addBtn.setVisibility(View.GONE);
         initAdapter();
     }
 
 
     public void initAdapter(){
         try {
-            mDatas = uservice.getAllBabys();
+            mDatas = uservice.getAllUserByScaleType();
             if(null==mDatas){
                 mDatas = new ArrayList<>();
             }
@@ -70,8 +71,12 @@ public class BabyChoiceActivity extends Activity {
                 public void onItemClick(View view, int position)
                 {
                     UserModel baby = mDatas.get(position);
-                    startActivity(BabyScaleNewActivity.creatIntent(BabyChoiceActivity.this,baby));
-                    BabyChoiceActivity.this.finish();
+                    Intent intent=new Intent();
+                    Bundle bundle=new  Bundle();
+                    bundle.putSerializable("user",baby);
+                    intent.putExtras(bundle);
+                    setResult(BodyFatNewActivity.SELCET_USER,intent);
+                    AdultChoiceActivity.this.finish();
                 }
             });
             mRecyclerView.setAdapter(mAdapter);
@@ -80,11 +85,11 @@ public class BabyChoiceActivity extends Activity {
         }
     }
 
-    @OnClick(R.id.addBtn)
-    public  void addUser(){
-        startActivity(BabyAddActivity.creatIntent(getApplicationContext()));
-        this.finish();
-    }
+//    @OnClick(R.id.addBtn)
+//    public  void addUser(){
+//        startActivity(BabyAddActivity.creatIntent(getApplicationContext()));
+//        this.finish();
+//    }
 
 
     @Override

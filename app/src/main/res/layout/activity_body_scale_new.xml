@@ -45,20 +45,35 @@
                     android:text="@string/bar_weight_title"
                     android:textColor="@color/main_text_color"
                     android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/weith_value_tx"
+                <RelativeLayout
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="0kg"
-                    android:textColor="@color/main_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content">
+                    <com.lefu.es.view.MyTextView5
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/weith_value_tx"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold"
+                        android:text="0kg"
+                        android:textSize="30sp"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/main_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"  >
+                    </com.lefu.es.view.MyTextView5>
+
+                    <TextView
+                        android:id="@+id/unti_tv"
+                        android:layout_toRightOf="@id/weith_value_tx"
+                        android:layout_marginLeft="3dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp"
+                        android:text="kg" />
+                </RelativeLayout>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/weith_status"
@@ -176,11 +191,15 @@
             android:orientation="vertical">
             <!--体重-->
             <include
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 layout="@layout/weight_scale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <!--BMI-->
             <include
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 layout="@layout/bmi_scale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

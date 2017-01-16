@@ -7,4 +7,6 @@ package com.lefu.es.blenew.service;
 public abstract class BluetoothLeScannerInterface {
 
     public void scanLeDevice(final int duration, final boolean enable){}
+
+    public void stopScane(){}
 }

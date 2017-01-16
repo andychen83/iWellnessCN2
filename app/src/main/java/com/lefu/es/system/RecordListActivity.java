@@ -47,6 +47,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,11 +88,11 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	private static final String TAG = "RecordListActivity";
 	
 	private TextView back_tv;
-	private TextView graph_tv;
-	private TextView list_tv;
+	private RadioButton graph_tv;
+	private RadioButton list_tv;
 	private TextView username_tv;
 
-	private LinearLayout linebg;
+	//private LinearLayout linebg;
 	private LinearLayout charcontainer;
 	private LinearLayout delist;
 
@@ -118,6 +120,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	@Bind(R.id.body_menu_ly)
 	LinearLayout menuLy;
 
+	@Bind(R.id.menuGroup_bath_ly)
+	LinearLayout menuBathLy;
+
+	@Bind(R.id.graphlist_group)
+	RadioGroup graphlist_group;
+
 	@Bind(R.id.weight_menu)
 	RadioButton weightMenu;
 
@@ -141,6 +149,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 	@Bind(R.id.muscial_menu)
 	RadioButton muscialMenu;
+
+	@Bind(R.id.menuGroup_ly)
+	LinearLayout menuRadioGroup;
 
 	protected UserModel user = null; //选择的婴儿
 
@@ -195,7 +206,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail_new);
 		ButterKnife.bind(this);
-		Serializable serializable = getIntent().getSerializableExtra("baby");
+		Serializable serializable = getIntent().getSerializableExtra("user");
 		if(null==serializable){
 			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
 			finish();
@@ -204,8 +215,20 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			//只有脂肪秤才显示
 			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)){
 				menuLy.setVisibility(View.VISIBLE);
+				menuBathLy.setVisibility(View.GONE);
 			}else{
 				menuLy.setVisibility(View.GONE);
+			}
+			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE) || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE) || "P999".equals(user.getGroup())){
+				menuLy.setVisibility(View.GONE);
+				menuBathLy.setVisibility(View.VISIBLE);
+			}else{
+				menuBathLy.setVisibility(View.GONE);
+			}
+			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+				menuLy.setVisibility(View.GONE);
+				menuBathLy.setVisibility(View.GONE);
+				graphlist_group.setVisibility(View.GONE);
 			}
 			handler = new Handler() {
 				@Override
@@ -237,15 +260,19 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			username_tv.setText(user.getUserName());
 			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
 				headImage.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
+			}else{
+				if("P999".equals(user.getGroup())){
+					UtilTooth.loadResPic(this,headImage,R.drawable.baby_default);
+				}
 			}
 		}
 		back_tv = (TextView) this.findViewById(R.id.back_textView);
 		back_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
-		graph_tv = (TextView) this.findViewById(R.id.graph_textview);
-		list_tv = (TextView) this.findViewById(R.id.list_textview);
+		graph_tv = (RadioButton) this.findViewById(R.id.graph_radio);
+		list_tv = (RadioButton) this.findViewById(R.id.list_radio);
 		graph_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
 		list_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
-		linebg = (LinearLayout) this.findViewById(R.id.line_bg);
+		//linebg = (LinearLayout) this.findViewById(R.id.line_bg);
 		charcontainer = (LinearLayout) this.findViewById(R.id.chart_container);
 		delist = (LinearLayout) this.findViewById(R.id.rl_delist_top);
 
@@ -312,10 +339,29 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		return i;
 	}
 
+	//人体秤
+	@OnClick(R.id.bmi_bath_menu)
+	public void bmiBathMenuClick(){
+		type = UtilConstants.BMI_SINGLE;
+		recordid = 0;
+		restUpMenu();
+		initChart();
+	}
+
+	@OnClick(R.id.weight_bath_menu)
+	public void weightBathMenuClick(){
+		type = UtilConstants.WEIGHT_SINGLE;
+		recordid = 0;
+		restDownMenu();
+		initChart();
+	}
+
+    //脂肪秤
 	@OnClick(R.id.weight_menu)
 	public void weightMenuClick(){
 		type = UtilConstants.WEIGHT_SINGLE;
 		recordid = 0;
+		restDownMenu();
 		initChart();
 	}
 
@@ -323,13 +369,15 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void waterMenuClick(){
 		type = UtilConstants.BODYWATER_SINGLE;
 		recordid = 0;
+		restDownMenu();
 		initChart();
 	}
 
 	@OnClick(R.id.fat_menu)
 	public void fatMenuClick(){
-		type = UtilConstants.WEIGHT_SINGLE;
+		type = UtilConstants.BODYFAT_SINGLE;
 		recordid = 0;
+		restDownMenu();
 		initChart();
 	}
 
@@ -337,6 +385,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void boneMenuClick(){
 		type = UtilConstants.BONE_SINGLE;
 		recordid = 0;
+		restDownMenu();
 		initChart();
 	}
 
@@ -344,6 +393,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void bmiMenuClick(){
 		type = UtilConstants.BMI_SINGLE;
 		recordid = 0;
+		restUpMenu();
 		initChart();
 	}
 
@@ -351,6 +401,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void visfatMenuClick(){
 		type = UtilConstants.VISCALEFAT_SINGLE;
 		recordid = 0;
+		restUpMenu();
 		initChart();
 	}
 
@@ -358,6 +409,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void bmrMenuClick(){
 		type = UtilConstants.BMR_SINGLE;
 		recordid = 0;
+		restUpMenu();
 		initChart();
 	}
 
@@ -365,15 +417,57 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	public void muscialMenuClick(){
 		type = UtilConstants.MUSCALE_SINGLE;
 		recordid = 0;
+		restUpMenu();
 		initChart();
+	}
+
+	/**
+	 * 重置上面按钮
+	 */
+	private void restUpMenu(){
+		if(weightMenu.isChecked()){
+			weightMenu.setChecked(false);
+		}
+		if(waterMenu.isChecked()){
+			waterMenu.setChecked(false);
+		}
+		if(fatMenu.isChecked()){
+			fatMenu.setChecked(false);
+		}
+		if(boneMenu.isChecked()){
+			boneMenu.setChecked(false);
+		}
+	}
+
+	/**
+	 * 重置下面按钮
+	 */
+	private void restDownMenu(){
+
+		if(bmiMenu.isChecked()){
+			bmiMenu.setChecked(false);
+		}
+		if(visfatMenu.isChecked()){
+			visfatMenu.setChecked(false);
+		}
+		if(bmrMenu.isChecked()){
+			bmrMenu.setChecked(false);
+		}
+		if(muscialMenu.isChecked()){
+			muscialMenu.setChecked(false);
+		}
 	}
 	
 	private void loadData() {
 		try {
 			if (null != user) {
 				//[Records [scaleType=cf, ugroup=P1, recordTime=2016-09-20 00:02:55, compareRecord=-33.0, rweight=27.0, rbmi=0.0, rbone=1.0, rbodyfat=5.0, rmuscle=24.4, rbodywater=85.0, rvisceralfat=1.0, rbmr=1457.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null], Records [scaleType=cf, ugroup=P1, recordTime=2016-09-19 23:33:06, compareRecord=60.0, rweight=60.0, rbmi=20.8, rbone=2.8, rbodyfat=13.2, rmuscle=47.6, rbodywater=58.2, rvisceralfat=2.0, rbmr=1516.0, level=null, sex=null, sweight=null, sbmi=0, sbone=null, sbodyfat=null, smuscle=null, sbodywater=null, svisceralfat=null, sbmr=null, sHeight=null, sAge=null]]
-				CacheHelper.recordListDesc = this.recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, user.getId(), 167f);
-				CacheHelper.recordList = this.recordService.getAllDatasByScaleAndIDAsc(UtilConstants.CURRENT_SCALE, user.getId(), 167f);
+				String scale = UtilConstants.CURRENT_SCALE;
+				if("P999".equals(user.getGroup())){
+					scale = UtilConstants.BABY_SCALE;
+				}
+				CacheHelper.recordListDesc = this.recordService.getAllDatasByScaleAndIDDesc(scale, user.getId(), 167f);
+				CacheHelper.recordList = this.recordService.getAllDatasByScaleAndIDAsc(scale, user.getId(), 167f);
 				initChart();
 			}
 		} catch (Exception e) {
@@ -745,20 +839,22 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					RecordListActivity.this.finish();
 					break;
 
-				case R.id.graph_textview :
-					linebg.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_graph));
+				case R.id.graph_radio :
+					//linebg.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_graph));
 					delist.setVisibility(View.GONE);
 					lv.setVisibility(View.GONE);
 					charcontainer.setVisibility(View.VISIBLE);
-					menuLy.setVisibility(View.VISIBLE);
+					menuRadioGroup.setVisibility(View.VISIBLE);
+					menuBathLy.setVisibility(View.VISIBLE);
 					break;
 
-				case R.id.list_textview :
-					linebg.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_list));
+				case R.id.list_radio :
+					//linebg.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_list));
 					delist.setVisibility(View.VISIBLE);
 					lv.setVisibility(View.VISIBLE);
 					charcontainer.setVisibility(View.GONE);
-					menuLy.setVisibility(View.GONE);
+					menuRadioGroup.setVisibility(View.GONE);
+					menuBathLy.setVisibility(View.GONE);
 //					if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_SHARE)) {
 //						showTipMask2();
 //					}
@@ -784,9 +880,8 @@ public class RecordListActivity extends Activity implements android.view.View.On
 				case R.id.share_img :
 					if (null != lastRecod) {
 						StringBuffer str = new StringBuffer();
-					
 						//婴儿秤，分享数据只需显示体重和BMI，其他数据去掉
-						if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
+						if(user.getScaleType().equals(UtilConstants.BABY_SCALE) || "P999".equals(user.getGroup())){
 							if (null != user) {
 								str.append(user.getUserName());
 								str.append("\n");
