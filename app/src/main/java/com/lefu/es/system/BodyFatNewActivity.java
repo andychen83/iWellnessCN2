@@ -1,8 +1,10 @@
 package com.lefu.es.system;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,9 +14,13 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,12 +29,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.blenew.helper.BleHelper1;
+import com.lefu.es.cache.CacheHelper;
+import com.lefu.es.constant.AppData;
+import com.lefu.es.constant.BluetoolUtil;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
+import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
+import com.lefu.es.service.TimeService;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.MoveView;
 import com.lefu.es.util.MyUtil;
@@ -38,6 +50,7 @@ import com.lefu.es.util.ToastUtils;
 import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView;
 import com.lefu.es.view.MyTextView5;
+import com.lefu.es.view.guideview.HighLightGuideView;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.io.File;
@@ -49,6 +62,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.R.attr.data;
+import static com.lefu.iwellness.newes.cn.system.R.id.cancle_datacbtn;
+import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
 import static com.lefu.iwellness.newes.cn.system.R.id.textView1;
 import static com.lefu.iwellness.newes.cn.system.R.id.textView2;
 
@@ -259,6 +274,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.age_index_tx)
     AppCompatTextView ageIndex;
 
+    @Bind(R.id.history_menu)
+    RelativeLayout historyLy;
+
 
     public static int SELCET_USER=100;
 
@@ -272,7 +290,22 @@ public class BodyFatNewActivity extends BaseBleActivity {
         initView();
     }
 
+    private void showTipMask() {
+        HighLightGuideView.builder(this).setText(getString(R.string.click_see_data)).addNoHighLightGuidView(R.drawable.ic_ok).addHighLightGuidView(historyLy, 0, 0.5f, HighLightGuideView.VIEWSTYLE_CIRCLE)
+                .setTouchOutsideDismiss(false).setOnDismissListener(new HighLightGuideView.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (null == UtilConstants.su) {
+                    UtilConstants.su = new SharedPreferencesUtil(BodyFatNewActivity.this);
+                }
+                UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_bodyfat_scale", "1");
+                UtilConstants.FIRST_INSTALL_BODYFAT_SCALE = "1";
 
+            }
+
+        }).show();
+
+    }
     /**
      * 初始化界面参数
      */
@@ -296,7 +329,6 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == SELCET_USER) {
             Bundle loginBundle = data.getExtras();
@@ -511,8 +543,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Override
     public void reveiveBleData(String readMessage) {
         System.out.println("检测读取到数据：" + readMessage);
-        if(!mActivty)return ;
-        if(TextUtils.isEmpty(readMessage)) return;
+        if(TextUtils.isEmpty(readMessage) || readMessage.length()<10 || !mActivty) return;
         //测脂错误
         if (readMessage.equals(UtilConstants.ERROR_CODE)) {
             if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)){
@@ -663,8 +694,19 @@ public class BodyFatNewActivity extends BaseBleActivity {
             UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
             handler.sendEmptyMessage(UtilConstants.scaleChangeMessage);
         }else{
-            localData(records,UtilConstants.CURRENT_USER);
-            initBodyBar(UtilConstants.CURRENT_USER,records);
+            try {
+                localData(records,UtilConstants.CURRENT_USER);
+                initBodyBar(UtilConstants.CURRENT_USER,records);
+                if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_BODYFAT_SCALE)) {
+                    List<Records> ls = recordService.getAllDatasByScaleAndIDAsc("cf",UtilConstants.CURRENT_USER.getId(),167f);
+                    if(null!=ls && ls.size()==1){
+                        showTipMask();
+                    }
+
+                }
+            }catch (Exception e){
+                Log.e(TAG,"保存数据后返回异常："+e.getMessage());
+            }
         }
     }
 
@@ -740,6 +782,126 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     };
 
+    protected Dialog receiveDataDialog;
+    private Button cancleBtn,saveBtn;
+    /**
+     * 接收到数据提示
+     */
+    protected void showReceiveDataDialog() {
+        // 初始化自定义布局参数
+        LayoutInflater layoutInflater = getLayoutInflater();
+        // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
+        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.receiveDataDialog));
+
+        cancleBtn = (Button) customLayout.findViewById(R.id.cancle_datacbtn);
+        saveBtn = (Button) customLayout.findViewById(save_databtn);
+
+        cancleBtn.setOnClickListener(imgOnClickListener);
+        saveBtn.setOnClickListener(imgOnClickListener);
+
+        receiveDataDialog = new Dialog(this,R.style.dialog);
+        receiveDataDialog.setContentView(customLayout);
+        receiveDataDialog .show();
+
+        Window window = receiveDataDialog.getWindow();
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.mystyle); // 添加动画
+    }
+
+    View.OnClickListener imgOnClickListener = new View.OnClickListener() {
+        @SuppressWarnings("deprecation")
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case cancle_datacbtn:
+                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                    receiveDataDialog = null;
+                    break;
+                case save_databtn:
+                    try {
+                        AppData.hasCheckData=true;
+                        if (!BluetoolUtil.bleflag)
+                            TimeService.setIsdoing(true);
+                        else
+                            BlueSingleton.setIsdoing(true);
+                        if (null != receiveRecod && null != receiveRecod.getScaleType()) {
+                            float compare = 0;
+                            if(!TextUtils.isEmpty(receiveRecod.getCompareRecord()) && !"null".equals(receiveRecod.getCompareRecord())){
+                                compare = Float.parseFloat(receiveRecod.getCompareRecord());
+                            }
+                            if(Math.abs(compare)>=3){
+
+                                dialogForBodyScale(getString(R.string.receive_data_waring), v.getId());
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                //receiveDataDialog = null;
+                            }else{
+                                if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                                    NutrientBo nutrient = null;
+                                    if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                                        nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                                    }
+                                    RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                                } else {
+                                    RecordDao.handleData2(recordService, receiveRecod);
+                                }
+                                saveDataCallBack(receiveRecod);
+                                if (!BluetoolUtil.bleflag){
+                                    TimeService.setIsdoing(false);
+                                }else{
+                                    BlueSingleton.setIsdoing(false);
+                                }
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                receiveDataDialog = null;
+                                receiveRecod = null;
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "保存用户测量数据异常"+e.getMessage());
+                    }
+                    break;
+            }
+        }
+    };
+
+    protected void dialogForBodyScale(String title, final int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BodyFatNewActivity.this);
+        builder.setMessage(title);
+        builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                        NutrientBo nutrient = null;
+                        if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                            nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                        }
+                        RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                    } else {
+                        RecordDao.handleData2(recordService, receiveRecod);
+                    }
+                    saveDataCallBack(receiveRecod);
+                    if (!BluetoolUtil.bleflag){
+                        TimeService.setIsdoing(false);
+                    }else{
+                        BlueSingleton.setIsdoing(false);
+                    }
+                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                    receiveDataDialog = null;
+                    receiveRecod = null;
+                } catch (Exception e) {
+                }
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -749,6 +911,10 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.weight_jiantou)
     public void menuWeightOpenClick(){
+        barBackToDefault();
+    }
+
+    private void barBackToDefault(){
         if(status_bar2.getVisibility()==View.VISIBLE){
             status_bar2.setVisibility(View.GONE);
             weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));

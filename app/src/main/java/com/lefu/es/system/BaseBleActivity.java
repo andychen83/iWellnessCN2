@@ -20,6 +20,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,7 +68,7 @@ import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
  * 蓝牙基础界面
  */
 
-public abstract class BaseBleActivity extends Activity {
+public abstract class BaseBleActivity extends AppCompatActivity {
     public final static String TAG = BaseBleActivity.class.getSimpleName();
 
     public BluetoothUtils1 mBluetoothUtils;
@@ -359,86 +360,6 @@ public abstract class BaseBleActivity extends Activity {
         }).start();
     }
 
-    protected AlertDialog receiveDataDialog;
-    private Button cancleBtn,saveBtn;
-    /**
-     * 接收到数据提示
-     */
-    protected void showReceiveDataDialog() {
-        // 初始化自定义布局参数
-        LayoutInflater layoutInflater = getLayoutInflater();
-        // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
-        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.receiveDataDialog));
-
-        cancleBtn = (Button) customLayout.findViewById(R.id.cancle_datacbtn);
-        saveBtn = (Button) customLayout.findViewById(save_databtn);
-
-        cancleBtn.setOnClickListener(imgOnClickListener);
-        saveBtn.setOnClickListener(imgOnClickListener);
-
-        receiveDataDialog = new AlertDialog.Builder(this).create();
-        receiveDataDialog.setView(customLayout, 0, 0, 0, 0);
-        receiveDataDialog .show();
-
-        Window window = receiveDataDialog.getWindow();
-        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
-        window.setWindowAnimations(R.style.mystyle); // 添加动画
-    }
-
-    View.OnClickListener imgOnClickListener = new View.OnClickListener() {
-        @SuppressWarnings("deprecation")
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case cancle_datacbtn:
-                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
-                    receiveDataDialog = null;
-                    break;
-                case save_databtn:
-                    try {
-                        AppData.hasCheckData=true;
-                        if (!BluetoolUtil.bleflag)
-                            TimeService.setIsdoing(true);
-                        else
-                            BlueSingleton.setIsdoing(true);
-                        if (null != receiveRecod && null != receiveRecod.getScaleType()) {
-                            float compare = 0;
-                            if(!TextUtils.isEmpty(receiveRecod.getCompareRecord()) && !"null".equals(receiveRecod.getCompareRecord())){
-                                compare = Float.parseFloat(receiveRecod.getCompareRecord());
-                            }
-                            if(Math.abs(compare)>=3){
-                                dialogForBodyScale(getString(R.string.receive_data_waring), v.getId());
-                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
-                                //receiveDataDialog = null;
-                            }else{
-                                if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-                                    NutrientBo nutrient = null;
-                                    if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
-                                        nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
-                                    }
-                                    RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
-                                } else {
-                                    RecordDao.handleData2(recordService, receiveRecod);
-                                }
-                                saveDataCallBack(receiveRecod);
-                                if (!BluetoolUtil.bleflag){
-                                    TimeService.setIsdoing(false);
-                                }else{
-                                    BlueSingleton.setIsdoing(false);
-                                }
-                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
-                                receiveDataDialog = null;
-                                receiveRecod = null;
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "保存用户测量数据异常"+e.getMessage());
-                    }
-                    break;
-            }
-        }
-    };
-
     /**
      * 保存后回调
      * @param records
@@ -529,45 +450,12 @@ public abstract class BaseBleActivity extends Activity {
         TextView name;
     }
 
-    protected void dialogForBodyScale(String title, final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(BaseBleActivity.this);
-        builder.setMessage(title);
-        builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
-                        NutrientBo nutrient = null;
-                        if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
-                            nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
-                        }
-                        RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
-                    } else {
-                        RecordDao.handleData2(recordService, receiveRecod);
-                    }
-                    saveDataCallBack(receiveRecod);
-                    if (!BluetoolUtil.bleflag){
-                        TimeService.setIsdoing(false);
-                    }else{
-                        BlueSingleton.setIsdoing(false);
-                    }
-                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
-                    receiveDataDialog = null;
-                    receiveRecod = null;
-                } catch (Exception e) {
-                }
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
-    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mActivty = false;
+    }
 
     @Override
     protected void onPause() {

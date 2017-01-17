@@ -1,9 +1,5 @@
 package com.lefu.es.adapter;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,26 +7,29 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lefu.es.constant.BluetoothTools;
 import com.lefu.es.constant.UtilConstants;
-import com.lefu.es.constant.imageUtil;
 import com.lefu.es.db.DBOpenHelper;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.UserService;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 用户列表适配器
+ * 抱婴列表适配器
  * @author Leon
  * 2015-11-17
  */
-public class UserlistviewAdapter extends BaseAdapter {
+public class BabylistviewAdapter extends BaseAdapter {
 	public List<UserModel> users = new ArrayList<UserModel>();
 	private int resource;
 	private int selectedPosition = -1;
@@ -39,7 +38,7 @@ public class UserlistviewAdapter extends BaseAdapter {
 	private boolean isEdit;
 	private Bitmap bitmap;
 	private UserModel user;
-	public UserlistviewAdapter(Context cont, int resource, List<UserModel> users) {
+	public BabylistviewAdapter(Context cont, int resource, List<UserModel> users) {
 		this.cont = cont;
 		this.resource = resource;
 		this.users = users;
@@ -114,26 +113,13 @@ public class UserlistviewAdapter extends BaseAdapter {
 						uservice = new UserService(cont);
 					}
 					int uid = getItemID(posintion);
-
 					uservice.delete(uid);
 					users.remove(posintion);
 					notifyDataSetChanged();
-					if (null != UtilConstants.CURRENT_USER && UtilConstants.CURRENT_USER.getId() == uid) {
-						UtilConstants.CURRENT_USER = null;
-					}
-					if (null == users || 0 == users.size()) {
-						Intent startService = new Intent(BluetoothTools.ACTION_NO_USER);
-						cont.sendBroadcast(startService);
 
-					}
-					//UserService uservice = new UserService(cont);
-					int maxGroup = uservice.getMaxGroup();
-					DBOpenHelper dbHelper = new DBOpenHelper(cont);
-					SQLiteDatabase dbs;
-					dbs = dbHelper.getReadableDatabase();
-					String sql = "update user u set max(number) = ? where scaletype = ?";
-					dbs.execSQL(sql, new Object[]{maxGroup, UtilConstants.SELECT_SCALE});
-					dbs.close();
+					Intent startService = new Intent(BluetoothTools.ACTION_NO_USER);
+					startService.putExtra("babyId",uid);
+					cont.sendBroadcast(startService);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

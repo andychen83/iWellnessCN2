@@ -37,8 +37,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lefu.es.constant.ActivityVolues;
 import com.lefu.es.constant.UtilConstants;
+import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
@@ -54,13 +56,12 @@ import com.lefu.iwellness.newes.cn.system.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -68,7 +69,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  * 添加用户信息
  * @author lfl
  */
-public class BabyAddActivity extends AppCompatActivity {
+public class AdultAddActivity extends AppCompatActivity {
 	private Button maleBtn;
 	private Button femaleBtn;
 
@@ -104,7 +105,7 @@ public class BabyAddActivity extends AppCompatActivity {
 	private LinearLayout birth_layout = null;
 
 	/** 修改头像 */
-	private ImageView ib_upphoto;
+	private SimpleDraweeView ib_upphoto;
 	/** 修改头像自定义Dialog中的按钮 **/
 	private Button rb_dialog[] = new Button[3];
 	private int RadioButtonID[] = {R.id.rb_setPhoto1, R.id.rb_setPhoto2, R.id.rb_setPhoto3};
@@ -139,9 +140,17 @@ public class BabyAddActivity extends AppCompatActivity {
 	private String mTempPhotoPath;
 	// 剪切后图像文件
 	private Uri mDestinationUri;
+
+	Records records = null;
+
+	public static Intent creatIntent(Context context, Records records){
+		Intent intent = new Intent(context,AdultAddActivity.class);
+		intent.putExtra("record",records);
+		return intent;
+	}
 	
 	private void showAlertDailog(String title){
-        new com.lefu.es.view.AlertDialog(BabyAddActivity.this).builder()
+        new com.lefu.es.view.AlertDialog(AdultAddActivity.this).builder()
                 .setTitle(getResources().getString(R.string.waring_title))
                 .setMsg(title)
                 .setPositiveButton(getResources().getString(R.string.ok_btn), new OnClickListener() {
@@ -152,12 +161,6 @@ public class BabyAddActivity extends AppCompatActivity {
                 }).show();
     }
 
-
-	public static Intent creatIntent(Context context){
-		Intent intent = new Intent(context,BabyAddActivity.class);
-		return intent;
-	}
-
 	// 使用系统当前日期加以调整作为照片的名称
 	private String getPhotoFileName() {
 		Date date = new Date(System.currentTimeMillis());
@@ -165,18 +168,14 @@ public class BabyAddActivity extends AppCompatActivity {
 		return dateFormat.format(date) + ".jpg";
 	}
 
-	@OnClick(R.id.userCancel)
-	public void cancleBtnClick(){
-		this.finish();
-	}
-
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_baby_add);
-		ButterKnife.bind(this);
+		setContentView(R.layout.activity_user_add);
+		Serializable serializable = getIntent().getSerializableExtra("record");
+		if(null!=serializable){
+			records = (Records)serializable;
+		}
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -190,7 +189,7 @@ public class BabyAddActivity extends AppCompatActivity {
 				.setCopyExistingPicturesToPublicLocation(true);
 		ExitApplication.getInstance().addActivity(this);
 
-		UtilConstants.su = new SharedPreferencesUtil(BabyAddActivity.this);
+		UtilConstants.su = new SharedPreferencesUtil(AdultAddActivity.this);
 	}
 
 	String str;
@@ -242,12 +241,12 @@ public class BabyAddActivity extends AppCompatActivity {
 		professBtn.setOnClickListener(leverOnClickListener);
 		imageCancel = (ImageView) findViewById(R.id.userCancel);
 		imageSave = (ImageView) findViewById(R.id.userSave);
-		//imageCancel.setOnClickListener(imgOnClickListener);
+		imageCancel.setOnClickListener(imgOnClickListener);
 		imageSave.setOnClickListener(imgOnClickListener);
 		//ageET.setOnClickListener(imgOnClickListener);
 		birth_layout.setOnClickListener(imgOnClickListener);
 
-		ib_upphoto = (ImageView) this.findViewById(R.id.reviseHead);
+		ib_upphoto = (SimpleDraweeView) this.findViewById(R.id.reviseHead);
 		ib_upphoto.setOnClickListener(photoClickListener);
 
 		ageET.setOnTouchListener(new View.OnTouchListener() {
@@ -415,7 +414,7 @@ public class BabyAddActivity extends AppCompatActivity {
 
 			} else {
 				if(null!=alertDialog)alertDialog.dismiss();
-				EasyImage.openCamera(BabyAddActivity.this, 0);
+				EasyImage.openCamera(AdultAddActivity.this, 0);
 //			Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //			//下面这句指定调用相机拍照后的照片存储的路径
 //			//takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mTempPhotoPath)));
@@ -535,7 +534,7 @@ public class BabyAddActivity extends AppCompatActivity {
 				public void onCanceled(EasyImage.ImageSource source, int type) {
 					//Cancel handling, you might wanna remove taken photo if it was canceled
 					if (source == EasyImage.ImageSource.CAMERA) {
-						File photoFile = EasyImage.lastlyTakenButCanceledPhoto(BabyAddActivity.this);
+						File photoFile = EasyImage.lastlyTakenButCanceledPhoto(AdultAddActivity.this);
 						if (photoFile != null) photoFile.delete();
 					}
 				}
@@ -548,7 +547,7 @@ public class BabyAddActivity extends AppCompatActivity {
 					tempFile = new File(Environment.getExternalStorageDirectory(), PHOTO_FILE_NAME);
 					crop(Uri.fromFile(tempFile));
 				} else {
-					Toast.makeText(BabyAddActivity.this, getString(R.string.setting_noSDCard), Toast.LENGTH_LONG).show();
+					Toast.makeText(AdultAddActivity.this, getString(R.string.setting_noSDCard), Toast.LENGTH_LONG).show();
 				}
 					break;
 
@@ -579,7 +578,7 @@ public class BabyAddActivity extends AppCompatActivity {
 
 	private void onPhotosReturned(List<File> photos) {
 		if(null!=photos && photos.size()>0){
-			Picasso.with(BabyAddActivity.this)
+			Picasso.with(AdultAddActivity.this)
 					.load(photos.get(0))
 					.fit()
 					.centerCrop()
@@ -592,7 +591,6 @@ public class BabyAddActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		// Clear any configuration that was done!
 		EasyImage.clearConfiguration(this);
-		ButterKnife.unbind(this);
 		super.onDestroy();
 	}
 
@@ -861,7 +859,9 @@ public class BabyAddActivity extends AppCompatActivity {
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			switch (v.getId()) {
-
+				case (R.id.userCancel) :
+					exit();
+					break;
 				case (R.id.userSave) :
 					saveUser();
 					break;
@@ -886,108 +886,121 @@ public class BabyAddActivity extends AppCompatActivity {
 	/**退出*/
 	private void exit(){
 		/* 是否存在用户 */
-		this.finish();
-		ExitApplication.getInstance().exit(BabyAddActivity.this);
+		try {
+			if (uservice.getCount() > 0) {
+				AdultAddActivity.this.startActivity(new Intent(AdultAddActivity.this, UserListActivity.class));
+			}else{
+				/* 结束程序 */
+				ExitApplication.getInstance().exit(AdultAddActivity.this);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**保存数据判断*/
 	private void saveUser() {
-		try {
-			String sName = nameET.getText().toString();
-			if (null == sName || "".equals(sName.trim())) {
-				Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
-				return;
-			}
-			String ageday = ageET.getText().toString();
-			if (null == ageday || "".equals(ageday.trim())) {
-				Toast.makeText(this, getString(R.string.age_error), Toast.LENGTH_SHORT).show();
-				return;
-			}
-			String year = ageday.substring(ageday.lastIndexOf("-") + 1);
-			String mm = ageday.substring(0, ageday.lastIndexOf("-"));
-			ageday = year + "-" + mm;
-			int age = Tool.getAgeByBirthday(Tool.StringToDate(ageday, "yyyy-MM-dd"));
-			if (age < 1 || age > 99) {
-				Toast.makeText(this, getString(R.string.age_error_2), Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-
-			if (isKG) {
-				String height1 = heightET.getText().toString();
-				if (null == height1 || "".equals(height1.trim())) {
-					Toast.makeText(this, getString(R.string.height_error), Toast.LENGTH_LONG)
-							.show();
-					return;
-				}
-
-				if (age >= 10) {
-					if(Float.parseFloat(height1) < 100 || Float.parseFloat(height1) >220){
-						Toast.makeText(this, getString(R.string.height_error_1), Toast.LENGTH_LONG)
-								.show();
-						return;
-					}
-
-				}else{
-					if(Float.parseFloat(height1) < 30 || Float.parseFloat(height1) >220){
-						Toast.makeText(this, getString(R.string.height_error_3), Toast.LENGTH_LONG)
-								.show();
-						return;
-					}
-				}
-			} else {
-				// heightET.setText(UtilTooth.myround(UtilTooth.cm2foot(user2.getBheigth()))+"");
-				String h1 = heightET.getText().toString();
-				if ("".equals(h1.trim()))
-					h1 = "0";
-				String h2 = heightET2.getText().toString();
-				if ("".equals(h2.trim()))
-					h2 = "0";
-				int h11 = (int) Float.parseFloat(h1);
-				int h22 = (int) Float.parseFloat(h2);
-				if (age >= 10){
-					if ((h11 < 3) || (h11 == 3 && h22 < 3) || (h11 > 7) || (h11 == 7 && h22 > 3)) {
-						Toast.makeText(this, getString(R.string.height_error_2), Toast.LENGTH_LONG)
-								.show();
-						return;
-					}
-				}else{
-					if ((h11 < 1) || (h11 > 7) || (h11 == 7 && h22 > 3)) {
-						Toast.makeText(this, getString(R.string.height_error_4), Toast.LENGTH_LONG)
-								.show();
-						return;
-					}
-				}
-			}
-
-			if (null == userType || "".equals(userType.trim())) {
-				Toast.makeText(this, getString(R.string.user_info_level_need), Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-			UserModel mPerson = creatUserModel();
-			if(mPerson!=null){
-				uservice.save(mPerson);
-				Toast.makeText(this, getString(R.string.user_info_save_success), Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent();
-				Bundle mBundle = new Bundle();
-				mBundle.putSerializable("user", mPerson);
-				intent.putExtras(mBundle);
-				setResult(101,intent);
-				this.finish();
-			}else{
-				Toast.makeText(this, getString(R.string.user_info_save_error), Toast.LENGTH_SHORT).show();
-			}
-
-		}catch (Exception e){
-			Toast.makeText(this, getString(R.string.user_info_save_error), Toast.LENGTH_SHORT).show();
+		String sName = nameET.getText().toString();
+		if (null == sName || "".equals(sName.trim())) {
+			Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String ageday = ageET.getText().toString();
+		if (null == ageday || "".equals(ageday.trim())) {
+			Toast.makeText(this, getString(R.string.age_error), Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String year = ageday.substring(ageday.lastIndexOf("-") + 1);
+		String mm = ageday.substring(0, ageday.lastIndexOf("-"));
+		ageday = year + "-" + mm;
+		int age = Tool.getAgeByBirthday(Tool.StringToDate(ageday, "yyyy-MM-dd"));
+		if (age < 1 || age > 99) {
+			Toast.makeText(this, getString(R.string.age_error_2), Toast.LENGTH_SHORT).show();
+			return;
 		}
 
+
+		if (isKG) {
+			String height1 = heightET.getText().toString();
+			if (null == height1 || "".equals(height1.trim())) {
+				Toast.makeText(this, getString(R.string.height_error), Toast.LENGTH_LONG)
+						.show();
+				return;
+			}
+
+			if (age >= 10) {
+                if(Float.parseFloat(height1) < 100 || Float.parseFloat(height1) >220){
+                    Toast.makeText(this, getString(R.string.height_error_1), Toast.LENGTH_LONG)
+                    .show();
+                    return;
+                }
+
+            }else{
+                if(Float.parseFloat(height1) < 30 || Float.parseFloat(height1) >220){
+                    Toast.makeText(this, getString(R.string.height_error_3), Toast.LENGTH_LONG)
+                    .show();
+                    return;
+                }
+            }
+		} else {
+			// heightET.setText(UtilTooth.myround(UtilTooth.cm2foot(user2.getBheigth()))+"");
+			String h1 = heightET.getText().toString();
+			if ("".equals(h1.trim()))
+				h1 = "0";
+			String h2 = heightET2.getText().toString();
+			if ("".equals(h2.trim()))
+				h2 = "0";
+			int h11 = (int) Float.parseFloat(h1);
+			int h22 = (int) Float.parseFloat(h2);
+			if (age >= 10){
+                if ((h11 < 3) || (h11 == 3 && h22 < 3) || (h11 > 7) || (h11 == 7 && h22 > 3)) {
+                    Toast.makeText(this, getString(R.string.height_error_2), Toast.LENGTH_LONG)
+                    .show();
+                    return;
+                }
+            }else{
+                if ((h11 < 1) || (h11 > 7) || (h11 == 7 && h22 > 3)) {
+                    Toast.makeText(this, getString(R.string.height_error_4), Toast.LENGTH_LONG)
+                    .show();
+                    return;
+                }
+            }
+		}
+
+		if (null == userType || "".equals(userType.trim())) {
+			Toast.makeText(this, getString(R.string.user_info_level_need), Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		UserModel mPerson = creatUserModel();
+		if(mPerson!=null){
+			try {
+				uservice.save(mPerson);
+				UtilConstants.CURRENT_USER = uservice.find(uservice.maxid());
+				UtilConstants.CURRENT_USER.setScaleType(UtilConstants.BATHROOM_SCALE);
+				UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
+				/*防止数据被清空，记录到本地*/
+				String blueTooth_type=(String) UtilConstants.su.readbackUp("lefuconfig", "bluetooth_type"+UtilConstants.CURRENT_USER.getId(), String.class);
+				UtilConstants.su.editSharedPreferences("lefuconfig", "addUser", JSONObject.toJSONString(UtilConstants.CURRENT_USER));
+				UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
+				Intent intent = new Intent();
+				Bundle mBundle = new Bundle();
+				mBundle.putSerializable("user", UtilConstants.CURRENT_USER);
+				intent.putExtras(mBundle);
+				setResult(104,intent);
+				AdultAddActivity.this.finish();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			Toast.makeText(this, getString(R.string.user_info_save_error), Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 
-	private String maxGroup = "P999";
+	private String maxGroup = "P0";
 	public UserModel creatUserModel() {
-		String group = "P999";
+		String group = this.uservice.getAddUserGroup(null);
 		Log.e("UserAddActivity", "當前創立用戶的用戶組:"+group);
 		UserModel mPerson = new UserModel();
 		try {
@@ -1091,10 +1104,10 @@ public class BabyAddActivity extends AppCompatActivity {
 
 	/*** 时间滚动器 **/
 	public void showDateTimePicker() {
-		LayoutInflater inflater = LayoutInflater.from(BabyAddActivity.this);
+		LayoutInflater inflater = LayoutInflater.from(AdultAddActivity.this);
 		View timepickerview = inflater.inflate(R.layout.datewheelpick, null);
 		timepickerview.setMinimumWidth(getWindowManager().getDefaultDisplay().getWidth());
-		ScreenInfo screenInfo = new ScreenInfo(BabyAddActivity.this);
+		ScreenInfo screenInfo = new ScreenInfo(AdultAddActivity.this);
 		wheelMain = new WheelMain(timepickerview);
 		wheelMain.screenheight = screenInfo.getHeight();
 		Calendar calendar = Calendar.getInstance();

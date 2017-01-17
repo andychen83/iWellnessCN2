@@ -5,11 +5,14 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 
 import com.lefu.es.constant.UtilConstants;
+import com.lefu.es.entity.UserModel;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Build.VERSION;
@@ -28,6 +31,16 @@ import android.widget.ZoomButtonsController;
  */
 public class InfoActivity extends Activity {
 	WebView weView;
+
+	boolean isBaby = false;
+
+
+	public static Intent creatIntent(Context context, boolean isbaby){
+		Intent intent = new Intent(context,InfoActivity.class);
+		intent.putExtra("isbaby",isbaby);
+		return intent;
+	}
+
 	@SuppressWarnings("unused")
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
@@ -39,6 +52,8 @@ public class InfoActivity extends Activity {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
 		setContentView(R.layout.activity_info);
+
+		isBaby = getIntent().getBooleanExtra("isbaby",false);
 		weView = (WebView) findViewById(R.id.wv_activity_help);
 		weView.getSettings().setJavaScriptEnabled(true);
 		weView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -63,13 +78,13 @@ public class InfoActivity extends Activity {
 		weView.getSettings().setUseWideViewPort(true);
 		weView.getSettings().setLoadWithOverviewMode(true);
 		if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_KG)) {
-			if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)) {
+			if (isBaby || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)) {
 				weView.loadUrl("file:///android_asset/info_baby_kg.htm");
 			} else {
 				weView.loadUrl("file:///android_asset/info.htm");
 			}
 		} else {
-			if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)) {
+			if (isBaby || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)) {
 				weView.loadUrl("file:///android_asset/info_baby_lboz.htm");
 			} else {
 				weView.loadUrl("file:///android_asset/info_lb.htm");

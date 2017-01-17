@@ -1,7 +1,10 @@
 package com.lefu.es.system;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -12,7 +15,12 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,15 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.blenew.constant.BluetoolUtil1;
 import com.lefu.es.blenew.helper.BleHelper1;
 import com.lefu.es.cache.CacheHelper;
+import com.lefu.es.constant.AppData;
+import com.lefu.es.constant.BluetoolUtil;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.db.RecordDao;
+import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
+import com.lefu.es.service.TimeService;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.MoveView;
 import com.lefu.es.util.MyUtil;
@@ -40,11 +53,15 @@ import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.lefu.iwellness.newes.cn.system.R.id.cancle_datacbtn;
+import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
 
 /*人体秤
 * */
@@ -125,6 +142,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
 
     private void initView() {
+        UtilConstants.SELECT_SCALE = UtilConstants.BATHROOM_SCALE;
         if(null!=UtilConstants.CURRENT_USER){
             userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
             if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
@@ -299,7 +317,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     public void reveiveBleData(String readMessage) {
 
         System.out.println("检测读取到数据：" + readMessage);
-        if(TextUtils.isEmpty(readMessage)) return;
+        if(TextUtils.isEmpty(readMessage) || readMessage.length()<10 || !mActivty) return;
         //测脂错误
         if (readMessage.equals(UtilConstants.ERROR_CODE)) {
             if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)){
@@ -360,7 +378,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
-                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
+                    if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1500) && null==receiveDataDialog) {
                         UtilConstants.receiveDataTime = System.currentTimeMillis();
                         dueDate(readMessage,3);
                     }
@@ -527,6 +545,139 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         }
 
     };
+
+    protected Dialog receiveDataDialog;
+    private Button cancleBtn,saveBtn;
+    /**
+     * 接收到数据提示
+     */
+    protected void showReceiveDataDialog() {
+        // 初始化自定义布局参数
+        LayoutInflater layoutInflater = getLayoutInflater();
+        // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
+        View customLayout = layoutInflater.inflate(R.layout.activity_receive_alert, (ViewGroup) findViewById(R.id.receiveDataDialog));
+
+        cancleBtn = (Button) customLayout.findViewById(R.id.cancle_datacbtn);
+        saveBtn = (Button) customLayout.findViewById(save_databtn);
+
+        cancleBtn.setOnClickListener(imgOnClickListener);
+        saveBtn.setOnClickListener(imgOnClickListener);
+
+        receiveDataDialog = new Dialog(this,R.style.dialog);
+        receiveDataDialog.setContentView(customLayout);
+        receiveDataDialog .show();
+
+        Window window = receiveDataDialog.getWindow();
+        window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.mystyle); // 添加动画
+    }
+
+    View.OnClickListener imgOnClickListener = new View.OnClickListener() {
+        @SuppressWarnings("deprecation")
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case cancle_datacbtn:
+                    if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                    receiveDataDialog = null;
+                    break;
+                case save_databtn:
+                    try {
+                        AppData.hasCheckData=true;
+                        if (!BluetoolUtil.bleflag)
+                            TimeService.setIsdoing(true);
+                        else
+                            BlueSingleton.setIsdoing(true);
+                        if (null != receiveRecod && null != receiveRecod.getScaleType()) {
+                            float compare = 0;
+                            if(!TextUtils.isEmpty(receiveRecod.getCompareRecord()) && !"null".equals(receiveRecod.getCompareRecord())){
+                                compare = Float.parseFloat(receiveRecod.getCompareRecord());
+                            }
+                            if(Math.abs(compare)>=3){
+                                askForSaveExceptionData();
+                                //dialogForBodyScale(getString(R.string.receive_data_waring), v.getId());
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                receiveDataDialog = null;
+                            }else{
+                                if (UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)) {
+                                    NutrientBo nutrient = null;
+                                    if(!TextUtils.isEmpty(receiveRecod.getRphoto())){
+                                        nutrient = CacheHelper.queryNutrientsByName(receiveRecod.getRphoto());
+                                    }
+                                    RecordDao.dueKitchenDate2(recordService, receiveRecod,nutrient);
+                                } else {
+                                    RecordDao.handleData2(recordService, receiveRecod);
+                                }
+                                saveDataCallBack(receiveRecod);
+                                if (!BluetoolUtil.bleflag){
+                                    TimeService.setIsdoing(false);
+                                }else{
+                                    BlueSingleton.setIsdoing(false);
+                                }
+                                if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                receiveDataDialog = null;
+                                receiveRecod = null;
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "保存用户测量数据异常"+e.getMessage());
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 询问异常数据是否保存
+     */
+    protected void askForSaveExceptionData() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BodyScaleNewActivity.this);
+        builder.setMessage(getString(R.string.receive_data_waring));
+        builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //启动成人用户选择
+                startActivityForResult(UserChoiceActivity.creatIntent(BodyScaleNewActivity.this,receiveRecod),103);
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RecordDao.handleData2(recordService, receiveRecod);
+                initView();
+                dialog.dismiss();
+                receiveRecod = null;
+            }
+        });
+        builder.create().show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 103) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel user = (UserModel) serializable;
+                    //保存用户
+                    UtilConstants.CURRENT_USER = user;
+                    UtilConstants.SELECT_USER=UtilConstants.CURRENT_USER.getId();
+                    System.out.println("当前用户称类型："+UtilConstants.CURRENT_SCALE);
+                    if (null != UtilConstants.CURRENT_USER && null != UtilConstants.CURRENT_USER.getDanwei() && !"".equals(UtilConstants.CURRENT_USER.getDanwei())) {
+                        if (null != UtilConstants.su) {
+                            UtilConstants.su.editSharedPreferences("lefuconfig", "unit", UtilConstants.CURRENT_USER.getDanwei());
+                            UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.CURRENT_USER.getId());
+                        }
+                    }
+                    RecordDao.handleData2(recordService, receiveRecod);
+                    initView();
+                }
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

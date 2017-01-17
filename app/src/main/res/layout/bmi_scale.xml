@@ -62,7 +62,7 @@
                 android:id="@+id/bmi_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/down_arrow" />
+                android:background="@drawable/up_arrow" />
         </LinearLayout>
     </RelativeLayout>
 

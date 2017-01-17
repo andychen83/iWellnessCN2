@@ -15,7 +15,7 @@
             android:id="@+id/reviseHead"
             android:layout_width="75.0dip"
             android:layout_height="75.0dip"
-            android:background="@drawable/user_pic"
+            android:background="@drawable/user_default"
             android:scaleType="centerCrop" />
     </LinearLayout>
 

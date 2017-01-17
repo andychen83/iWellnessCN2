@@ -123,10 +123,7 @@ public class BodyFatScaleSetActivity extends AppCompatActivity {
     @OnClick(R.id.infomation_ly)
     public void infoClick(){
        /* 跳转info界面 */
-        Intent intent0 = new Intent();
-        intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent0.setClass(BodyFatScaleSetActivity.this, InfoActivity.class);
-        BodyFatScaleSetActivity.this.startActivity(intent0);
+        startActivity(InfoActivity.creatIntent(BodyFatScaleSetActivity.this,true));
     }
 
     @OnClick(R.id.linke_contract)

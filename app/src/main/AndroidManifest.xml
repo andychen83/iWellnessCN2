@@ -144,9 +144,8 @@
         <activity
             android:name="com.lefu.es.system.BodyFatNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/NoTitleBar" />
 
-        </activity>
         <!-- 添加婴儿信息界面 -->
         <activity
             android:name="com.lefu.es.system.BabyAddActivity"
@@ -156,12 +155,12 @@
         <activity
             android:name="com.lefu.es.system.BodyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/NoTitleBar" />
         <!-- 婴儿秤 -->
         <activity
             android:name="com.lefu.es.system.BabyScaleNewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/NoTitleBar" />
         <!-- 婴儿秤设置界面 -->
         <activity
             android:name="com.lefu.es.system.BabySetScaleActivity"
@@ -177,10 +176,28 @@
         <activity
             android:name="com.lefu.es.system.BabyChoiceActivity"
             android:theme="@style/dialog" />
+        <!-- 婴儿选择页面 给数据异常提示用的 -->
+        <activity
+            android:name="com.lefu.es.system.BabyChoiceForDataActivity"
+            android:theme="@style/dialog" />
         <!-- 大人选择页面 -->
         <activity
             android:name="com.lefu.es.system.AdultChoiceActivity"
             android:theme="@style/dialog" />
+        <!-- 婴儿列表页面 -->
+        <activity
+            android:name="com.lefu.es.system.UserBabyListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <!--大人选择页面 -->
+        <activity
+            android:name="com.lefu.es.system.UserChoiceActivity"
+            android:theme="@style/dialog" />
+        <!--大人添加页面 -->
+        <activity
+            android:name="com.lefu.es.system.AdultAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleBar" />
     </application>
 
 </manifest>

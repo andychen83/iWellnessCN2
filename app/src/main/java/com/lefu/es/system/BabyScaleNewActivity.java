@@ -1,9 +1,11 @@
 package com.lefu.es.system;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.TimeService;
+import com.lefu.es.service.UserService;
 import com.lefu.es.util.MoveView;
 import com.lefu.es.util.MyUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
@@ -185,6 +188,9 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                             Message message=initHandler.obtainMessage(1);
                             message.obj=lastRecord;
                             initHandler.sendMessage(message);
+                        }else{
+                            Message message=initHandler.obtainMessage(2);
+                            initHandler.sendMessage(message);
                         }
                     } catch (Exception e) {
                         Log.e(TAG,"初始化抱婴界面失败："+e.getMessage());
@@ -210,7 +216,10 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                         initBodyBar(babyUser,lastRecord);
                     }
                     break;
-
+                case 2:
+                    localData(null,babyUser);
+                    initBodyBar(babyUser,null);
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -223,110 +232,114 @@ public class BabyScaleNewActivity extends BaseBleActivity {
      * @param
      */
     private  void localData(Records record,UserModel user){
-        if(null==user || null==record)return;
-        if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-            if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
-                String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
+        if(null==user)return;
+        if(null==record){
+            compare_tv.setTexts("0.0", null);
+        }else{
+            if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
+                    String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
 
-                weithValueTx.setTexts(tempS[0], tempS[1]);
-                if (null != unit_tv) {
-                    unit_tv.setText(this.getText(R.string.stlb_danwei));
-                }
-            } else {
-                weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
-                if (null != unit_tv) {
-                    unit_tv.setText(this.getText(R.string.stlb_danwei));
-                }
-            }
-        } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-            weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
-            if (null != unit_tv) {
-                unit_tv.setText(this.getText(R.string.lb_danwei));
-            }
-        } else {
-            weithValueTx.setTexts(UtilTooth.keep1Point(record.getRweight()), null);
-            if (null != unit_tv) {
-                unit_tv.setText(this.getText(R.string.kg_danwei));
-            }
-        }
-        String sex = user.getSex();
-        if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
-        int gender = Integer.parseInt(sex);
-        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
-
-        if (babyUser.getDanwei().equals(UtilConstants.UNIT_KG)) {
-            if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
-                compare_tv.setTexts("0.0", null);
-                compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
-            } else {
-                BigDecimal b = new BigDecimal(Double.parseDouble(record.getCompareRecord()));
-                float cr = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                if (cr > 0) {
-                    compare_tv.setTexts("↑" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
-                } else if (cr < 0) {
-                    compare_tv.setTexts("↓" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
+                    weithValueTx.setTexts(tempS[0], tempS[1]);
+                    if (null != unit_tv) {
+                        unit_tv.setText(this.getText(R.string.stlb_danwei));
+                    }
                 } else {
-                    compare_tv.setTexts(UtilTooth.myroundString3(record.getCompareRecord() + "") + this.getText(R.string.kg_danwei), null);
+                    weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                    if (null != unit_tv) {
+                        unit_tv.setText(this.getText(R.string.stlb_danwei));
+                    }
+                }
+            } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+                weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.lb_danwei));
+                }
+            } else {
+                weithValueTx.setTexts(UtilTooth.keep1Point(record.getRweight()), null);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.kg_danwei));
                 }
             }
-        } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_LB) || babyUser.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-            if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
-                record.setCompareRecord("0");
-                compare_tv.setTexts("0.0 " + " " + this.getText(R.string.lb_danwei), null);
-            } else {
+            String sex = user.getSex();
+            if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+            int gender = Integer.parseInt(sex);
+            weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
+
+            if (babyUser.getDanwei().equals(UtilConstants.UNIT_KG)) {
+                if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
+                    compare_tv.setTexts("0.0", null);
+                    compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
+                } else {
+                    BigDecimal b = new BigDecimal(Double.parseDouble(record.getCompareRecord()));
+                    float cr = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                    if (cr > 0) {
+                        compare_tv.setTexts("↑" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
+                    } else if (cr < 0) {
+                        compare_tv.setTexts("↓" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
+                    } else {
+                        compare_tv.setTexts(UtilTooth.myroundString3(record.getCompareRecord() + "") + this.getText(R.string.kg_danwei), null);
+                    }
+                }
+            } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_LB) || babyUser.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+                if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
+                    record.setCompareRecord("0");
+                    compare_tv.setTexts("0.0 " + " " + this.getText(R.string.lb_danwei), null);
+                } else {
+                    float cr = Float.parseFloat(record.getCompareRecord());
+                    if (cr > 0) {
+                        compare_tv.setTexts("↑" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
+                    } else if (cr < 0) {
+                        compare_tv.setTexts("↓" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
+                    } else {
+                        compare_tv.setTexts("0.0" + " " + this.getText(R.string.lb_danwei), null);
+                    }
+                }
+            } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
+                    record.setCompareRecord("0");
+                    compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
+                }
                 float cr = Float.parseFloat(record.getCompareRecord());
+                String wei = UtilTooth.kgToLB_new(Math.abs(Float.parseFloat(record.getCompareRecord())));
+                String[] fatTemp = UtilTooth.kgToStLbForScaleFat2(Math.abs(Float.parseFloat(record.getCompareRecord())));
                 if (cr > 0) {
-                    compare_tv.setTexts("↑" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
-                } else if (cr < 0) {
-                    compare_tv.setTexts("↓" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
-                } else {
-                    compare_tv.setTexts("0.0" + " " + this.getText(R.string.lb_danwei), null);
-                }
-            }
-        } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_ST)) {
-            if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
-                record.setCompareRecord("0");
-                compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
-            }
-            float cr = Float.parseFloat(record.getCompareRecord());
-            String wei = UtilTooth.kgToLB_new(Math.abs(Float.parseFloat(record.getCompareRecord())));
-            String[] fatTemp = UtilTooth.kgToStLbForScaleFat2(Math.abs(Float.parseFloat(record.getCompareRecord())));
-            if (cr > 0) {
-                if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
-                    if (fatTemp[1] != null) {
-                        compare_tv.setTexts("↑" + fatTemp[0], fatTemp[1]);
+                    if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
+                        if (fatTemp[1] != null) {
+                            compare_tv.setTexts("↑" + fatTemp[0], fatTemp[1]);
+                        } else {
+                            compare_tv.setTexts("↑" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
+                        }
                     } else {
-                        compare_tv.setTexts("↑" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
+                        compare_tv.setTexts("↑" + wei + this.getText(R.string.stlb_danwei), null);
+                    }
+                } else if (cr < 0) {
+                    if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
+                        if (fatTemp[1] != null) {
+                            compare_tv.setTexts("↓" + fatTemp[0], fatTemp[1]);
+                        } else {
+                            compare_tv.setTexts("↓" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
+                        }
+                    } else {
+                        compare_tv.setTexts("↓" + wei + this.getText(R.string.stlb_danwei), null);
                     }
                 } else {
-                    compare_tv.setTexts("↑" + wei + this.getText(R.string.stlb_danwei), null);
+                    compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
                 }
-            } else if (cr < 0) {
-                if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
-                    if (fatTemp[1] != null) {
-                        compare_tv.setTexts("↓" + fatTemp[0], fatTemp[1]);
+            } else {
+                if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
+                    compare_tv.setTexts("0.0", null);
+                    compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
+                } else {
+                    BigDecimal b = new BigDecimal(Double.parseDouble(record.getCompareRecord()));
+                    float cr = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                    if (cr > 0) {
+                        compare_tv.setTexts("↑" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
+                    } else if (cr < 0) {
+                        compare_tv.setTexts("↓" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
                     } else {
-                        compare_tv.setTexts("↓" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
+                        compare_tv.setTexts(UtilTooth.myroundString3(record.getCompareRecord() + "") + this.getText(R.string.kg_danwei), null);
                     }
-                } else {
-                    compare_tv.setTexts("↓" + wei + this.getText(R.string.stlb_danwei), null);
-                }
-            } else {
-                compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
-            }
-        } else {
-            if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
-                compare_tv.setTexts("0.0", null);
-                compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
-            } else {
-                BigDecimal b = new BigDecimal(Double.parseDouble(record.getCompareRecord()));
-                float cr = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                if (cr > 0) {
-                    compare_tv.setTexts("↑" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
-                } else if (cr < 0) {
-                    compare_tv.setTexts("↓" + UtilTooth.myroundString3(Math.abs(cr) + "") + this.getText(R.string.kg_danwei), null);
-                } else {
-                    compare_tv.setTexts(UtilTooth.myroundString3(record.getCompareRecord() + "") + this.getText(R.string.kg_danwei), null);
                 }
             }
         }
@@ -342,7 +355,15 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             bmiIndex.setText(UtilTooth.keep1Point(record.getRbmi()));
             MoveView.bmi(BabyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,record.getRbmi());
 
+        }else{
+            bmiIndex.setText("0");
+            MoveView.bmi(BabyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,0);
         }
+    }
+
+    @OnClick(R.id.user_header)
+    public void  userHeaderClick(){
+        startActivityForResult(UserBabyListActivity.creatIntent(BabyScaleNewActivity.this,babyUser.getId()),102);
     }
 
     /**
@@ -371,6 +392,42 @@ public class BabyScaleNewActivity extends BaseBleActivity {
     @OnClick(R.id.setting_menu)
     public void setMenuClick(){
         startActivity(BodyFatScaleSetActivity.creatIntent(BabyScaleNewActivity.this,babyUser));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 102) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel userModel = (UserModel)serializable;
+                    initView(userModel);
+                }
+            }
+        }else if (resultCode == 103) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel user = (UserModel) serializable;
+                    //替换当前页面最后的测量记录
+                    babyUser = user;
+                    initView(babyUser);
+                    //通知界面更新
+                    Message message=initHandler.obtainMessage(1);
+                    message.obj=lastRecord;
+                    initHandler.sendMessage(message);
+                    //保存记录
+                    RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
+                    //重置
+                    receiveRecod = null;
+                    //lastRecord = null;
+                    isOpenBabyScale = false;
+                }
+            }
+        }
     }
 
 
@@ -555,21 +612,30 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                                     data.setScaleType(UtilConstants.BABY_SCALE);
                                     //更新界面
                                     if(null!=lastRecord){
-                                        data.setCompareRecord((UtilTooth.myround(data.getRweight() - lastRecord.getRweight())) + "");
+                                        float compare = data.getRweight() - lastRecord.getRweight();
+                                        data.setCompareRecord((UtilTooth.myround(compare)) + "");
+                                        Log.e(TAG, "婴儿车前后重量相差:"+ compare);
+                                        if(Math.abs(compare)>=0.2){
+                                            //替换当前页面最后的测量记录
+                                            lastRecord = data;
+                                            askForSaveExceptionData();
+                                            return ;
+                                        }
                                     }else{
                                         data.setCompareRecord((UtilTooth.myround(weight)) + "");
                                     }
+                                    //替换当前页面最后的测量记录
+                                    lastRecord = data;
                                     //通知界面更新
                                     Message message=initHandler.obtainMessage(1);
                                     message.obj=data;
                                     initHandler.sendMessage(message);
                                     //保存记录
                                     RecordDao.handHarmBabyData(recordService,data,babyUser);
-                                    //替换当前页面最后的测量记录
-                                    lastRecord = data;
+
                                     //重置
                                     receiveRecod = null;
-                                    lastRecord = null;
+                                    //lastRecord = null;
                                     isOpenBabyScale = false;
                                 } catch (Exception e) {
                                     Log.e(TAG, "保存用户测量数据异常"+e.getMessage());
@@ -587,6 +653,44 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         }
 
     };
+
+
+    /**
+     * 询问异常数据是否保存
+     */
+    protected void askForSaveExceptionData() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BabyScaleNewActivity.this);
+        builder.setMessage(getString(R.string.receive_data_waring));
+        builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //启动 选择
+                startActivityForResult(BabyChoiceForDataActivity.creatIntent(BabyScaleNewActivity.this,receiveRecod),103);
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //通知界面更新
+                Message message=initHandler.obtainMessage(1);
+                message.obj=lastRecord;
+                initHandler.sendMessage(message);
+                //保存记录
+                RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
+
+                //重置
+                receiveRecod = null;
+                //lastRecord = null;
+                isOpenBabyScale = false;
+                dialog.dismiss();
+
+            }
+        });
+        builder.create().show();
+    }
+
+
 
 
     @Override

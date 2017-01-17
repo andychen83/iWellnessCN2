@@ -25,9 +25,9 @@
           android:layout_marginLeft="5dp"
           android:layout_alignParentLeft="true"
           android:layout_alignParentTop="true"
-          android:background="@drawable/user_default"
-          fresco:placeholderImage="@drawable/user_default"
-          fresco:failureImage="@drawable/user_default"
+          android:background="@drawable/baby_default"
+          fresco:placeholderImage="@drawable/baby_default"
+          fresco:failureImage="@drawable/baby_default"
           android:scaleType="fitXY" />
 
       <ImageView
