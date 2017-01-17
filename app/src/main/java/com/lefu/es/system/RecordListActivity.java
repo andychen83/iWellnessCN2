@@ -845,7 +845,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					lv.setVisibility(View.GONE);
 					charcontainer.setVisibility(View.VISIBLE);
 					menuRadioGroup.setVisibility(View.VISIBLE);
-					menuBathLy.setVisibility(View.VISIBLE);
+					//脂肪秤 和 厨房秤 没有
+					if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)||UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+						menuBathLy.setVisibility(View.GONE);
+					}else{
+						menuBathLy.setVisibility(View.VISIBLE);
+					}
 					break;
 
 				case R.id.list_radio :

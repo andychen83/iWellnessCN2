@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/user_default" />
+                android:src="@drawable/baby_default" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -132,20 +132,20 @@
                     android:id="@+id/infomation_ly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="30dip"
-                    android:background="@drawable/userset_linebg_shap" >
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/blue_item_bg"
+                    android:clickable="true"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dip"
-                        android:background="@null"
-                        android:focusable="false"
-                        android:text="@string/info"
-                        android:textColor="@color/darkgray" />
+                        android:text="@string/info" />
 
                     <ImageView
                         android:layout_width="wrap_content"

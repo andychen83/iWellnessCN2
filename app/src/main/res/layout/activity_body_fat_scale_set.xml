@@ -153,13 +153,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dip"
-                        android:background="@null"
-                        android:focusable="false"
-                        android:text="@string/info"
-                        android:textColor="@color/darkgray" />
+                        android:text="@string/info" />
 
                     <ImageView
                         android:layout_width="wrap_content"
