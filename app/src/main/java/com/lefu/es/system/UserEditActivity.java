@@ -172,7 +172,18 @@ public class UserEditActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_edit);
+		Serializable serializable = getIntent().getSerializableExtra("user");
+		if(null!=serializable){
+			user = (UserModel)serializable;
+		}else{
+			user = UtilConstants.CURRENT_USER;
+		}
+		if("P999".equals(user.getGroup())){
+			setContentView(R.layout.activity_baby_edit);
+		}else{
+			setContentView(R.layout.activity_user_edit);
+		}
+
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -189,12 +200,7 @@ public class UserEditActivity extends AppCompatActivity {
 			AppData.isCheckScale=true;
 			UtilConstants.CURRENT_USER= JSONObject.parseObject((String) UtilConstants.su.readbackUp("lefuconfig", "addUser", ""),UserModel.class);
 		}
-		Serializable serializable = getIntent().getSerializableExtra("user");
-		if(null!=serializable){
-			user = (UserModel)serializable;
-		}else{
-			user = UtilConstants.CURRENT_USER;
-		}
+
 		initView();
 	}
 
@@ -267,10 +273,6 @@ public class UserEditActivity extends AppCompatActivity {
 			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
 				photoImg = user.getPer_photo();
 				ib_upphoto.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
-			}else{
-				if("P999".equals(user.getGroup())){
-					UtilTooth.loadResPic(this,ib_upphoto,R.drawable.baby_default);
-				}
 			}
 			if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST)) {
 				isKG = false;

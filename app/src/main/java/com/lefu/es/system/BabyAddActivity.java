@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.lefu.es.constant.ActivityVolues;
 import com.lefu.es.constant.UtilConstants;
+import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
@@ -54,6 +55,7 @@ import com.lefu.iwellness.newes.cn.system.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -139,6 +141,8 @@ public class BabyAddActivity extends AppCompatActivity {
 	private String mTempPhotoPath;
 	// 剪切后图像文件
 	private Uri mDestinationUri;
+
+	Records records = null;
 	
 	private void showAlertDailog(String title){
         new com.lefu.es.view.AlertDialog(BabyAddActivity.this).builder()
@@ -153,8 +157,9 @@ public class BabyAddActivity extends AppCompatActivity {
     }
 
 
-	public static Intent creatIntent(Context context){
+	public static Intent creatIntent(Context context, Records records){
 		Intent intent = new Intent(context,BabyAddActivity.class);
+		intent.putExtra("record",records);
 		return intent;
 	}
 
@@ -177,6 +182,10 @@ public class BabyAddActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_baby_add);
 		ButterKnife.bind(this);
+		Serializable serializable = getIntent().getSerializableExtra("record");
+		if(null!=serializable){
+			records = (Records)serializable;
+		}
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -967,13 +976,19 @@ public class BabyAddActivity extends AppCompatActivity {
 
 			UserModel mPerson = creatUserModel();
 			if(mPerson!=null){
-				uservice.save(mPerson);
+				int useid = uservice.save(mPerson);
 				Toast.makeText(this, getString(R.string.user_info_save_success), Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent();
-				Bundle mBundle = new Bundle();
-				mBundle.putSerializable("user", mPerson);
-				intent.putExtras(mBundle);
-				setResult(101,intent);
+				if(null==records){
+					//抱婴主页
+					UserModel user = uservice.find(useid);
+					startActivity(BabyScaleNewActivity.creatIntent(BabyAddActivity.this,user));
+				}else{
+					Intent intent = new Intent();
+					Bundle mBundle = new Bundle();
+					mBundle.putSerializable("user", mPerson);
+					intent.putExtras(mBundle);
+					setResult(101,intent);
+				}
 				this.finish();
 			}else{
 				Toast.makeText(this, getString(R.string.user_info_save_error), Toast.LENGTH_SHORT).show();
@@ -1009,7 +1024,7 @@ public class BabyAddActivity extends AppCompatActivity {
 
 		mPerson.setPer_photo(photoImg);
 
-		mPerson.setDanwei(UtilConstants.CHOICE_KG);
+		mPerson.setDanwei(UtilConstants.UNIT_KG);
 		/*if (null != target_edittv) {
 			String wei = target_edittv.getText().toString().trim();
 			if (null == wei || "".equals(wei)) {

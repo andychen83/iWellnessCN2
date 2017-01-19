@@ -236,22 +236,8 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         if(null==record){
             compare_tv.setTexts("0.0", null);
         }else{
-            if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-                if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
-                    String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
-
-                    weithValueTx.setTexts(tempS[0], tempS[1]);
-                    if (null != unit_tv) {
-                        unit_tv.setText(this.getText(R.string.stlb_danwei));
-                    }
-                } else {
-                    weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
-                    if (null != unit_tv) {
-                        unit_tv.setText(this.getText(R.string.stlb_danwei));
-                    }
-                }
-            } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-                weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                weithValueTx.setTexts(UtilTooth.lbozToString(record.getRweight()), null);
                 if (null != unit_tv) {
                     unit_tv.setText(this.getText(R.string.lb_danwei));
                 }
@@ -266,7 +252,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             int gender = Integer.parseInt(sex);
             weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
 
-            if (babyUser.getDanwei().equals(UtilConstants.UNIT_KG)) {
+            if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
                 if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
                     compare_tv.setTexts("0.0", null);
                     compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
@@ -281,50 +267,19 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                         compare_tv.setTexts(UtilTooth.myroundString3(record.getCompareRecord() + "") + this.getText(R.string.kg_danwei), null);
                     }
                 }
-            } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_LB) || babyUser.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+            } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
                 if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
                     record.setCompareRecord("0");
                     compare_tv.setTexts("0.0 " + " " + this.getText(R.string.lb_danwei), null);
                 } else {
                     float cr = Float.parseFloat(record.getCompareRecord());
                     if (cr > 0) {
-                        compare_tv.setTexts("↑" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
+                        compare_tv.setTexts("↑" + UtilTooth.lbozToString(record.getRweight()), null);
                     } else if (cr < 0) {
-                        compare_tv.setTexts("↓" + UtilTooth.kgToLB(Math.abs(Float.parseFloat(record.getCompareRecord()))) + " " + this.getText(R.string.lb_danwei), null);
+                        compare_tv.setTexts("↓" + UtilTooth.lbozToString(record.getRweight()), null);
                     } else {
-                        compare_tv.setTexts("0.0" + " " + this.getText(R.string.lb_danwei), null);
+                        compare_tv.setTexts("0.0" + " " + this.getText(R.string.lboz_danwei), null);
                     }
-                }
-            } else if (babyUser.getDanwei().equals(UtilConstants.UNIT_ST)) {
-                if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
-                    record.setCompareRecord("0");
-                    compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
-                }
-                float cr = Float.parseFloat(record.getCompareRecord());
-                String wei = UtilTooth.kgToLB_new(Math.abs(Float.parseFloat(record.getCompareRecord())));
-                String[] fatTemp = UtilTooth.kgToStLbForScaleFat2(Math.abs(Float.parseFloat(record.getCompareRecord())));
-                if (cr > 0) {
-                    if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
-                        if (fatTemp[1] != null) {
-                            compare_tv.setTexts("↑" + fatTemp[0], fatTemp[1]);
-                        } else {
-                            compare_tv.setTexts("↑" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
-                        }
-                    } else {
-                        compare_tv.setTexts("↑" + wei + this.getText(R.string.stlb_danwei), null);
-                    }
-                } else if (cr < 0) {
-                    if (record.getScaleType().equals(UtilConstants.BODY_SCALE)) {
-                        if (fatTemp[1] != null) {
-                            compare_tv.setTexts("↓" + fatTemp[0], fatTemp[1]);
-                        } else {
-                            compare_tv.setTexts("↓" + fatTemp[0] + this.getText(R.string.stlb_danwei), null);
-                        }
-                    } else {
-                        compare_tv.setTexts("↓" + wei + this.getText(R.string.stlb_danwei), null);
-                    }
-                } else {
-                    compare_tv.setTexts("0.0 " + this.getText(R.string.stlb_danwei), null);
                 }
             } else {
                 if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
@@ -571,8 +526,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         }else if(1==i){//阿里秤
             records = MyUtil.parseZuKangMeaage(this.recordService, readMessage,babyUser);
         }else if(2==i){//新称过程数据
-            float weight = MyUtil.getWeightData(readMessage);
-            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx);
         }else if(3==i){//新秤锁定数据
             records = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,babyUser);
         }

@@ -10,6 +10,8 @@ import com.lefu.es.entity.UserModel;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 /**
  * 用户
  * @author Leon
@@ -33,11 +35,17 @@ public class UserService {
 	}
 	
 	/**保存用户信息*/
-	public void save(UserModel pe) throws Exception {
+	public int save(UserModel pe) throws Exception {
+		int strid = 0;
 		dbs = dbHelper.getWritableDatabase();
 		dbs.execSQL("insert into user(username,ugroup,sex,level,bheigth,ageyear,agemonth,number,scaletype,uniqueid,birth,per_photo,targweight,danwei) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
 				new Object[]{pe.getUserName(),pe.getGroup(),pe.getSex(),pe.getLevel(),pe.getBheigth(),pe.getAgeYear(),pe.getAgeMonth(),pe.getNumber(),pe.getScaleType(),pe.getUniqueID(),pe.getBirth(),pe.getPer_photo(),pe.getTargweight(),pe.getDanwei()});
+		Cursor cursor = dbs.rawQuery("select last_insert_rowid() from user", null);
+
+		if (cursor.moveToFirst()) strid = cursor.getInt(0);
+		Log.i("testAuto", strid + "");
 		dbs.close();
+		return strid;
 	}
 	
 	/**获取最大分组数*/

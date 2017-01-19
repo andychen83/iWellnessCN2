@@ -62,7 +62,7 @@
                 android:id="@+id/weight_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/up_arrow" />
+                android:background="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
 

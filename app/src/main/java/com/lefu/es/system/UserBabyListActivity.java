@@ -173,7 +173,7 @@ public class UserBabyListActivity extends Activity {
 	
 	/**跳转到添加用户界面*/
 	private void toAddUser(){
-		startActivityForResult(BabyAddActivity.creatIntent(UserBabyListActivity.this),101);
+		startActivityForResult(BabyAddActivity.creatIntent(UserBabyListActivity.this,null),101);
 	}
 
 	@Override

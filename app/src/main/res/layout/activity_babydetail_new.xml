@@ -1,0 +1,376 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/reviseHead"
+                android:layout_width="75.0dip"
+                android:layout_height="75.0dip"
+                android:background="@drawable/user_default"
+                fresco:placeholderImage="@drawable/user_default"
+                fresco:failureImage="@drawable/user_default"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reviseHead"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/back_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/back_name_mark"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/share_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/back_textView"
+            android:layout_marginRight="23dp"
+            android:scaleType="fitXY"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:src="@drawable/shar" />
+    </RelativeLayout>
+    <RadioGroup
+        android:id="@+id/graphlist_group"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="3dp" >
+
+        <RadioButton
+            android:id="@+id/graph_radio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/left_corners_btn_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/scale_record_graph"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/list_radio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/left_corners_btn_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/scale_record_list"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/menuGroup_bath_ly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/tongji_bath_group"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp" >
+
+            <RadioButton
+                android:id="@+id/weight_bath_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/left_corners_btn_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/weight_menu"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/bmi_bath_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/left_corners_btn_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/bmi_menu"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RadioGroup>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/body_menu_ly"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/menuGroup_ly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/tongji_group"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp" >
+
+                <RadioButton
+                    android:id="@+id/weight_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/weight_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/water_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/water_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/fat_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/fat_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/bone_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bone_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </RadioGroup>
+            <View
+                android:background="?android:attr/listDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1sp"/>
+            <RadioGroup
+                android:id="@id/tongji_group"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/bmi_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bmi_menu"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/visfat_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/visfat_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/bmr_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/bmr_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/muscial_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/left_corners_btn_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/muscial_menu"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/rl_delist_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bmi_title"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:visibility="gone"
+        android:weightSum="100" >
+
+        <TextView
+            android:id="@+id/tv_ldate"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="45"
+            android:gravity="center_horizontal"
+            android:text="@string/date_title"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_lweight"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="30"
+            android:text="@string/wight_gr_title"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_lbmi"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:text="@string/bmi1_title"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.27"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/detailist_contains"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.52"
+            android:background="@drawable/rounded_corners_whiteview"
+            android:cacheColorHint="@color/tm"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:scrollingCache="false"
+            android:visibility="gone" >
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/chart_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|fill_horizontal" >
+
+        <ImageView
+            android:id="@+id/del_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_delete" />
+
+        <ImageView
+            android:id="@+id/delall_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_delete_all" />
+    </LinearLayout>
+
+</LinearLayout>

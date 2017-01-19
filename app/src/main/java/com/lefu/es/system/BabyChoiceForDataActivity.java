@@ -92,7 +92,7 @@ public class BabyChoiceForDataActivity extends Activity {
 
     @OnClick(R.id.addBtn)
     public  void addUser(){
-        startActivityForResult(BabyAddActivity.creatIntent(BabyChoiceForDataActivity.this),101);
+        startActivityForResult(BabyAddActivity.creatIntent(BabyChoiceForDataActivity.this,records),101);
     }
 
     @Override

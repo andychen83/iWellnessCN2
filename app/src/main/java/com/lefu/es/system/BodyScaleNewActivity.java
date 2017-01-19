@@ -229,7 +229,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
             if(null==babys || babys.size()==0){
                 //添加一个用户组
-                startActivity(BabyAddActivity.creatIntent(BodyScaleNewActivity.this));
+                startActivity(BabyAddActivity.creatIntent(BodyScaleNewActivity.this,null));
             }else{
                 //弹出选择用户组
                 startActivity(BabyChoiceActivity.creatIntent(BodyScaleNewActivity.this));
@@ -492,9 +492,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
-            float weight = MyUtil.getWeightData(readMessage);
-
-            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);

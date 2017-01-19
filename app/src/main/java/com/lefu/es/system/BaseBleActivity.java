@@ -52,6 +52,7 @@ import com.lefu.es.entity.UserModel;
 import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
+import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.iwellness.newes.cn.system.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -448,6 +449,19 @@ public abstract class BaseBleActivity extends AppCompatActivity {
     class ViewHolder{
         ImageView image;
         TextView name;
+    }
+
+    protected void showAlertDailog(String title) {
+        new com.lefu.es.view.AlertDialog(BaseBleActivity.this).builder().setTitle(getResources().getString(R.string.waring_title)).setMsg(title).setPositiveButton(getResources().getString(R.string.ok_btn), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null == UtilConstants.su) {
+                    UtilConstants.su = new SharedPreferencesUtil(BaseBleActivity.this);
+                }
+                UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_dailog", "1");
+                UtilConstants.FIRST_INSTALL_DAILOG = "1";
+            }
+        }).show();
     }
 
 

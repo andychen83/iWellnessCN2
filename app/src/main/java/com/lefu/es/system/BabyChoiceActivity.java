@@ -82,7 +82,7 @@ public class BabyChoiceActivity extends Activity {
 
     @OnClick(R.id.addBtn)
     public  void addUser(){
-        startActivity(BabyAddActivity.creatIntent(getApplicationContext()));
+        startActivity(BabyAddActivity.creatIntent(getApplicationContext(),null));
         this.finish();
     }
 

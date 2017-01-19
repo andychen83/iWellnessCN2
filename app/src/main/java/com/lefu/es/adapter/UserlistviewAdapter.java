@@ -98,7 +98,7 @@ public class UserlistviewAdapter extends BaseAdapter {
 			bitmap = null;
 			cache.nameView.setText(user.getUserName());
 			if (null != user.getPer_photo() && !"".equals(user.getPer_photo())) {
-				cache.photo.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
+				cache.photo.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
 				//cache.photo.setImageBitmap(bitmap);
 			}
 		}

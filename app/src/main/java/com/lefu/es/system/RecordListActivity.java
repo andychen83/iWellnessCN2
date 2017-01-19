@@ -204,33 +204,39 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_detail_new);
-		ButterKnife.bind(this);
 		Serializable serializable = getIntent().getSerializableExtra("user");
 		if(null==serializable){
 			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
 			finish();
+		}else {
+			user = (UserModel) serializable;
+		}
+		if("P999".equals(user.getGroup())){
+			setContentView(R.layout.activity_babydetail_new);
 		}else{
-			user = (UserModel)serializable;
+			setContentView(R.layout.activity_detail_new);
+		}
+
+		ButterKnife.bind(this);
 			//只有脂肪秤才显示
-			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)){
+		if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)){
 				menuLy.setVisibility(View.VISIBLE);
 				menuBathLy.setVisibility(View.GONE);
 			}else{
 				menuLy.setVisibility(View.GONE);
 			}
-			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE) || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE) || "P999".equals(user.getGroup())){
+		if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE) || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE) || "P999".equals(user.getGroup())){
 				menuLy.setVisibility(View.GONE);
 				menuBathLy.setVisibility(View.VISIBLE);
 			}else{
 				menuBathLy.setVisibility(View.GONE);
 			}
-			if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+		if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
 				menuLy.setVisibility(View.GONE);
 				menuBathLy.setVisibility(View.GONE);
 				graphlist_group.setVisibility(View.GONE);
 			}
-			handler = new Handler() {
+		handler = new Handler() {
 				@Override
 				public void handleMessage(Message msg) {
 					switch (msg.what) {
@@ -246,10 +252,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 				}
 
 			};
-			type = UtilConstants.WEIGHT_SINGLE;
-			recordid = 0;
-			initView();
-		}
+		type = UtilConstants.WEIGHT_SINGLE;
+		recordid = 0;
+		initView();
 	}
 
 	private void initView() {

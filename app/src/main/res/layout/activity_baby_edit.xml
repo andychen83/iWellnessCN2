@@ -57,10 +57,10 @@
                     android:layout_height="33dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:background="@drawable/login_editbox"
-                    android:hint="@string/user_info_name_tip"
-                    android:maxLength="16"
+                    android:hint="@string/inputname_waring"
+                     android:maxLength="16"
                     android:singleLine="true"
+                    android:background="@drawable/login_editbox"
                     android:lines="1"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -83,6 +83,42 @@
                     android:background="@null"
                     android:text="@string/user_info_gender"
                     android:textColor="@color/darkgray" />
+
+                <!--
+            <RadioGroup
+                android:id="@+id/add_radioGourp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/add_brith_nan"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:background="#0fffffff"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/add_brith_xingbie"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dip"
+                    android:text="MAle"
+                    android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+
+                <RadioButton
+                    android:id="@+id/add_brith_nv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:background="#0fffffff"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/add_brith_xingbie"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dip"
+                    android:text="Female"
+                    android:textColor="@drawable/add_brith_xingbie_fontcolor" />
+               </RadioGroup> -->
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,7 +132,6 @@
                         android:layout_marginLeft="10dip"
                         android:background="#0fffffff"
                         android:button="@null"
-                        android:checked="true"
                         android:scaleX="1.3"
                         android:scaleY="1.3"
                         android:drawableLeft="@drawable/add_brith_xingbie"
@@ -109,7 +144,7 @@
                         android:layout_width="32dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
-                        android:background="@drawable/mand"
+                        android:background="@drawable/man"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -143,7 +178,6 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -164,7 +198,7 @@
                     android:text="@string/user_info_unit"
                     android:textColor="@color/darkgray" />
 
-                 <RadioGroup
+                <RadioGroup
                     android:id="@+id/unit_radioGourp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -178,7 +212,6 @@
                         android:layout_marginLeft="10dip"
                         android:background="#0fffffff"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/add_brith_xingbie"
                         android:gravity="center_vertical"
                         android:paddingLeft="6dip"
@@ -223,7 +256,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/birth_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -241,6 +273,17 @@
                     android:text="@string/user_info_birthday"
                     android:textColor="@color/darkgray" />
 
+               <!--  <Button
+                    android:id="@+id/add_brith_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@null"
+                    android:hint="select your birthday "
+                    android:lines="1"
+                    android:textSize="15dp" /> -->
+                
                  <TextView
                      android:id="@+id/add_brith_day"
                     android:layout_width="wrap_content"
@@ -256,6 +299,42 @@
                     android:lines="1"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
+                <!--
+                 <Button
+                android:id="@+id/add_brith_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:layout_marginLeft="20dp"
+                android:hint="Day"
+                android:lines="1"
+                android:textSize="15dp" />-->
+
+
+                <!--
+              <TextView
+                android:id="@+id/add_brith_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:layout_marginLeft="20dp"
+                android:hint="Month"
+                android:lines="1"
+                android:textSize="15dp" />
+             
+              <TextView
+                android:id="@+id/add_brith_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:layout_marginLeft="20dp"
+                android:hint="Year"
+                android:lines="1"
+                android:textSize="15dp" /> -->
+
             </LinearLayout>
 
             <LinearLayout
@@ -265,7 +344,8 @@
                 android:layout_marginTop="20dip"
                 android:background="@drawable/userset_line_bg"
                 android:focusable="true"
-                android:focusableInTouchMode="true" >
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -283,9 +363,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/login_editbox"
-                    android:inputType="number"
-                    android:maxLength="3"
                     android:lines="1"
+                    android:maxLength="3"
+                    android:numeric="decimal"
                     android:textSize="12sp" />
 
                 <TextView
@@ -305,9 +385,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="2dp"
                     android:background="@drawable/login_editbox"
-                    android:inputType="numberSigned"
                     android:lines="1"
                     android:maxLength="2"
+                    android:numeric="integer"
                     android:textSize="12sp"
                     android:visibility="gone" />
 
@@ -321,7 +401,8 @@
                     android:hint=""
                     android:lines="1"
                     android:text="cm"
-                    android:textSize="12dp" />
+                    android:textColor="@color/darkgray"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -331,9 +412,9 @@
                 android:layout_marginTop="20dip"
                 android:background="@drawable/userset_line_bg"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone"
-                android:gravity="center_vertical" >
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:focusableInTouchMode="true" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -343,14 +424,12 @@
                     android:background="@null"
                     android:text="@string/user_info_level"
                     android:textColor="@color/darkgray" />
-
                 <RadioButton
                         android:id="@+id/ordinary_btn_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#0fffffff"
                         android:button="@null"
-                        android:checked="true"
                         android:scaleX="1.3"
                         android:scaleY="1.3"
                         android:drawableLeft="@drawable/add_brith_xingbie"
@@ -361,7 +440,7 @@
                     android:id="@+id/ordinary_btn"
                     android:layout_width="66dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/pcommd"
+                    android:background="@drawable/pcomm"
                     android:gravity="center_vertical|right" />
                 
                  <RadioButton
@@ -382,7 +461,7 @@
                     android:layout_height="30dp"
                     android:background="@drawable/pyeyu"
                     android:gravity="center_vertical|right"
-                    />
+                     />
                 
                  <RadioButton
                         android:id="@+id/profess_btn_checkbox"
@@ -401,7 +480,10 @@
                     android:layout_width="66dp"
                     android:layout_height="30dp"
                     android:background="@drawable/pyundong"
+                   
                     android:gravity="center_vertical|right" />
+
+               
             </LinearLayout>
 
             <LinearLayout
@@ -412,7 +494,8 @@
                 android:layout_marginTop="20dip"
                 android:background="@drawable/userset_line_bg"
                 android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:visibility="visible" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -435,7 +518,7 @@
                     android:maxLength="5"
                     android:numeric="integer"
                     android:textSize="12sp" />
-                 <TextView
+                <TextView
                     android:id="@+id/kgheng"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -453,7 +536,7 @@
                     android:layout_marginLeft="2dp"
                     android:background="@drawable/login_editbox"
                     android:lines="1"
-                    android:numeric="integer"
+                     android:numeric="integer"
                     android:textSize="12sp"
                     android:visibility="gone" />
 
@@ -490,7 +573,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/usersave_btn_shap_next" />
+            android:background="@drawable/usersave_btn_shap" />
     </LinearLayout>
 
 </LinearLayout>

@@ -450,7 +450,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
             if(null==babys || babys.size()==0){
                 //添加一个用户组
-                startActivity(BabyAddActivity.creatIntent(BodyFatNewActivity.this));
+                startActivity(BabyAddActivity.creatIntent(BodyFatNewActivity.this,null));
             }else{
                 //弹出选择用户组
                 startActivity(BabyChoiceActivity.creatIntent(BodyFatNewActivity.this));
@@ -727,8 +727,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
-            float weight = MyUtil.getWeightData(readMessage);
-            weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx);
+           // weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -749,6 +749,20 @@ public class BodyFatNewActivity extends BaseBleActivity {
                     if(null!=data){
                         weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
                         playSound();
+                        // 提示信息
+                        if (data.getRweight() != 0  && data.getRbodyfat() == 0) {
+                            // 第一次接受数据才提示
+                            if (TextUtils.isEmpty(UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET)) {
+                                showAlertDailog(getResources().getString(R.string.keep_stand_with_bare_feet));
+                                if (null == UtilConstants.su) {
+                                    UtilConstants.su = new SharedPreferencesUtil(BodyFatNewActivity.this);
+                                }
+                                UtilConstants.su.editSharedPreferences("lefuconfig", "first_badyfat_scale_keep_stand_with_bare_feet", "1");
+                                UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET = "1";
+                                return;
+                            }
+
+                        }
                         showReceiveDataDialog();
                     }
                     break;
