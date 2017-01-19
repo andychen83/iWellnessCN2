@@ -406,33 +406,41 @@ public class MyUtil {
 		return weight;
 	}
 
-	public static void setProcessWeightData(String readMessage, MyTextView5 textView5){
+	public static void setProcessWeightData(String readMessage, MyTextView5 textView5,String unit,boolean isbaby){
 		if(TextUtils.isEmpty(readMessage) && readMessage.length()<22){
 			return ;
 		}
-		String unit = readMessage.substring(16, 18);
+		//String unit = readMessage.substring(16, 18);
 		float weight = StringUtils.hexToTen(readMessage.substring(8, 10)+readMessage.substring(6, 8))*0.01f;
-		if (unit.equals("00")) {//kg
-			textView5.setTexts( weight+"", null);
-		} else if (unit.equals("01")) {//lb
-			textView5.setTexts(UtilTooth.kgToLB_ForFatScale(weight), null);
-		} else if (unit.equals("02")) {//st
-			String[] tempS = UtilTooth.kgToStLbForScaleFat2(weight);
-			textView5.setTexts(tempS[0], tempS[1]);
-		} else if (unit.equals("03")) {//斤
-			textView5.setTexts( weight+"", null);
-		} else if (unit.equals("04")) {//g
-			textView5.setTexts( weight+"", null);
-		}else if (unit.equals("05")) {//lb:oz
-			textView5.setTexts( weight+"", null);
-		}else if (unit.equals("06")) {//oz
-			textView5.setTexts( weight+"", null);
-		}else if (unit.equals("07")) {//ml(water)
-			textView5.setTexts( weight+"", null);
-		}else if (unit.equals("08")) {//ml(milk)
-			textView5.setTexts( weight+"", null);
+		if (unit.equals("kg")) {//kg
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		} else if (unit.equals("lb")) {//lb
+			if(isbaby){
+				textView5.setTexts(UtilTooth.lbozToString(weight), null);
+			}else{
+				textView5.setTexts(UtilTooth.kgToLB_ForFatScale(weight), null);
+			}
+		} else if (unit.equals("st") || unit.equals("st:lb")) {//st
+			if(isbaby){
+				textView5.setTexts(UtilTooth.lbozToString(weight), null);
+			}else{
+				String[] tempS = UtilTooth.kgToStLbForScaleFat2(weight);
+				textView5.setTexts(tempS[0], tempS[1]);
+			}
+		} else if (unit.equals("斤")) {//斤
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		} else if (unit.equals("g")) {//g
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		}else if (unit.equals("lb:oz")) {//lb:oz
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		}else if (unit.equals("oz")) {//oz
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		}else if (unit.equals("ml(water)")) {//ml(water)
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
+		}else if (unit.equals("ml(milk)")) {//ml(milk)
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
 		}else {
-			textView5.setTexts( weight+"", null);
+			textView5.setTexts( UtilTooth.keep1Point(weight)+"", null);
 		}
 	}
 

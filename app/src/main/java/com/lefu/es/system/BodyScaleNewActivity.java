@@ -3,6 +3,7 @@ package com.lefu.es.system;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,6 +131,9 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     @Bind(R.id.bmi_jiantou)
     AppCompatImageView bmi_jiantou;
 
+    @Bind(R.id.targe_tx)
+    TextView targetTx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +142,8 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         uservice = new UserService(this);
 
         initView();
+
+        ExitApplication.getInstance().addActivity(this);
     }
 
 
@@ -147,6 +154,11 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             userNameTx.setText(UtilConstants.CURRENT_USER.getUserName());
             if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
                 userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
+            }
+            if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                targetTx.setText(UtilTooth.kgToLB_ForFatScale(UtilConstants.CURRENT_USER.getTargweight())+"lb");
+            } else {
+                targetTx.setText(UtilTooth.keep1Point3(UtilConstants.CURRENT_USER.getTargweight())+"kg");
             }
             try {
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"ce");
@@ -492,7 +504,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
-            MyUtil.setProcessWeightData(readMessage,weithValueTx);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx,UtilConstants.CURRENT_USER.getDanwei(),false);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
             Message msg1 = handler.obtainMessage(0);
@@ -518,7 +530,9 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
                     break;
                 case 5 :
-
+                    /* 退出 */
+                    exit();
+                    ExitApplication.getInstance().exit(BodyScaleNewActivity.this);
                     break;
                 case UtilConstants.scaleChangeMessage :
 					/*保存秤类型*/
@@ -681,6 +695,28 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            handler.sendEmptyMessage(5);
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_HOME) {
+            exit();
+            ExitApplication.getInstance().exit(this);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /** 退出 */
+    private void exit() {
+		/* 停止服务 */
+        //stopScanService();
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+        this.finish();
     }
 
     @OnClick(R.id.weight_jiantou)

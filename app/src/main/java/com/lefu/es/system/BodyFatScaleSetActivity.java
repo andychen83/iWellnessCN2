@@ -106,8 +106,8 @@ public class BodyFatScaleSetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode){
-            case RESULT_OK:
+        switch (requestCode){
+            case 2:
                 Bundle b=data.getExtras(); //data为B中回传的Intent
                 if(null!=b){
                     Serializable serializable = b.getSerializable("user");

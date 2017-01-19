@@ -22,9 +22,9 @@
                 android:id="@+id/reviseHead"
                 android:layout_width="75.0dip"
                 android:layout_height="75.0dip"
-                android:background="@drawable/user_default"
-                fresco:placeholderImage="@drawable/user_default"
-                fresco:failureImage="@drawable/user_default"
+                android:background="@drawable/baby_default"
+                fresco:placeholderImage="@drawable/baby_default"
+                fresco:failureImage="@drawable/baby_default"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -84,17 +84,31 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
 
-        <RadioButton
-            android:id="@+id/list_radio"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <RelativeLayout
             android:layout_weight="1"
-            android:background="@drawable/left_corners_btn_selector"
-            android:button="@null"
-            android:gravity="center"
-            android:text="@string/scale_record_list"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RadioButton
+                android:id="@+id/list_radio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:background="@drawable/left_corners_btn_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/scale_record_list"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/list_cicle"
+                android:text=""
+                android:clickable="false"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </RelativeLayout>
 
     </RadioGroup>
     <LinearLayout

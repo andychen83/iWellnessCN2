@@ -38,7 +38,7 @@ public class LoadingActivity extends Activity {
 		//isPad();
 		
 		UtilConstants.su = new SharedPreferencesUtil(LoadingActivity.this);
-//		UtilConstants.FIRST_INSTALL_BODY = (String) UtilConstants.su.readbackUp("lefuconfig", "first_install_body","");
+		//UtilConstants.FIRST_INSTALL_BODYHARMBABY_SCALE = (String) UtilConstants.su.readbackUp("lefuconfig", "first_body_harmbaby","");
 		UtilConstants.FIRST_INSTALL_BABY_SCALE = (String) UtilConstants.su.readbackUp("lefuconfig", "first_install_baby_scale","");
 		UtilConstants.FIRST_INSTALL_BATH_SCALE = (String) UtilConstants.su.readbackUp("lefuconfig", "first_install_bath_scale","");
 		UtilConstants.FIRST_INSTALL_BODYFAT_SCALE = (String) UtilConstants.su.readbackUp("lefuconfig", "first_install_bodyfat_scale","");

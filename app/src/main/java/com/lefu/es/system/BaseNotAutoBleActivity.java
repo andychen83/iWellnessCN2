@@ -1,8 +1,8 @@
 package com.lefu.es.system;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -28,40 +29,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lefu.es.ble.BlueSingleton;
 import com.lefu.es.blenew.bean.BluetoothLeDevice1;
 import com.lefu.es.blenew.constant.BluetoolUtil1;
 import com.lefu.es.blenew.service.BluetoothLeScannerInterface;
 import com.lefu.es.blenew.service.BluetoothLeService1;
 import com.lefu.es.blenew.service.BluetoothUtils1;
-import com.lefu.es.cache.CacheHelper;
 import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.BLEConstant;
-import com.lefu.es.constant.BluetoolUtil;
 import com.lefu.es.constant.UtilConstants;
-import com.lefu.es.db.RecordDao;
-import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
-import com.lefu.es.entity.UserModel;
-import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.RecordService;
-import com.lefu.es.service.TimeService;
 import com.lefu.es.util.SharedPreferencesUtil;
 import com.lefu.iwellness.newes.cn.system.R;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lefu.iwellness.newes.cn.system.R.id.cancle_datacbtn;
-import static com.lefu.iwellness.newes.cn.system.R.id.home_img_btn;
 import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
 
 /**
@@ -69,8 +59,8 @@ import static com.lefu.iwellness.newes.cn.system.R.id.save_databtn;
  * 蓝牙基础界面
  */
 
-public abstract class BaseBleActivity extends AppCompatActivity {
-    public final static String TAG = BaseBleActivity.class.getSimpleName();
+public abstract class BaseNotAutoBleActivity extends AppCompatActivity {
+    public final static String TAG = BaseNotAutoBleActivity.class.getSimpleName();
 
     public BluetoothUtils1 mBluetoothUtils;
     public BluetoothLeScannerInterface mScanner;
@@ -101,25 +91,28 @@ public abstract class BaseBleActivity extends AppCompatActivity {
             //注册通知
             registerReceiver(mGattUpdateReceiver, BluetoothUtils1.makeGattUpdateIntentFilter());
             //绑定蓝牙服务服务
-            final Intent gattServiceIntent = new Intent(BaseBleActivity.this, BluetoothLeService1.class);
+            final Intent gattServiceIntent = new Intent(BaseNotAutoBleActivity.this, BluetoothLeService1.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED ) {
-                requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                        getString(R.string.permission_blurtooth),
-                        REQUEST_ACCESS_COARSE_LOCATION_PERMISSION);
-            } else {
-                //启动扫描
-                scanHandler.post(scanThread);
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+//                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                    != PackageManager.PERMISSION_GRANTED ) {
+//                requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+//                        getString(R.string.permission_blurtooth),
+//                        REQUEST_ACCESS_COARSE_LOCATION_PERMISSION);
+//            } else {
+//                //启动扫描
+//                scanHandler.post(scanThread);
+//            }
         }else{
             Toast.makeText(this,"该设备不支持BLE",Toast.LENGTH_LONG).show();
             finish();
         }
     }
 
+    /**
+     * 藍牙連接
+     */
     public void  startScaneBLE(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -200,8 +193,6 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         public void run() {
             // 你的线程所干的事情
             startScan();
-            //十秒后再重复工作
-            scanHandler.postDelayed(scanThread,10000);
         }
     };
     /**
@@ -347,7 +338,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
             public void run() {
                 soundpool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
                 int sourceid = -1;
-                sourceid = soundpool.load(BaseBleActivity.this, R.raw.ring, 0);
+                sourceid = soundpool.load(BaseNotAutoBleActivity.this, R.raw.ring, 0);
                 AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int streamVolume = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
                 try {
@@ -450,11 +441,11 @@ public abstract class BaseBleActivity extends AppCompatActivity {
     }
 
     protected void showAlertDailog(String title) {
-        new com.lefu.es.view.AlertDialog(BaseBleActivity.this).builder().setTitle(getResources().getString(R.string.waring_title)).setMsg(title).setPositiveButton(getResources().getString(R.string.ok_btn), new View.OnClickListener() {
+        new com.lefu.es.view.AlertDialog(BaseNotAutoBleActivity.this).builder().setTitle(getResources().getString(R.string.waring_title)).setMsg(title).setPositiveButton(getResources().getString(R.string.ok_btn), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null == UtilConstants.su) {
-                    UtilConstants.su = new SharedPreferencesUtil(BaseBleActivity.this);
+                    UtilConstants.su = new SharedPreferencesUtil(BaseNotAutoBleActivity.this);
                 }
                 UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_dailog", "1");
                 UtilConstants.FIRST_INSTALL_DAILOG = "1";
@@ -465,13 +456,82 @@ public abstract class BaseBleActivity extends AppCompatActivity {
 
     protected  boolean ageError = false;
     protected void showAgeOrHeightAlertDailog(String title) {
-        new com.lefu.es.view.AlertDialog(BaseBleActivity.this).builder().setTitle(getResources().getString(R.string.ageorheight_error_title)).setMsg(title).setPositiveButton(getResources().getString(R.string.ok_btn), new View.OnClickListener() {
+        new com.lefu.es.view.AlertDialog(BaseNotAutoBleActivity.this).builder().setTitle(getResources().getString(R.string.ageorheight_error_title)).setMsg(title).setPositiveButton(getResources().getString(R.string.ok_btn), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ageError = false;
             }
         }).show();
         ageError = true;
+    }
+
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
+        @Override
+        public void onFinish() {//计时完毕时触发
+            if(null!=time){
+                time.cancel();
+                time = null;
+            }
+            if(null!=downCountDialog){
+                downCountDialog.dismiss();
+                downCountDialog = null;
+            }
+        }
+        @Override
+        public void onTick(final long millisUntilFinished){//计时过程显示
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(null!=baby_time_title)baby_time_title.setText(millisUntilFinished /1000+"");
+                }
+            });
+        }
+    }
+
+    protected Dialog downCountDialog;
+    protected  TextView baby_up_title;
+    protected  TextView baby_time_title;
+
+    protected TimeCount time = null;
+    /**
+     * 接收到数据提示
+     */
+    protected void showDownCountDataDialog(String msg) {
+        if(null!=downCountDialog){
+            downCountDialog.dismiss();
+            downCountDialog = null;
+        }
+        if(null!=time){
+            time.cancel();
+            time = null;
+        }
+        // 初始化自定义布局参数
+        LayoutInflater layoutInflater = getLayoutInflater();
+        // 为了能在下面的OnClickListener中获取布局上组件的数据，必须定义为final类型.
+        View customLayout = layoutInflater.inflate(R.layout.activity_downcount_alert, (ViewGroup) findViewById(R.id.receiveDataDialog));
+        baby_up_title = (TextView) customLayout.findViewById(R.id.baby_up_title);
+        baby_time_title = (TextView) customLayout.findViewById(R.id.baby_time_title);
+
+        baby_up_title.setText(msg);
+
+        downCountDialog = new Dialog(this,R.style.dialog);
+        downCountDialog.setContentView(customLayout);
+        downCountDialog .show();
+
+        Window window = downCountDialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+
+        lp.y = 150;
+        window.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL); // 此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.mystyle); // 添加动画
+        window.setAttributes(lp);
+
+        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
+        time.start();//开始计时
+
     }
 
 

@@ -1,13 +1,48 @@
 package com.lefu.es.system;
 
-import java.io.File;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint.Align;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.lefu.es.adapter.RecordBabyDetailAdaptor;
+import com.lefu.es.adapter.RecordDetailAdaptor;
+import com.lefu.es.cache.CacheHelper;
+import com.lefu.es.constant.UtilConstants;
+import com.lefu.es.entity.Records;
+import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.NoRecordsEvent;
+import com.lefu.es.service.RecordService;
+import com.lefu.es.util.MoveView;
+import com.lefu.es.util.SharedPreferencesUtil;
+import com.lefu.es.util.StringUtils;
+import com.lefu.es.util.UtilTooth;
+import com.lefu.es.view.guideview.HighLightGuideView;
+import com.lefu.es.view.guideview.HighLightGuideView.OnDismissListener;
+import com.lefu.iwellness.newes.cn.system.R;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -21,73 +56,28 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 import org.greenrobot.eventbus.EventBus;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Paint.Align;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.lefu.es.adapter.RecordDetailAdaptor;
-import com.lefu.es.cache.CacheHelper;
-import com.lefu.es.constant.UtilConstants;
-import com.lefu.es.constant.imageUtil;
-import com.lefu.es.entity.Records;
-import com.lefu.es.entity.UserModel;
-import com.lefu.es.event.NoRecordsEvent;
-import com.lefu.es.service.ExitApplication;
-import com.lefu.es.service.RecordService;
-import com.lefu.es.util.Image;
-import com.lefu.es.util.MoveView;
-import com.lefu.es.util.MyUtil;
-import com.lefu.es.util.SharedPreferencesUtil;
-import com.lefu.es.util.StringUtils;
-import com.lefu.es.util.UtilTooth;
-import com.lefu.es.view.GuideView;
-import com.lefu.es.view.guideview.HighLightGuideView;
-import com.lefu.es.view.guideview.HighLightGuideView.OnDismissListener;
-import com.lefu.iwellness.newes.cn.system.R;
+import java.io.File;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lefu.iwellness.newes.cn.system.R.drawable.baby;
-
 /**
- * 测量记录列表
+ *  抱嬰测量记录列表
  * 
  * @author Leon 2015-11-19
  */
 @SuppressLint("SimpleDateFormat")
-public class RecordListActivity extends Activity implements android.view.View.OnClickListener, DateChangeCallback {
+public class RecordBabyListActivity extends Activity implements View.OnClickListener, DateChangeCallback {
 	private static final String TAG = "RecordListActivity";
-	
+
 	private TextView back_tv;
 	private RadioButton graph_tv;
 	private RadioButton list_tv;
@@ -113,7 +103,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	private int selectedPosition = -1;
 	private int dateType = 5;
 
-	private RecordDetailAdaptor recordAdaptor;
+	private RecordBabyDetailAdaptor recordAdaptor;
 	private ListView lv;
 
 	private RecordService recordService;
@@ -166,11 +156,11 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	 * @return
 	 */
 	public static Intent creatIntent(Context context,UserModel user){
-		Intent intent = new Intent(context,RecordListActivity.class);
+		Intent intent = new Intent(context,RecordBabyListActivity.class);
 		intent.putExtra("user",user);
 		return intent;
 	}
-	
+
 	private void showTipMask() {
 		HighLightGuideView.builder(this)
 		.setText(getString(R.string.click_see_list))
@@ -178,12 +168,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			@Override
 			public void onDismiss() {
 				if (null == UtilConstants.su) {
-					UtilConstants.su = new SharedPreferencesUtil(RecordListActivity.this);
+					UtilConstants.su = new SharedPreferencesUtil(RecordBabyListActivity.this);
 				}
-				
+
 				UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_detail", "1");
 				UtilConstants.FIRST_INSTALL_DETAIL = "1";
-				
+
 			}
 		}).show();
 	}
@@ -195,11 +185,11 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			@Override
 			public void onDismiss() {
 				if (null == UtilConstants.su) {
-					UtilConstants.su = new SharedPreferencesUtil(RecordListActivity.this);
+					UtilConstants.su = new SharedPreferencesUtil(RecordBabyListActivity.this);
 				}
 				UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_share", "1");
 				UtilConstants.FIRST_INSTALL_SHARE = "1";
-				
+
 			}
 		}).show();
 	}
@@ -209,16 +199,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		super.onCreate(savedInstanceState);
 		Serializable serializable = getIntent().getSerializableExtra("user");
 		if(null==serializable){
-			Toast.makeText(RecordListActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
+			Toast.makeText(RecordBabyListActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
 			finish();
 		}else {
 			user = (UserModel) serializable;
 		}
-		if("P999".equals(user.getGroup())){
-			setContentView(R.layout.activity_babydetail_new);
-		}else{
-			setContentView(R.layout.activity_detail_new);
-		}
+		setContentView(R.layout.activity_babydetail_new);
 
 		ButterKnife.bind(this);
 			//只有脂肪秤才显示
@@ -268,18 +254,14 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			username_tv.setText(user.getUserName());
 			if (null != user.getPer_photo() && !"".equals(user.getPer_photo()) && !user.getPer_photo().equals("null")) {
 				headImage.setImageURI(Uri.fromFile(new File(user.getPer_photo())));
-			}else{
-				if("P999".equals(user.getGroup())){
-					UtilTooth.loadResPic(this,headImage,R.drawable.baby_default);
-				}
 			}
 		}
 		back_tv = (TextView) this.findViewById(R.id.back_textView);
-		back_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
+		back_tv.setOnClickListener((View.OnClickListener) imgOnClickListener);
 		graph_tv = (RadioButton) this.findViewById(R.id.graph_radio);
 		list_tv = (RadioButton) this.findViewById(R.id.list_radio);
-		graph_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
-		list_tv.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
+		graph_tv.setOnClickListener((View.OnClickListener) imgOnClickListener);
+		list_tv.setOnClickListener((View.OnClickListener) imgOnClickListener);
 		//linebg = (LinearLayout) this.findViewById(R.id.line_bg);
 		charcontainer = (LinearLayout) this.findViewById(R.id.chart_container);
 		delist = (LinearLayout) this.findViewById(R.id.rl_delist_top);
@@ -287,9 +269,9 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		deleteImg = (ImageView) this.findViewById(R.id.del_img_btn);
 		delallImg = (ImageView) this.findViewById(R.id.delall_img_btn);
 		shareImage = (ImageView) this.findViewById(R.id.share_img);
-		deleteImg.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
-		delallImg.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
-		shareImage.setOnClickListener((android.view.View.OnClickListener) imgOnClickListener);
+		deleteImg.setOnClickListener((View.OnClickListener) imgOnClickListener);
+		delallImg.setOnClickListener((View.OnClickListener) imgOnClickListener);
+		shareImage.setOnClickListener((View.OnClickListener) imgOnClickListener);
 
 		lv = (ListView) findViewById(R.id.detailist_contains);
 		lv.setOnItemClickListener(itemClickListener);
@@ -297,11 +279,11 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 		chartContainer = (LinearLayout) findViewById(R.id.chart_container);
 		loadData();
-		
+
 		if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_DETAIL) && null!=CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() == 1) {
 			showTipMask();
 		}
-		
+
 	}
 
 	@Override
@@ -326,7 +308,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 			handler.sendEmptyMessage(1);
 			Intent intent = new Intent();
-			intent.setClass(RecordListActivity.this, RecordListItemActivity.class);
+			intent.setClass(RecordBabyListActivity.this, RecordListItemActivity.class);
 			Bundle mBundle = new Bundle();
 			mBundle.putSerializable("record", lastRecod);
 			intent.putExtras(mBundle);
@@ -465,7 +447,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			muscialMenu.setChecked(false);
 		}
 	}
-	
+
 	private void loadData() {
 		try {
 			if (null != user) {
@@ -522,25 +504,19 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						} else if (type == UtilConstants.BODYWATER_SINGLE) {
 							views[i] = UtilTooth.myround(recor.getRbodywater());
 						} else if (type == UtilConstants.BONE_SINGLE) {
-							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								views[i] = UtilTooth.myround(recor.getRbone());
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRbone()));
+							if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+								views[i] = UtilTooth.lbToLBOZ_F(recor.getRbone());
 							} else {
 								views[i] = UtilTooth.myround(recor.getRbone());
+
 							}
 						} else if (type == UtilConstants.MUSCALE_SINGLE) {
 //					views[i] = UtilTooth.myround(recor.getRmuscle());
-							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								views[i] = UtilTooth.myround(recor.getRmuscle());
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-								views[i] = Double.parseDouble(UtilTooth.kgToLB(recor.getRmuscle()));
+							if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+								views[i] = UtilTooth.lbToLBOZ_F(recor.getRmuscle());
 							} else {
 								views[i] = UtilTooth.myround(recor.getRmuscle());
+
 							}
 						} else if (type == UtilConstants.VISCALEFAT_SINGLE) {
 							views[i] = UtilTooth.myround(recor.getRvisceralfat());
@@ -563,7 +539,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 	private void intiListView(List<Records> list2) {
 		if (null != list2 && list2.size() > 0) {
-			recordAdaptor = new RecordDetailAdaptor(getApplicationContext(), list2, lv, R.layout.listview_item);
+			recordAdaptor = new RecordBabyDetailAdaptor(getApplicationContext(), list2, lv, R.layout.listview_item,user);
 //			if (selectedPosition >= list2.size()) {
 //				selectedPosition = list2.size() - 1;
 //			}
@@ -583,7 +559,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		} else {
 			list2 = new ArrayList<Records>();
 			selectedPosition = -1;
-			recordAdaptor = new RecordDetailAdaptor(getApplicationContext(), list2, lv, R.layout.listview_item);
+			recordAdaptor = new RecordBabyDetailAdaptor(getApplicationContext(), list2, lv, R.layout.listview_item,user);
 			lv.setAdapter(recordAdaptor);
 		}
 	}
@@ -664,7 +640,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						min = vlu;
 					}
 				}
-				
+
 				Log.i(TAG, "vlu: "+vlu);
 			}
 			XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
@@ -683,7 +659,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			double xMax = Double.parseDouble((curTime + (60 * 60 * 24 * 365)) + "");
 			renderer.setXAxisMin(xMin);
 			renderer.setXAxisMax(xMax);
-			
+
 			switch (type) {
 				case UtilConstants.WEIGHT_SINGLE :
 					if (UtilConstants.UNIT_KG.equals(UtilConstants.CHOICE_KG)) {
@@ -721,8 +697,8 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						renderer.setYTitle(this.getText(R.string.bonelb_cloun).toString());
 					}else if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_ST)) {
 						renderer.setYTitle(this.getText(R.string.bonestlb_cloun).toString());
-					} 
-					
+					}
+
 					break;
 				case UtilConstants.MUSCALE_SINGLE :
 					if (UtilConstants.CHOICE_KG.equals(UtilConstants.UNIT_KG)) {
@@ -839,12 +815,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 		return i;
 	}
 
-	android.view.View.OnClickListener imgOnClickListener = new android.view.View.OnClickListener() {
+	View.OnClickListener imgOnClickListener = new View.OnClickListener() {
 		@SuppressWarnings("deprecation")
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case R.id.back_textView :
-					RecordListActivity.this.finish();
+					RecordBabyListActivity.this.finish();
 					break;
 
 				case R.id.graph_radio :
@@ -871,7 +847,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 //					if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_SHARE)) {
 //						showTipMask2();
 //					}
-					
+
 					if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_SHARE) && null!=CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() == 1) {
 						showTipMask2();
 					}
@@ -880,7 +856,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 					deleteImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_deleted));
 					delallImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_delete_all));
 					if (selectedPosition == -1) {
-						Toast.makeText(RecordListActivity.this, getString(R.string.select_record), Toast.LENGTH_LONG);
+						Toast.makeText(RecordBabyListActivity.this, getString(R.string.select_record), Toast.LENGTH_LONG);
 						return;
 					}
 					dialog(getString(R.string.deleted_waring), v.getId());
@@ -909,7 +885,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 							str.append("\n");
 							str.append("\n");
 							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()) + "");
+								str.append(getString(R.string.export_weight) + lastRecod.getRweight() + "");
 								str.append(getText(R.string.kg_danwei));
 							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 								str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
@@ -921,12 +897,12 @@ public class RecordListActivity extends Activity implements android.view.View.On
 							str.append("   "+MoveView.weightString(gender,user.getBheigth(),lastRecod.getRweight()));
 							str.append("\n");
 							str.append("\n");
-							
+
 							float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
 							bmi = UtilTooth.myround(bmi);
 
 							str.append(getString(R.string.export_BMI) + bmi + "\n");
-							
+
 						}else{
 						if (null != user) {
 							str.append(user.getUserName());
@@ -938,7 +914,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						str.append("\n");
 						str.append("\n");
 						if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-							str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()) + "");
+							str.append(getString(R.string.export_weight) + lastRecod.getRweight() + "");
 							str.append(getText(R.string.kg_danwei));
 						} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 							str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
@@ -1029,7 +1005,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 						startActivity(sendIntent);
 					} else {
-						Toast.makeText(RecordListActivity.this, getString(R.string.select_record), Toast.LENGTH_SHORT).show();
+						Toast.makeText(RecordBabyListActivity.this, getString(R.string.select_record), Toast.LENGTH_SHORT).show();
 					}
 					break;
 			}
@@ -1037,7 +1013,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 	};
 
 	protected void dialog(String title, final int id) {
-		AlertDialog.Builder builder = new Builder(RecordListActivity.this);
+		Builder builder = new Builder(RecordBabyListActivity.this);
 		builder.setMessage(title);
 		builder.setNegativeButton(R.string.cancle_btn, new OnClickListener() {
 			@Override

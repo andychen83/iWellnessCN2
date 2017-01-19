@@ -257,7 +257,7 @@ public class UserService {
 	/**获取最大的用户id*/
 	public int maxid()throws Exception{
 		dbs = dbHelper.getReadableDatabase();
-		Cursor cursor = dbs.rawQuery("select max(id) from user where ugroup<>?", new String[]{"P999"});
+		Cursor cursor = dbs.rawQuery("select max(id) from user ", null);
 		cursor.moveToFirst();
 		int result = cursor.getInt(0);
 		cursor.close();

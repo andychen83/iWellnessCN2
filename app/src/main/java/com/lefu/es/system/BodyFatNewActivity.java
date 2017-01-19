@@ -3,6 +3,7 @@ package com.lefu.es.system;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -277,6 +279,14 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.history_menu)
     RelativeLayout historyLy;
 
+    @Bind(R.id.history_cicle)
+    TextView history_cicle;
+
+    @Bind(R.id.harmbaby_cicle)
+    TextView harmbaby_cicle;
+
+    @Bind(R.id.targe_tx)
+    TextView targetTx;
 
     public static int SELCET_USER=100;
 
@@ -288,10 +298,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
         uservice = new UserService(this);
 
         initView();
+
+        ExitApplication.getInstance().addActivity(this);
     }
 
     private void showTipMask() {
-        HighLightGuideView.builder(this).setText(getString(R.string.click_see_data)).addNoHighLightGuidView(R.drawable.ic_ok).addHighLightGuidView(historyLy, 0, 0.5f, HighLightGuideView.VIEWSTYLE_CIRCLE)
+        HighLightGuideView.builder(this).setText(getString(R.string.click_see_data)).addNoHighLightGuidView(R.drawable.ic_ok).addHighLightGuidView(history_cicle, 0, 0.5f, HighLightGuideView.VIEWSTYLE_CIRCLE)
                 .setTouchOutsideDismiss(false).setOnDismissListener(new HighLightGuideView.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -300,12 +312,22 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 }
                 UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_bodyfat_scale", "1");
                 UtilConstants.FIRST_INSTALL_BODYFAT_SCALE = "1";
-
+                showHarmBabyTipMask();
             }
 
         }).show();
-
     }
+
+    private void showHarmBabyTipMask() {
+        HighLightGuideView.builder(this).setText(getString(R.string.click_to_harambaby)).addNoHighLightGuidView(R.drawable.ic_ok).addHighLightGuidView(harmbaby_cicle, 0, 0.5f, HighLightGuideView.VIEWSTYLE_CIRCLE)
+                .setTouchOutsideDismiss(false).setOnDismissListener(new HighLightGuideView.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+
+        }).show();
+    }
+
     /**
      * 初始化界面参数
      */
@@ -316,10 +338,22 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 if(!TextUtils.isEmpty(UtilConstants.CURRENT_USER.getPer_photo())){
                     userHeadImg.setImageURI(Uri.fromFile(new File(UtilConstants.CURRENT_USER.getPer_photo())));
                 }
+                if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB) || UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                    targetTx.setText(UtilTooth.kgToLB_ForFatScale(UtilConstants.CURRENT_USER.getTargweight())+"lb");
+                } else {
+                    targetTx.setText(UtilTooth.keep1Point3(UtilConstants.CURRENT_USER.getTargweight())+"kg");
+                }
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
                 if(null!=lastRecords){
                     localData(lastRecords,UtilConstants.CURRENT_USER);
                     initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
+                }
+                if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_BODYFAT_SCALE)) {
+                    List<Records> ls = recordService.getAllDatasByScaleAndIDAsc("cf",UtilConstants.CURRENT_USER.getId(),167f);
+                    if(null!=ls && ls.size()==1){
+                        showTipMask();
+                    }
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -557,26 +591,17 @@ public class BodyFatNewActivity extends BaseBleActivity {
             return;
         }
         //秤和人体参数不匹配
-        if (readMessage.startsWith(UtilConstants.BABY_SCALE)) {
-            if (UtilConstants.CURRENT_USER.getAgeYear() < 1 || UtilConstants.CURRENT_USER.getBheigth()<30) {
-                if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-                    Toast.makeText(BodyFatNewActivity.this, getString(R.string.age_error_5), Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(BodyFatNewActivity.this, getString(R.string.age_error_7), Toast.LENGTH_SHORT).show();
-                }
-
-                return;
-            }
-        }else{
+        if(!ageError){
             if (UtilConstants.CURRENT_USER.getAgeYear() < 10 || UtilConstants.CURRENT_USER.getBheigth()<100) {
                 if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-                    Toast.makeText(BodyFatNewActivity.this, getString(R.string.age_error_4), Toast.LENGTH_SHORT).show();
+                    showAgeOrHeightAlertDailog(getString(R.string.age_error_4));
                 }else{
-                    Toast.makeText(BodyFatNewActivity.this, getString(R.string.age_error_6), Toast.LENGTH_SHORT).show();
+                    showAgeOrHeightAlertDailog(getString(R.string.age_error_6));
                 }
                 return;
             }
         }
+
         //处理不同类型的秤
 
         boolean newScale = false;
@@ -727,7 +752,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
-            MyUtil.setProcessWeightData(readMessage,weithValueTx);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx,UtilConstants.CURRENT_USER.getDanwei(),false);
            // weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
@@ -749,20 +774,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                     if(null!=data){
                         weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
                         playSound();
-                        // 提示信息
-                        if (data.getRweight() != 0  && data.getRbodyfat() == 0) {
-                            // 第一次接受数据才提示
-                            if (TextUtils.isEmpty(UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET)) {
-                                showAlertDailog(getResources().getString(R.string.keep_stand_with_bare_feet));
-                                if (null == UtilConstants.su) {
-                                    UtilConstants.su = new SharedPreferencesUtil(BodyFatNewActivity.this);
-                                }
-                                UtilConstants.su.editSharedPreferences("lefuconfig", "first_badyfat_scale_keep_stand_with_bare_feet", "1");
-                                UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET = "1";
-                                return;
-                            }
 
-                        }
                         showReceiveDataDialog();
                     }
                     break;
@@ -770,7 +782,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
                     break;
                 case 5 :
-
+                    /* 退出 */
+                    exit();
+                    ExitApplication.getInstance().exit(BodyFatNewActivity.this);
                     break;
                 case UtilConstants.scaleChangeMessage :
 					/*保存秤类型*/
@@ -864,6 +878,18 @@ public class BodyFatNewActivity extends BaseBleActivity {
                                     BlueSingleton.setIsdoing(false);
                                 }
                                 if(null!=receiveDataDialog)receiveDataDialog.dismiss();
+                                // 提示信息
+                                if (receiveRecod.getRweight() != 0  && receiveRecod.getRbodyfat() == 0) {
+                                    // 第一次接受数据才提示
+                                    if (TextUtils.isEmpty(UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET)) {
+                                        showAlertDailog(getResources().getString(R.string.keep_stand_with_bare_feet));
+                                        if (null == UtilConstants.su) {
+                                            UtilConstants.su = new SharedPreferencesUtil(BodyFatNewActivity.this);
+                                        }
+                                        UtilConstants.su.editSharedPreferences("lefuconfig", "first_badyfat_scale_keep_stand_with_bare_feet", "1");
+                                        UtilConstants.FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET = "1";
+                                    }
+                                }
                                 receiveDataDialog = null;
                                 receiveRecod = null;
                             }
@@ -920,6 +946,29 @@ public class BodyFatNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            handler.sendEmptyMessage(5);
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_HOME) {
+            exit();
+            ExitApplication.getInstance().exit(this);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /** 退出 */
+    private void exit() {
+		/* 停止服务 */
+        //stopScanService();
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+
+        this.finish();
     }
 
 

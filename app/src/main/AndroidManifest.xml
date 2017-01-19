@@ -198,6 +198,11 @@
             android:name="com.lefu.es.system.AdultAddActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBar" />
+        <!--抱嬰列表界面 -->
+        <activity
+            android:name="com.lefu.es.system.RecordBabyListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
     </application>
 
 </manifest>

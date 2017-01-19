@@ -19,7 +19,8 @@ public class UtilConstants {
 	public static String FIRST_INSTALL_BODYFAT_SCALE = "";
 	public static String FIRST_INSTALL_KITCHEN_SCALE = "";
 	public static String FIRST_RECEIVE_BODYFAT_SCALE_KEEP_STAND_WITH_BARE_FEET = "";
-	
+
+	//public static String FIRST_INSTALL_BODYHARMBABY_SCALE = "";
 	public static String FIRST_INSTALL_DETAIL = "";
 	public static String FIRST_INSTALL_DAILOG = "";
 	public static String FIRST_INSTALL_SHARE = "";

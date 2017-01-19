@@ -228,6 +228,7 @@ public class AutoBLEActivity extends BaseBleActivity {
 	@Override
 	public void discoverBleService() {
 		ToastUtils.ToastCenter(AutoBLEActivity.this, getString(R.string.scale_paired_success));
+		isConneced=true;
 		//发送人体参数
 		if(null!= mDeviceName && (mDeviceName.toLowerCase().startsWith("heal")
 				|| mDeviceName.toLowerCase().startsWith("yu"))){
@@ -266,22 +267,13 @@ public class AutoBLEActivity extends BaseBleActivity {
 	public void reveiveBleData(String readMessage) {
 		System.out.println("检测读取到数据：" + readMessage);
 		if(TextUtils.isEmpty(readMessage)) return;
-		if (readMessage.startsWith(UtilConstants.BABY_SCALE)) {
-			if (UtilConstants.CURRENT_USER.getAgeYear() < 1 || UtilConstants.CURRENT_USER.getBheigth()<30) {
-				if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_5), Toast.LENGTH_SHORT).show();
-				}else{
-					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_7), Toast.LENGTH_SHORT).show();
-				}
-
-				return;
-			}
-		}else{
+		//秤和人体参数不匹配
+		if(!ageError){
 			if (UtilConstants.CURRENT_USER.getAgeYear() < 10 || UtilConstants.CURRENT_USER.getBheigth()<100) {
 				if(UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)){
-					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_4), Toast.LENGTH_SHORT).show();
+					showAgeOrHeightAlertDailog(getString(R.string.age_error_4));
 				}else{
-					Toast.makeText(AutoBLEActivity.this, getString(R.string.age_error_6), Toast.LENGTH_SHORT).show();
+					showAgeOrHeightAlertDailog(getString(R.string.age_error_6));
 				}
 				return;
 			}

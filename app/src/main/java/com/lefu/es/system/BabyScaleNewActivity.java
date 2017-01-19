@@ -41,6 +41,8 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.NoRecordsEvent;
+import com.lefu.es.event.ReFlushBabyEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.TimeService;
 import com.lefu.es.service.UserService;
@@ -53,6 +55,10 @@ import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView2;
 import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.Serializable;
@@ -72,7 +78,7 @@ import static com.lefu.iwellness.newes.cn.system.R.style.dialog;
 /*
 抱婴模式秤
 * */
-public class BabyScaleNewActivity extends BaseBleActivity {
+public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
 
     @Bind(R.id.setting_menu)
      RelativeLayout set;
@@ -147,7 +153,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_scale_new);
         ButterKnife.bind(this);
-
+        EventBus.getDefault().register(this);
         Serializable serializable = getIntent().getSerializableExtra("baby");
         if(null==serializable){
             Toast.makeText(BabyScaleNewActivity.this, getString(R.string.choice_a_baby), Toast.LENGTH_LONG).show();
@@ -167,7 +173,12 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                 userHeadImg.setImageURI(Uri.fromFile(new File(babyUser.getPer_photo())));
             }
             userNameTx.setText(babyUser.getUserName());
-            targetTx.setText(UtilTooth.keep1Point3(babyUser.getTargweight())+"");
+            if (babyUser.getDanwei().equals(UtilConstants.UNIT_LB) || babyUser.getDanwei().equals(UtilConstants.UNIT_FATLB) || babyUser.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                targetTx.setText(UtilTooth.kgToLB_ForFatScale(babyUser.getTargweight())+"lb");
+            } else {
+                targetTx.setText(UtilTooth.keep1Point3(babyUser.getTargweight())+"kg");
+            }
+
             //初始化界面参数
             initViewData(babyUser);
         }
@@ -234,12 +245,15 @@ public class BabyScaleNewActivity extends BaseBleActivity {
     private  void localData(Records record,UserModel user){
         if(null==user)return;
         if(null==record){
-            compare_tv.setTexts("0.0", null);
+            compare_tv.setTexts("0.0 kg", null);
+            if (null != unit_tv) {
+                unit_tv.setText(this.getText(R.string.kg_danwei));
+            }
         }else{
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
                 weithValueTx.setTexts(UtilTooth.lbozToString(record.getRweight()), null);
                 if (null != unit_tv) {
-                    unit_tv.setText(this.getText(R.string.lb_danwei));
+                    unit_tv.setText("");
                 }
             } else {
                 weithValueTx.setTexts(UtilTooth.keep1Point(record.getRweight()), null);
@@ -254,7 +268,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
             if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
                 if (null == record.getCompareRecord() || "".equals(record.getCompareRecord())) {
-                    compare_tv.setTexts("0.0", null);
+                    //compare_tv.setTexts("0.0", null);
                     compare_tv.setTexts("0.0 " + this.getText(R.string.kg_danwei), null);
                 } else {
                     BigDecimal b = new BigDecimal(Double.parseDouble(record.getCompareRecord()));
@@ -270,7 +284,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
                 if (null == record.getCompareRecord() || "".equals(record.getCompareRecord().trim())) {
                     record.setCompareRecord("0");
-                    compare_tv.setTexts("0.0 " + " " + this.getText(R.string.lb_danwei), null);
+                    compare_tv.setTexts("0.0 " + " " + this.getText(R.string.lboz_danwei), null);
                 } else {
                     float cr = Float.parseFloat(record.getCompareRecord());
                     if (cr > 0) {
@@ -331,23 +345,32 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
     @OnClick(R.id.history_menu)
     public void  historyMenuClick(){
-        startActivityForResult(RecordListActivity.creatIntent(BabyScaleNewActivity.this,babyUser),0);
+        startActivityForResult(RecordBabyListActivity.creatIntent(BabyScaleNewActivity.this,babyUser),0);
     }
 
     @OnClick(R.id.harmbaby_menu)
     public void  upScaleClick(){
         this.isOpenBabyScale = true;
         receiveRecod = null;
-        ToastUtils.ToastCenter(BabyScaleNewActivity.this, getString(R.string.adult_onscale_waring));
+        showDownCountDataDialog(getString(R.string.adult_onscale_waring));
+        //開啟藍牙掃描
+        startScaneBLE();
 
-        //发送人体参数
-        discoverBleService();
     }
 
     @OnClick(R.id.setting_menu)
     public void setMenuClick(){
         startActivity(BodyFatScaleSetActivity.creatIntent(BabyScaleNewActivity.this,babyUser));
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ReFlushBabyEvent reFlushBabyEvent) {
+        UserModel userModel = reFlushBabyEvent.getUserModel();
+        if(null!=userModel){
+            babyUser = userModel;
+            initView(userModel);
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -375,8 +398,9 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                     message.obj=lastRecord;
                     initHandler.sendMessage(message);
                     //保存记录
-                    RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
+                     RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
                     //重置
+                    if(null!=mBluetoothLeService) mBluetoothLeService.disconnect();
                     receiveRecod = null;
                     //lastRecord = null;
                     isOpenBabyScale = false;
@@ -401,6 +425,8 @@ public class BabyScaleNewActivity extends BaseBleActivity {
 
     @Override
     public void discoverBleService() {
+
+        //ToastUtils.ToastCenter(BabyScaleNewActivity.this, getString(R.string.adult_onscale_waring));
        // ToastUtils.ToastCenter(BabyScaleNewActivity.this, getString(R.string.scale_paired_success));
         //发送人体参数
         if(null!= mDeviceName && (mDeviceName.toLowerCase().startsWith("heal")
@@ -526,7 +552,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
         }else if(1==i){//阿里秤
             records = MyUtil.parseZuKangMeaage(this.recordService, readMessage,babyUser);
         }else if(2==i){//新称过程数据
-            MyUtil.setProcessWeightData(readMessage,weithValueTx);
+            MyUtil.setProcessWeightData(readMessage,weithValueTx,babyUser.getDanwei(),true);
         }else if(3==i){//新秤锁定数据
             records = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,babyUser);
         }
@@ -547,11 +573,21 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                     if(isOpenBabyScale && null!=data && data.getRweight()>0){
                         if(null==receiveRecod){
                             receiveRecod = data;
-                            ToastUtils.ToastCenter(BabyScaleNewActivity.this, getString(R.string.harm_baby_onscale_waring));
+                            showDownCountDataDialog(getString(R.string.harm_baby_onscale_waring));
+                            //ToastUtils.ToastCenter(BabyScaleNewActivity.this, getString(R.string.harm_baby_onscale_waring));
                             return ;
                         }else{
                             float weight  = data.getRweight()-receiveRecod.getRweight();
                             //ToastUtils.ToastCenter(BabyScaleNewActivity.this, "接收到抱着婴儿测量的数据了****:"+weight);
+                            //關閉倒計時狂
+                            if(null!=downCountDialog){
+                                downCountDialog.dismiss();
+                                downCountDialog = null;
+                            }
+                            if(null!=time){
+                                time.cancel();
+                                time = null;
+                            }
                             if(weight>0){
                                 //保存 婴体重
                                 try {
@@ -572,7 +608,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                                         if(Math.abs(compare)>=0.2){
                                             //替换当前页面最后的测量记录
                                             lastRecord = data;
-                                            askForSaveExceptionData();
+                                            askForSaveExceptionData(data);
                                             return ;
                                         }
                                     }else{
@@ -586,7 +622,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
                                     initHandler.sendMessage(message);
                                     //保存记录
                                     RecordDao.handHarmBabyData(recordService,data,babyUser);
-
+                                    if(null!=mBluetoothLeService) mBluetoothLeService.disconnect();
                                     //重置
                                     receiveRecod = null;
                                     //lastRecord = null;
@@ -612,14 +648,14 @@ public class BabyScaleNewActivity extends BaseBleActivity {
     /**
      * 询问异常数据是否保存
      */
-    protected void askForSaveExceptionData() {
+    protected void askForSaveExceptionData(final Records records) {
         AlertDialog.Builder builder = new AlertDialog.Builder(BabyScaleNewActivity.this);
         builder.setMessage(getString(R.string.receive_data_waring));
         builder.setNegativeButton(R.string.cancle_btn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //启动 选择
-                startActivityForResult(BabyChoiceForDataActivity.creatIntent(BabyScaleNewActivity.this,receiveRecod),103);
+                startActivityForResult(BabyChoiceForDataActivity.creatIntent(BabyScaleNewActivity.this,records),103);
                 dialog.dismiss();
             }
         });
@@ -628,11 +664,12 @@ public class BabyScaleNewActivity extends BaseBleActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //通知界面更新
                 Message message=initHandler.obtainMessage(1);
-                message.obj=lastRecord;
+                message.obj=records;
                 initHandler.sendMessage(message);
                 //保存记录
                 RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
 
+                if(null!=mBluetoothLeService) mBluetoothLeService.disconnect();
                 //重置
                 receiveRecod = null;
                 //lastRecord = null;
@@ -651,6 +688,7 @@ public class BabyScaleNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
 }

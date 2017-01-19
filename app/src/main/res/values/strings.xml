@@ -3,6 +3,8 @@
     <string name="click_see_list">点击进入列表展示界面</string>
     <string name="click_see_share">点击通过twitter／邮件／短信分享</string>
 
+    <string name="ageorheight_error_title">身高或年龄设置错误</string>
+    <string name="click_to_harambaby">点击进入抱婴模式</string>
     <string name="click_see_data">点击查看数据趋势图</string>
     <string name="waring_title">提醒</string>
     <string name="yeyu_waring_title">业余运动员：一个星期专业运动锻炼少于5天或等于五天的人。</string>
@@ -120,8 +122,8 @@
     <string name="detect_timeout_once_more">检测超时，再检测一次!</string>
     <string name="detect_timeout">没有发现设备，请按“返回”返回!</string>
     <string name="babyScacle_param_error">身高或年龄参数不符合婴儿的要求，请重置!</string>
-    <string name="user_data_error">蓝牙无法连接\n身高或年龄设定错误\n年龄：10-100\n身高：100-220cm\n返回</string>
-    <string name="user_data_error_lb">蓝牙无法连接\n身高或年龄设定错误\n年龄：10-99\n身高：3ft:3in-7ft:2in\n返回</string>
+    <string name="user_data_error">\n年龄：10-100\n身高：100-220cm\n返回</string>
+    <string name="user_data_error_lb">\n年龄：10-99\n身高：3ft:3in-7ft:2in\n返回</string>
     <string name="scale_connection_success">请保持站立在设备上!</string>
     <string name="scale_keep_scale_work">请确认设备开启，正在搜寻中…</string>
     <string name="scale_measurement_error">脂肪测量错误，请重新秤重.</string>
@@ -134,19 +136,7 @@
     <string name="connect_state_connected">连接</string>
     <string name="connect_state_not_connected">未连接</string>
 
-    <!-- 分享导出 -->
-    <string name="export_name">姓名:</string>
-    <string name="export_time">时间:</string>
-    <string name="export_weight">体重:</string>
-    <string name="export_body_Water">体水分:</string>
-    <string name="export_body_Fat">体脂肪:</string>
-    <string name="export_bone">骨骼:</string>
-    <string name="export_BMI">BMI:</string>
-    <string name="export_BMR">BMR:</string>
-    <string name="export_bmi">BMI:</string>
-    <string name="export_visceral_fat">内脏脂肪:</string>
-    <string name="export_bmr">基础代谢率:</string>
-    <string name="export_muscle_mass">肌肉含量:</string>
+
 
     <!-- 设置界面 -->
     <string name="scale_title">切换秤</string>
@@ -392,6 +382,20 @@
     <string name="harm_baby_onscale_waring">抱着婴儿上秤</string>
 
     <string name="click_onscale_waring">每次测量请先点击  上秤  菜单</string>
+
+    <!-- 分享导出 -->
+    <string name="export_name">姓名:</string>
+    <string name="export_time">时间:</string>
+    <string name="export_weight">体重:</string>
+    <string name="export_body_Water">水分率:</string>
+    <string name="export_body_Fat">脂肪率:</string>
+    <string name="export_bone">骨量:</string>
+    <string name="export_BMI">BMI:</string>
+    <string name="export_BMR">BMR:</string>
+    <string name="export_bmi">BMI:</string>
+    <string name="export_visceral_fat">内脏脂肪:</string>
+    <string name="export_bmr">BMR:</string>
+    <string name="export_muscle_mass">肌肉含量:</string>
 
     <string name="bar_weight_title">体重</string>
     <string name="bar_bodywater_title">水分率</string>

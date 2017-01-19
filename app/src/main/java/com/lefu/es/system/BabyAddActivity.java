@@ -42,6 +42,7 @@ import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.service.ExitApplication;
+import com.lefu.es.service.RecordService;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.Image;
 import com.lefu.es.util.ImageUtil;
@@ -96,6 +97,7 @@ public class BabyAddActivity extends AppCompatActivity {
 
 	private boolean isKG = true;
 	private UserService uservice;
+	RecordService recordService;
 
 	private LinearLayout taget_layout = null;
 	private EditText target_edittv = null;
@@ -976,16 +978,23 @@ public class BabyAddActivity extends AppCompatActivity {
 
 			UserModel mPerson = creatUserModel();
 			if(mPerson!=null){
-				int useid = uservice.save(mPerson);
+				 uservice.save(mPerson);
+				int maxuid = uservice.maxid();
 				Toast.makeText(this, getString(R.string.user_info_save_success), Toast.LENGTH_SHORT).show();
+				UserModel user = uservice.find(maxuid);
 				if(null==records){
 					//抱婴主页
-					UserModel user = uservice.find(useid);
 					startActivity(BabyScaleNewActivity.creatIntent(BabyAddActivity.this,user));
 				}else{
+//					if(null!=user){
+//						if(null==recordService){
+//							recordService = new RecordService(BabyAddActivity.this);
+//						}
+//						recordService.save(records);
+//					}
 					Intent intent = new Intent();
 					Bundle mBundle = new Bundle();
-					mBundle.putSerializable("user", mPerson);
+					mBundle.putSerializable("user", user);
 					intent.putExtras(mBundle);
 					setResult(101,intent);
 				}

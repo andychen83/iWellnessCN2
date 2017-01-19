@@ -45,6 +45,7 @@ import com.lefu.es.constant.AppData;
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.constant.imageUtil;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.ReFlushBabyEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.Image;
@@ -57,6 +58,8 @@ import com.lefu.es.wheelview.ScreenInfo;
 import com.lefu.es.wheelview.WheelMain;
 import com.lefu.iwellness.newes.cn.system.R;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1091,15 +1094,19 @@ public class UserEditActivity extends AppCompatActivity {
 								uservice.update(user);
 								user = uservice.find(user.getId());
 								UtilConstants.SELECT_USER = user.getId();
+								Intent intent=new Intent();
+								Bundle bundle=new Bundle();
+								bundle.putSerializable("user",user);
+								intent.putExtras(bundle);
+								setResult(RESULT_OK, intent);
+								if("P999".equals(user.getGroup())){
+									EventBus.getDefault().post(new ReFlushBabyEvent(user));
+								}
+								UserEditActivity.this.finish();
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							Intent intent=new Intent();
-							Bundle bundle=new Bundle();
-							bundle.putSerializable("user",user);
-							intent.putExtras(bundle);
-							setResult(RESULT_OK, intent);
-							UserEditActivity.this.finish();
+
 						} else {
 							/*跳转到指定的扫描界面*/
 							int currentapiVersion = Build.VERSION.SDK_INT;
