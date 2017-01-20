@@ -166,8 +166,8 @@ public class RecordBabyDetailAdaptor extends BaseAdapter {
 
 				
 		}
-		float bmi = UtilTooth.countBMI2(user.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
-		bmiView.setText(UtilTooth.myround(bmi)+"");
+		//float bmi = UtilTooth.countBMI2(user.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
+		bmiView.setText(UtilTooth.myround(user.getRbmi())+"");
 		
 		return convertView;
 	}

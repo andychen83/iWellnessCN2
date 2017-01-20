@@ -41,6 +41,7 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
@@ -53,6 +54,10 @@ import com.lefu.es.util.ToastUtils;
 import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.Serializable;
@@ -139,6 +144,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body_scale_new);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         uservice = new UserService(this);
 
         initView();
@@ -180,25 +186,38 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         if(null==user || null==record)return;
         if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
             if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
-                String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
+                String[] tempS = {"0","0"};
+                if(null!=record)tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
 
                 weithValueTx.setTexts(tempS[0], tempS[1]);
                 if (null != unit_tv) {
                     unit_tv.setText(this.getText(R.string.stlb_danwei));
                 }
             } else {
-                weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                if(null!=record){
+                    weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                }else{
+                    weithValueTx.setTexts("0", null);
+                }
                 if (null != unit_tv) {
                     unit_tv.setText(this.getText(R.string.stlb_danwei));
                 }
             }
         } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-            weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            if(null!=record){
+                weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            }else{
+                weithValueTx.setTexts("0.0", null);
+            }
             if (null != unit_tv) {
                 unit_tv.setText(this.getText(R.string.lb_danwei));
             }
         } else {
-            weithValueTx.setTexts(record.getRweight() + "", null);
+            if(null!=record){
+                weithValueTx.setTexts( UtilTooth.keep1Point(record.getRweight()), null);
+            }else{
+                weithValueTx.setTexts( "0.0", null);
+            }
             if (null != unit_tv) {
                 unit_tv.setText(this.getText(R.string.kg_danwei));
             }
@@ -214,24 +233,39 @@ public class BodyScaleNewActivity extends BaseBleActivity {
      * @param record
      */
     public void initBodyBar(UserModel user, Records record){
-        if(null!=record && null!=user){
+        if( null!=user){
             String sex = user.getSex();
             if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
             int gender = Integer.parseInt(sex);
             // 体重
+            float weight = (null==record?0f:record.getRweight());
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
-                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRweight()) + "lb");
+                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(weight) + "lb");
             }else{
-                weightIndex.setText(UtilTooth.keep1Point(record.getRweight())+ "kg");
+                weightIndex.setText(UtilTooth.keep1Point(weight)+ "kg");
             }
-            MoveView.weight(BodyScaleNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),record.getRweight(),user.getDanwei());
+
+            MoveView.weight(BodyScaleNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),weight,user.getDanwei());
 
             // BMI
-            bmiIndex.setText(UtilTooth.keep1Point(record.getRbmi()));
-            MoveView.bmi(BodyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,record.getRbmi());
+            float bmi = (null==record?0f:record.getRbmi());
+            bmiIndex.setText(UtilTooth.keep1Point(bmi));
+            MoveView.bmi(BodyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,bmi);
 
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NoRecordsEvent noRecordsEvent) {
+        try {
+            //Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
+            localData(null,UtilConstants.CURRENT_USER);
+            initBodyBar(UtilConstants.CURRENT_USER,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    };
 
     List<UserModel> babys = null;
     @OnClick(R.id.harmbaby_menu)
@@ -686,6 +720,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                     }
                     RecordDao.handleData2(recordService, receiveRecod);
                     initView();
+                    receiveRecod = null;
                 }
             }
         }
@@ -695,6 +730,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

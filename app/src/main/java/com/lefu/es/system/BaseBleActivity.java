@@ -492,6 +492,8 @@ public abstract class BaseBleActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        /* 秤识别中 */
+        AppData.isCheckScale = false;
         mActivty = true;
     }
 

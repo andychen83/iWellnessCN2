@@ -140,6 +140,12 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
+
+        <activity
+            android:name="com.lefu.es.system.RecordListBabyItemActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle" />
         <!-- 新脂肪秤界面 -->
         <activity
             android:name="com.lefu.es.system.BodyFatNewActivity"

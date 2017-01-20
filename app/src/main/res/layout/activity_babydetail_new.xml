@@ -154,6 +154,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/body_menu_ly"
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

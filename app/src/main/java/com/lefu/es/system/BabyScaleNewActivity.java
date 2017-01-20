@@ -42,6 +42,7 @@ import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.event.NoRecordsEvent;
+import com.lefu.es.event.NoRecordsHarmBabysEvent;
 import com.lefu.es.event.ReFlushBabyEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.TimeService;
@@ -245,9 +246,18 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
     private  void localData(Records record,UserModel user){
         if(null==user)return;
         if(null==record){
-            compare_tv.setTexts("0.0 kg", null);
-            if (null != unit_tv) {
-                unit_tv.setText(this.getText(R.string.kg_danwei));
+            if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
+                weithValueTx.setTexts("0lb:0oz", null);
+                compare_tv.setTexts("0.0 lb", null);
+                if (null != unit_tv) {
+                    unit_tv.setText("");
+                }
+            } else {
+                compare_tv.setTexts("0.0 kg", null);
+                weithValueTx.setTexts("0.0", null);
+                if (null != unit_tv) {
+                    unit_tv.setText(this.getText(R.string.kg_danwei));
+                }
             }
         }else{
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
@@ -370,6 +380,16 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
             babyUser = userModel;
             initView(userModel);
         }
+    };
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NoRecordsHarmBabysEvent noRecordsEvent) {
+       if(null!=babyUser){
+           //初始化界面参数
+           initViewData(babyUser);
+
+           initBodyBar(babyUser,null);
+       }
     };
 
     @Override

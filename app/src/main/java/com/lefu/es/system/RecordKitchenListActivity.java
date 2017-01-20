@@ -227,12 +227,14 @@ public class RecordKitchenListActivity extends Activity implements android.view.
 			recordAdaptor.notifyDataSetInvalidated();
 
 			handler.sendEmptyMessage(1);
-			Intent intent = new Intent();
-			intent.setClass(RecordKitchenListActivity.this, RecordListItemActivity.class);
-			Bundle mBundle = new Bundle();
-			mBundle.putSerializable("record", lastRecod);
-			intent.putExtras(mBundle);
-			startActivity(intent);
+			startActivity(RecordListItemActivity.creatIntent(RecordKitchenListActivity.this,UtilConstants.CURRENT_USER,lastRecod));
+
+//			Intent intent = new Intent();
+//			intent.setClass(RecordKitchenListActivity.this, RecordListItemActivity.class);
+//			Bundle mBundle = new Bundle();
+//			mBundle.putSerializable("record", lastRecod);
+//			intent.putExtras(mBundle);
+//			startActivity(intent);
 		}
 	};
 

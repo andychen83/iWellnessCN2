@@ -51,6 +51,7 @@ import com.lefu.es.service.UserService;
 import com.lefu.es.util.Image;
 import com.lefu.es.util.ImageUtil;
 import com.lefu.es.util.SharedPreferencesUtil;
+import com.lefu.es.util.ToastUtils;
 import com.lefu.es.util.Tool;
 import com.lefu.es.util.UID;
 import com.lefu.es.util.UtilTooth;
@@ -180,6 +181,11 @@ public class UserEditActivity extends AppCompatActivity {
 			user = (UserModel)serializable;
 		}else{
 			user = UtilConstants.CURRENT_USER;
+		}
+		if(null==user){
+			ToastUtils.ToastCenter(UserEditActivity.this,"获取用户信息失败");
+			finish();
+			return ;
 		}
 		if("P999".equals(user.getGroup())){
 			setContentView(R.layout.activity_baby_edit);
@@ -1085,41 +1091,61 @@ public class UserEditActivity extends AppCompatActivity {
 					if (null != user) {
 						/* 判断是否是识别界面进入 */
 						UserModel user=creatUserModel();
-						if (!AppData.isCheckScale) {
-							/* 保存用户信息 */
-							try {
-								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
-									user.setDanwei(UtilConstants.UNIT_KG);
-								}
-								uservice.update(user);
-								user = uservice.find(user.getId());
-								UtilConstants.SELECT_USER = user.getId();
-								Intent intent=new Intent();
-								Bundle bundle=new Bundle();
-								bundle.putSerializable("user",user);
-								intent.putExtras(bundle);
-								setResult(RESULT_OK, intent);
-								if("P999".equals(user.getGroup())){
-									EventBus.getDefault().post(new ReFlushBabyEvent(user));
-								}
-								UserEditActivity.this.finish();
-							} catch (Exception e) {
-								e.printStackTrace();
+						/* 保存用户信息 */
+						try {
+							if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+								user.setDanwei(UtilConstants.UNIT_KG);
 							}
-
-						} else {
-							/*跳转到指定的扫描界面*/
-							int currentapiVersion = Build.VERSION.SDK_INT;
-							Intent intent1 = new Intent();
-							intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							if (currentapiVersion < 18) {
-								intent1.setClass(UserEditActivity.this, AutoBTActivity.class);
-							} else {
-								intent1.setClass(UserEditActivity.this, AutoBLEActivity.class);
+							uservice.update(user);
+							user = uservice.find(user.getId());
+							UtilConstants.SELECT_USER = user.getId();
+							Intent intent=new Intent();
+							Bundle bundle=new Bundle();
+							bundle.putSerializable("user",user);
+							intent.putExtras(bundle);
+							setResult(RESULT_OK, intent);
+							if("P999".equals(user.getGroup())){
+								EventBus.getDefault().post(new ReFlushBabyEvent(user));
 							}
-							UserEditActivity.this.startActivity(intent1);
-							finish();
+							UserEditActivity.this.finish();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
+//						if (!AppData.isCheckScale) {
+//							/* 保存用户信息 */
+//							try {
+//								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+//									user.setDanwei(UtilConstants.UNIT_KG);
+//								}
+//								uservice.update(user);
+//								user = uservice.find(user.getId());
+//								UtilConstants.SELECT_USER = user.getId();
+//								Intent intent=new Intent();
+//								Bundle bundle=new Bundle();
+//								bundle.putSerializable("user",user);
+//								intent.putExtras(bundle);
+//								setResult(RESULT_OK, intent);
+//								if("P999".equals(user.getGroup())){
+//									EventBus.getDefault().post(new ReFlushBabyEvent(user));
+//								}
+//								UserEditActivity.this.finish();
+//							} catch (Exception e) {
+//								e.printStackTrace();
+//							}
+//
+//						} else {
+//							/*跳转到指定的扫描界面*/
+//							int currentapiVersion = Build.VERSION.SDK_INT;
+//							Intent intent1 = new Intent();
+//							intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//							if (currentapiVersion < 18) {
+//								intent1.setClass(UserEditActivity.this, AutoBTActivity.class);
+//							} else {
+//								intent1.setClass(UserEditActivity.this, AutoBLEActivity.class);
+//							}
+//							UserEditActivity.this.startActivity(intent1);
+//							finish();
+//						}
 					}
 					break;
 			}

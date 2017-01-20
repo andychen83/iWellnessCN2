@@ -320,8 +320,8 @@
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_centerInParent="true"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -347,8 +347,8 @@
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_centerInParent="true"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
         </RelativeLayout>
 
     </LinearLayout>

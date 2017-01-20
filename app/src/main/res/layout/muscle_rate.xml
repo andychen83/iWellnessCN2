@@ -201,7 +201,7 @@
                 android:id="@+id/face_img_muscle"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/hp_icon" />
+                android:src="@drawable/sunface" />
         </LinearLayout>
     </RelativeLayout>
 

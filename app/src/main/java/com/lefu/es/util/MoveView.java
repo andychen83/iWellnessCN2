@@ -396,15 +396,47 @@ public class MoveView {
      * @param textView3 是否标准
      * @param bone      当前人的骨量
      */
-    public static void bone(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3, float bone,String danwei) {
+    public static void bone(Activity activity, View view, ImageView imageView, TextView textView1, TextView textView2, TextView textView3,int gender,float weight, float bone,String danwei) {
         // 从左到右第一个分割线
         float critical_point1 = 2.4f;
         // 从左到右第二个分割线
         float critical_point2 = 2.6f;
         // 终点分割线
-        float critical_point3 = 1.0f;
+        float critical_point3 = 3.2f;
         // 笑脸偏移量
         int deviation = 0;
+        if (gender == 1) {
+            // 男
+            if (weight < 60) {
+                critical_point1 = 2.4f;
+                critical_point2 = 2.6f;
+                critical_point3 = 3.2f;
+            } else if (weight >= 60 && weight <= 75) {
+                critical_point1 = 2.8f;
+                critical_point2 = 3.0f;
+                critical_point3 = 3.2f;
+            } else if (weight > 75) {
+                critical_point1 = 3.1f;
+                critical_point2 = 3.3f;
+                critical_point3 = 3.4f;
+            }
+
+        } else {
+            // 女
+            if (weight < 45) {
+                critical_point1 = 1.7f;
+                critical_point2 = 1.9f;
+                critical_point3 = 2.5f;
+            } else if (weight >= 45 && weight <= 60) {
+                critical_point1 = 2.1f;
+                critical_point2 = 2.3f;
+                critical_point3 = 2.5f;
+            } else if (weight > 60) {
+                critical_point1 = 2.4f;
+                critical_point2 = 2.6f;
+                critical_point3 = 3.0f;
+            }
+        }
         // 屏幕宽度
         int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
 

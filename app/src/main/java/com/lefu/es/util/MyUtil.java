@@ -471,7 +471,7 @@ public class MyUtil {
 		recod.setLevel(user.getLevel());
 
 		String scaleType = readMessage.substring(0,2);
-		impedance = StringUtils.hexToTen(readMessage.substring(4,6)+readMessage.substring(2,4));
+		impedance = (int)(StringUtils.hexToTen(readMessage.substring(4,6)+readMessage.substring(2,4))*0.1f);
 		//String unit = readMessage.substring(16, 18);
 		weight = StringUtils.hexToTen(readMessage.substring(8, 10)+readMessage.substring(6, 8))*0.01d;
 		height = user.getBheigth();

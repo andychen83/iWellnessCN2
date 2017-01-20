@@ -2,6 +2,8 @@ package com.lefu.es.system;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.entity.Records;
@@ -21,6 +24,8 @@ import com.lefu.es.util.MoveView;
 import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView4;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import java.io.Serializable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,13 +80,35 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 
 	ImageView chaImage = null;
 
+	protected UserModel user = null;
+
+	public static Intent creatIntent(Context context, UserModel user,Records record){
+		Intent intent = new Intent(context,RecordListItemActivity.class);
+		intent.putExtra("user",user);
+		intent.putExtra("record",record);
+		return intent;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		record = (Records) getIntent().getSerializableExtra("record");
+		Serializable serializable = getIntent().getSerializableExtra("user");
+		if(null==serializable){
+			user = UtilConstants.CURRENT_USER;
+		}else {
+			user = (UserModel) serializable;
+		}
+		Serializable serializable2 = getIntent().getSerializableExtra("record");
+		if(null==serializable2){
+			Toast.makeText(RecordListItemActivity.this, getString(R.string.choice_a_user), Toast.LENGTH_LONG).show();
+			finish();
+		}else {
+			record = (Records) serializable2;
+		}
+
 
 		if(UtilConstants.BABY_SCALE.equals(record.getScaleType()) || UtilConstants.BATHROOM_SCALE.equals(record.getScaleType())){
 			setContentView(R.layout.activity_detaillistitem2);
@@ -135,24 +162,24 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 		if (null != record) {
 			if(UtilConstants.KITCHEN_SCALE.equals(UtilConstants.CURRENT_SCALE)){
 				tv_name_title.setText(record.getRphoto());
-				if(null!=UtilConstants.CURRENT_USER){
-					if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)) {
+				if(null!=user){
+					if (user.getDanwei().equals(UtilConstants.UNIT_LB)) {
 						tvdetail_weight_title.setText(this.getText(R.string.Weightlboz_cloun).toString());
 						if (null != tvdetail_weight)
 							tvdetail_weight.setTexts(UtilTooth.kgToLBoz(record.getRweight()) + "",null);
-					}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+					}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 						tvdetail_weight_title.setText(this.getText(R.string.Weightfloz_cloun).toString());
 						if (null != tvdetail_weight)
 							tvdetail_weight.setTexts(UtilTooth.kgToFloz(record.getRweight()) + "",null);
-					}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_G)) {
+					}else if (user.getDanwei().equals(UtilConstants.UNIT_G)) {
 						tvdetail_weight_title.setText(this.getText(R.string.Weightg_cloun).toString());
 						if (null != tvdetail_weight)
 							tvdetail_weight.setTexts(UtilTooth.keep2Point(record.getRweight()) + "",null);
-					}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ML)) {
+					}else if (user.getDanwei().equals(UtilConstants.UNIT_ML)) {
 						tvdetail_weight_title.setText(this.getText(R.string.Weightml_cloun).toString());
 						if (null != tvdetail_weight)
 							tvdetail_weight.setTexts(UtilTooth.keep2Point(record.getRweight()) + "",null);
-					}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ML2)) {
+					}else if (user.getDanwei().equals(UtilConstants.UNIT_ML2)) {
 						tvdetail_weight_title.setText(this.getText(R.string.Weightml2_cloun).toString());
 						if (null != tvdetail_weight)
 							tvdetail_weight.setTexts(UtilTooth.kgToML(record.getRweight()) + "",null);
@@ -197,15 +224,15 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 
 			}else{
 				tv_name_title.setText("");
-				if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+				if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 					tvdetail_weight_title.setText(this.getText(R.string.Weightkg_cloun).toString());
 					if (null != tvdetail_weight)
 						tvdetail_weight.setTexts(UtilTooth.keep1Point(record.getRweight()),null);
-				} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)) {
+				} else if (user.getDanwei().equals(UtilConstants.UNIT_LB)) {
 					tvdetail_weight_title.setText(this.getText(R.string.Weightlb_cloun).toString());
 					if (null != tvdetail_weight)
 						tvdetail_weight.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()) + "",null);
-				}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+				}else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 					tvdetail_weight_title.setText(this.getText(R.string.Weightstlb_cloun).toString());
 					if (null != tvdetail_weight)
 						tvdetail_weight.setTexts(UtilTooth.kgToStLb_B(record.getRweight()) + "",null);
@@ -215,7 +242,7 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 					}else{
 						tvdetail_weight.setTexts(fatTemp[0]+getText(R.string.stlb_danwei),null);
 					}
-				}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+				}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 					if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
 						tvdetail_weight_title.setText(this.getText(R.string.Weightlboz_cloun).toString());
 						if (null != tvdetail_weight)
@@ -232,18 +259,18 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 						tvdetail_weight.setTexts(UtilTooth.keep1Point(record.getRweight()),null);
 				}
 				
-				if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_KG)) {
+				if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 					tvdetail_bone_title.setText(this.getText(R.string.bonekg_cloun).toString());
 					tvdetail_muscle_title.setText(this.getText(R.string.musclekg_cloun).toString());
 					tvdetail_bone.setText(record.getRbone()+"");
 					tvdetail_muscle.setText(record.getRmuscle() + "");
-				}else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_LB)
-						|| UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
+				}else if (user.getDanwei().equals(UtilConstants.UNIT_LB)
+						|| user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
 					tvdetail_bone_title.setText(this.getText(R.string.bonelb_cloun).toString());
 					tvdetail_muscle_title.setText(this.getText(R.string.musclelb_cloun).toString());
 					tvdetail_bone.setText(UtilTooth.kgToLB(record.getRbone()) + "");
 					tvdetail_muscle.setText(UtilTooth.kgToLB(record.getRmuscle()) + "");
-				} else if (UtilConstants.CURRENT_USER.getDanwei().equals(UtilConstants.UNIT_ST)) {
+				} else if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
 					tvdetail_bone_title.setText(this.getText(R.string.bonestlb_cloun).toString());
 					tvdetail_muscle_title.setText(this.getText(R.string.musclestlb_cloun).toString());
 					tvdetail_bone.setText(UtilTooth.kgToLB(record.getRbone()) + "");
@@ -271,11 +298,11 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 					tvdetail_visceral.setText(record.getRvisceralfat() + "");
 				if (null != tvdetail_bmi){
 					//String bmi = "";
-					float bmi = UtilTooth.countBMI2(record.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
+					float bmi = UtilTooth.countBMI2(record.getRweight(), (user.getBheigth() / 100));
                     tvdetail_bmi.setText(UtilTooth.myround(bmi)+"");
 	            }
 			}
-			countBodyParam(record,UtilConstants.CURRENT_USER);
+			countBodyParam(record,user);
 		}
 	}
 

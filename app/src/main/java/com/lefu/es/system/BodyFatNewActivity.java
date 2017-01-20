@@ -41,6 +41,7 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.TimeService;
 import com.lefu.es.service.UserService;
@@ -54,6 +55,10 @@ import com.lefu.es.view.MyTextView;
 import com.lefu.es.view.MyTextView5;
 import com.lefu.es.view.guideview.HighLightGuideView;
 import com.lefu.iwellness.newes.cn.system.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.Serializable;
@@ -295,6 +300,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body_fat_new);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         uservice = new UserService(this);
 
         initView();
@@ -344,10 +350,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
                     targetTx.setText(UtilTooth.keep1Point3(UtilConstants.CURRENT_USER.getTargweight())+"kg");
                 }
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
-                if(null!=lastRecords){
-                    localData(lastRecords,UtilConstants.CURRENT_USER);
-                    initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
-                }
+                localData(lastRecords,UtilConstants.CURRENT_USER);
+                initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
+
                 if (TextUtils.isEmpty(UtilConstants.FIRST_INSTALL_BODYFAT_SCALE)) {
                     List<Records> ls = recordService.getAllDatasByScaleAndIDAsc("cf",UtilConstants.CURRENT_USER.getId(),167f);
                     if(null!=ls && ls.size()==1){
@@ -388,28 +393,41 @@ public class BodyFatNewActivity extends BaseBleActivity {
      * @param
      */
     private  void localData(Records record,UserModel user){
-        if(null==user || null==record)return;
+        if(null==user)return;
         if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
             if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
-                String[] tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
+                String[] tempS = {"0","0"};
+               if(null!=record)tempS = UtilTooth.kgToStLbForScaleFat2(record.getRweight());
 
                 weithValueTx.setTexts(tempS[0], tempS[1]);
                 if (null != unit_tv) {
                     unit_tv.setText(this.getText(R.string.stlb_danwei));
                 }
             } else {
-                weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                if(null!=record){
+                    weithValueTx.setTexts(UtilTooth.kgToStLb(record.getRweight()), null);
+                }else{
+                    weithValueTx.setTexts("0", null);
+                }
                 if (null != unit_tv) {
                     unit_tv.setText(this.getText(R.string.stlb_danwei));
                 }
             }
         } else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-            weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            if(null!=record){
+                weithValueTx.setTexts(UtilTooth.kgToLB_ForFatScale(record.getRweight()), null);
+            }else{
+                weithValueTx.setTexts("0.0", null);
+            }
             if (null != unit_tv) {
                 unit_tv.setText(this.getText(R.string.lb_danwei));
             }
         } else {
-            weithValueTx.setTexts(record.getRweight() + "", null);
+            if(null!=record){
+                weithValueTx.setTexts( UtilTooth.keep1Point(record.getRweight()), null);
+            }else{
+                weithValueTx.setTexts( "0.0", null);
+            }
             if (null != unit_tv) {
                 unit_tv.setText(this.getText(R.string.kg_danwei));
             }
@@ -429,42 +447,49 @@ public class BodyFatNewActivity extends BaseBleActivity {
      * @param record
      */
     public void initBodyBar(UserModel user, Records record){
-        if(null!=record && null!=user){
+        if(null!=user){
             String sex = user.getSex();
             if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
             int gender = Integer.parseInt(sex);
             // 体重
+            float weight = (null==record?0f:record.getRweight());
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
-                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRweight()) + "lb");
+                weightIndex.setText(UtilTooth.kgToLB_ForFatScale(weight) + "lb");
             }else{
-                weightIndex.setText(UtilTooth.keep1Point(record.getRweight())+ "kg");
+                weightIndex.setText(UtilTooth.keep1Point(weight)+ "kg");
             }
 
-            MoveView.weight(BodyFatNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),record.getRweight(),user.getDanwei());
+            MoveView.weight(BodyFatNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),weight,user.getDanwei());
             // 水分率
-            waterIndex.setText(UtilTooth.keep1Point(record.getRbodywater())+"%");
-            MoveView.moisture(BodyFatNewActivity.this,face_img_moisture_ll,face_img_moisture,moistrue_critical_point1,moistrue_critical_point2,biaoz_moistrue,gender,record.getRbodywater());
+            float water = (null==record?0f:record.getRbodywater());
+            waterIndex.setText(UtilTooth.keep1Point(water)+"%");
+            MoveView.moisture(BodyFatNewActivity.this,face_img_moisture_ll,face_img_moisture,moistrue_critical_point1,moistrue_critical_point2,biaoz_moistrue,gender,water);
             // 脂肪率
-            fatIndex.setText(UtilTooth.keep1Point(record.getRbodyfat())+"%");
-            MoveView.bft(BodyFatNewActivity.this,face_img_bft_ll,face_img_bft,bft_critical_point1,bft_critical_point2,bft_critical_point3,bft_critical_point4,bft_biaoz,gender,user.getAgeYear(),record.getRbodyfat());
+            float bodyfat = (null==record?0f:record.getRbodyfat());
+            fatIndex.setText(UtilTooth.keep1Point(bodyfat)+"%");
+            MoveView.bft(BodyFatNewActivity.this,face_img_bft_ll,face_img_bft,bft_critical_point1,bft_critical_point2,bft_critical_point3,bft_critical_point4,bft_biaoz,gender,user.getAgeYear(),bodyfat);
             // 骨量
+            float bone = (null==record?0f:record.getRbone());
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
-                boneIndex.setText(UtilTooth.kgToLB_ForFatScale(record.getRbone()) + "lb");
+                boneIndex.setText(UtilTooth.kgToLB_ForFatScale(bone) + "lb");
             }else{
-                boneIndex.setText(UtilTooth.keep1Point(record.getRbone())+ "kg");
+                boneIndex.setText(UtilTooth.keep1Point(bone)+ "kg");
             }
-            MoveView.bone(BodyFatNewActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,record.getRbone(),user.getDanwei());
+            MoveView.bone(BodyFatNewActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,gender,weight,bone,user.getDanwei());
             // BMI
-            bmiIndex.setText(UtilTooth.keep1Point(record.getRbmi()));
-            MoveView.bmi(BodyFatNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,record.getRbmi());
+            float bmi = (null==record?0f:record.getRbmi());
+            bmiIndex.setText(UtilTooth.keep1Point(bmi));
+            MoveView.bmi(BodyFatNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,bmi);
             // 内脏脂肪指数
-            visalfatIndex.setText(UtilTooth.keep1Point(record.getRvisceralfat()));
-            MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,record.getRvisceralfat());
+            float rvisceralfat = (null==record?0f:record.getRvisceralfat());
+            visalfatIndex.setText(UtilTooth.keep1Point(rvisceralfat));
+            MoveView.visceralFat(BodyFatNewActivity.this,face_img_visceral_ll,face_img_visceral,visceral_critical_point1,visceral_critical_point2,visceral_biaoz,rvisceralfat);
             // BMR 基础代谢率
-            bmrIndex.setText(UtilTooth.keep1Point(record.getRbmr())+"kcal");
-            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,gender,user.getAgeYear(),record.getRweight(),record.getRbmr());
+            float bmr = (null==record?0f:record.getRbmr());
+            bmrIndex.setText(UtilTooth.keep1Point(bmr)+"kcal");
+            MoveView.bmr(BodyFatNewActivity.this,face_img_bmr_ll,face_img_bmr,bmr_critical_point1,bmr_biaoz,gender,user.getAgeYear(),weight,bmr);
             // 肌肉含量
-            float muscal = UtilTooth.keep1Point3(record.getRmuscle());
+            float muscal = (null==record?0f:UtilTooth.keep1Point3(record.getRmuscle()));
             if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_FATLB) || user.getDanwei().equals(UtilConstants.UNIT_ST)){
                 muscalIndex.setText(UtilTooth.kgToLB_ForFatScale(muscal) + "lb");
             }else{
@@ -472,7 +497,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             }
             MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,gender,user.getBheigth(),muscal,user.getDanwei());
             //身体年龄
-            ageIndex.setText(UtilTooth.keep0Point(record.getBodyAge()));
+            //ageIndex.setText(UtilTooth.keep0Point(record.getBodyAge()));
         }
     }
 
@@ -910,6 +935,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                try {
+                    Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
+                    localData(lastRecords,UtilConstants.CURRENT_USER);
+                }catch (Exception e){
+                    Log.e(TAG,"");
+                }
             }
         });
         builder.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
@@ -946,6 +977,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -970,6 +1002,18 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
         this.finish();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NoRecordsEvent noRecordsEvent) {
+        try {
+            //Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
+            localData(null,UtilConstants.CURRENT_USER);
+            initBodyBar(UtilConstants.CURRENT_USER,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    };
 
 
     @OnClick(R.id.weight_jiantou)

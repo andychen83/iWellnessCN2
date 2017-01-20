@@ -603,6 +603,51 @@ public class RecordService {
 		dbs.close();
 		return pes;
 	}
+
+
+	/**
+	 * 给抱婴使用
+	 * @param
+	 * @param uid
+	 * @param
+	 * @return
+     * @throws Exception
+     */
+	public List<Records> getAllDatasByScaleAndIDDescForHarmBaby(int uid) throws Exception {
+		dbs = dbHelper.getReadableDatabase();
+		String sql = "select * from userrecord where useid=? order by recordtime desc ";
+		Cursor cursor = dbs.rawQuery(sql, new String[]{ String.valueOf(uid)});
+		List<Records> pes = new ArrayList<Records>();
+		while (cursor.moveToNext()) {
+			int id = cursor.getInt(cursor.getColumnIndex("id"));
+			int useid = cursor.getInt(cursor.getColumnIndex("useid"));
+			String scaletype = cursor.getString(cursor.getColumnIndex("scaleType"));
+			String ugroup = cursor.getString(cursor.getColumnIndex("ugroup"));
+			String recordtime = cursor.getString(cursor.getColumnIndex("recordtime"));
+			String comparerecord = cursor.getString(cursor.getColumnIndex("comparerecord"));
+
+			float rweight = cursor.getFloat(cursor.getColumnIndex("rweight"));
+			float rbmi = cursor.getFloat(cursor.getColumnIndex("rbmi"));
+			float rbone = cursor.getFloat(cursor.getColumnIndex("rbone"));
+			float rbodyfat = cursor.getFloat(cursor.getColumnIndex("rbodyfat"));
+			float rmuscle = cursor.getFloat(cursor.getColumnIndex("rmuscle"));
+			float rbodywater = cursor.getFloat(cursor.getColumnIndex("rbodywater"));
+			float rvisceralfat = cursor.getFloat(cursor.getColumnIndex("rvisceralfat"));
+			float rbmr = cursor.getFloat(cursor.getColumnIndex("rbmr"));
+			float bodyage = cursor.getFloat(cursor.getColumnIndex("bodyage"));
+			Records rs = new Records(id, useid, scaletype, ugroup, recordtime, comparerecord, rweight, rbmi, rbone, rbodyfat, rmuscle, rbodywater, rvisceralfat, rbmr, bodyage);
+
+			String photo = cursor.getString(cursor.getColumnIndex("photo"));
+			if (photo != null) {
+				rs.setRphoto(photo);
+			}
+
+			pes.add(rs);
+		}
+		cursor.close();
+		dbs.close();
+		return pes;
+	}
 	
 	
 
@@ -612,6 +657,45 @@ public class RecordService {
 //		String sql = "select *,datetime(recordtime,'localtime') md from userrecord where scaleType=? and useid=? order by recordtime asc ";
 		String sql = "select * from userrecord where scaleType=? and useid=? order by recordtime asc ";
 		Cursor cursor = dbs.rawQuery(sql, new String[]{scale, String.valueOf(uid)});
+		List<Records> pes = new ArrayList<Records>();
+		while (cursor.moveToNext()) {
+			int id = cursor.getInt(cursor.getColumnIndex("id"));
+			int useid = cursor.getInt(cursor.getColumnIndex("useid"));
+			String scaletype = cursor.getString(cursor.getColumnIndex("scaleType"));
+			String ugroup = cursor.getString(cursor.getColumnIndex("ugroup"));
+//			String recordtime = cursor.getString(cursor.getColumnIndex("md"));
+			String recordtime = cursor.getString(cursor.getColumnIndex("recordtime"));
+			String comparerecord = cursor.getString(cursor.getColumnIndex("comparerecord"));
+
+			float rweight = cursor.getFloat(cursor.getColumnIndex("rweight"));
+			float rbmi = cursor.getFloat(cursor.getColumnIndex("rbmi"));
+			float rbone = cursor.getFloat(cursor.getColumnIndex("rbone"));
+			float rbodyfat = cursor.getFloat(cursor.getColumnIndex("rbodyfat"));
+			float rmuscle = cursor.getFloat(cursor.getColumnIndex("rmuscle"));
+			float rbodywater = cursor.getFloat(cursor.getColumnIndex("rbodywater"));
+			float rvisceralfat = cursor.getFloat(cursor.getColumnIndex("rvisceralfat"));
+			float rbmr = cursor.getFloat(cursor.getColumnIndex("rbmr"));
+			float bodyage = cursor.getFloat(cursor.getColumnIndex("bodyage"));
+			Records rs = new Records(id, useid, scaletype, ugroup, recordtime, comparerecord, rweight, rbmi, rbone, rbodyfat, rmuscle, rbodywater, rvisceralfat, rbmr, bodyage);
+
+			String photo = cursor.getString(cursor.getColumnIndex("photo"));
+			if (photo != null && photo.length() > 3) {
+				rs.setRphoto(photo);
+			}
+
+			pes.add(rs);
+		}
+		cursor.close();
+		dbs.close();
+		return pes;
+	}
+
+	/**根据秤类型和用户id查询*/
+	public List<Records> getAllDatasByScaleAndIDAsForHarmBaby(int uid) throws Exception {
+		dbs = dbHelper.getReadableDatabase();
+//		String sql = "select *,datetime(recordtime,'localtime') md from userrecord where scaleType=? and useid=? order by recordtime asc ";
+		String sql = "select * from userrecord where scaleType=? and useid=? order by recordtime asc ";
+		Cursor cursor = dbs.rawQuery(sql, new String[]{ String.valueOf(uid)});
 		List<Records> pes = new ArrayList<Records>();
 		while (cursor.moveToNext()) {
 			int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -663,6 +747,17 @@ public class RecordService {
 		dbs = dbHelper.getWritableDatabase();
 		dbs.beginTransaction();
 		dbs.execSQL("delete from userrecord where useid=? and scaleType=?", new Object[]{userid, scaleKind});
+		dbs.setTransactionSuccessful();
+		dbs.endTransaction();
+		dbs.close();
+	}
+
+	/**根据用户id和秤类型删除所有测量记录*/
+	public void deleteByUseridAndScaleForHarmBaby(String userid) {
+
+		dbs = dbHelper.getWritableDatabase();
+		dbs.beginTransaction();
+		dbs.execSQL("delete from userrecord where useid=? ", new Object[]{userid});
 		dbs.setTransactionSuccessful();
 		dbs.endTransaction();
 		dbs.close();

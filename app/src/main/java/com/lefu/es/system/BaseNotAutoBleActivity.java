@@ -255,7 +255,7 @@ public abstract class BaseNotAutoBleActivity extends AppCompatActivity {
             } else if (BLEConstant.ACTION_DATA_AVAILABLE.equals(action)) { //接收到数据
                 String readMessage = intent.getStringExtra(BLEConstant.EXTRA_DATA);
                 Log.e(TAG, "接收数据"+readMessage);
-                if(!TextUtils.isEmpty(readMessage) && readMessage.length()>10 && mActivty){
+                if(!TextUtils.isEmpty(readMessage) && readMessage.length()>10){
                     Message msg1 = nofityHandler.obtainMessage(BluetoolUtil1.RECEIVE_DATA);
                     msg1.obj = readMessage;
                     nofityHandler.sendMessage(msg1);
@@ -546,7 +546,6 @@ public abstract class BaseNotAutoBleActivity extends AppCompatActivity {
         super.onPause();
         /* 秤识别中 */
         AppData.isCheckScale = false;
-        mActivty = false;
     }
 
     @Override

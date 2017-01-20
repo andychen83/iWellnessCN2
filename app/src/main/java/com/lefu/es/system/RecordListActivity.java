@@ -325,12 +325,14 @@ public class RecordListActivity extends Activity implements android.view.View.On
 			recordAdaptor.notifyDataSetInvalidated();
 
 			handler.sendEmptyMessage(1);
-			Intent intent = new Intent();
-			intent.setClass(RecordListActivity.this, RecordListItemActivity.class);
-			Bundle mBundle = new Bundle();
-			mBundle.putSerializable("record", lastRecod);
-			intent.putExtras(mBundle);
-			startActivity(intent);
+
+			startActivity(RecordListItemActivity.creatIntent(RecordListActivity.this,user,lastRecod));
+//			Intent intent = new Intent();
+//			intent.setClass(RecordListActivity.this, RecordListItemActivity.class);
+//			Bundle mBundle = new Bundle();
+//			mBundle.putSerializable("record", lastRecod);
+//			intent.putExtras(mBundle);
+//			startActivity(intent);
 		}
 	};
 
@@ -907,7 +909,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 
 							str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 							str.append("\n");
-							str.append("\n");
+
 							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()) + "");
 								str.append(getText(R.string.kg_danwei));
@@ -920,23 +922,25 @@ public class RecordListActivity extends Activity implements android.view.View.On
 							}
 							str.append("   "+MoveView.weightString(gender,user.getBheigth(),lastRecod.getRweight()));
 							str.append("\n");
-							str.append("\n");
+
 							
 							float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
 							bmi = UtilTooth.myround(bmi);
 
-							str.append(getString(R.string.export_BMI) + bmi + "\n");
+							str.append(getString(R.string.export_BMI) + bmi);
+							str.append("   "+MoveView.bmiString(bmi));
+							str.append("\n");
 							
 						}else{
 						if (null != user) {
 							str.append(user.getUserName());
 							str.append("\n");
-							str.append("\n");
+
 						}
 
 						str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 						str.append("\n");
-						str.append("\n");
+
 						if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 							str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()) + "");
 							str.append(getText(R.string.kg_danwei));
@@ -949,18 +953,18 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						}
 						str.append("   "+MoveView.weightString(gender,user.getBheigth(),lastRecod.getRweight()));
 						str.append("\n");
-						str.append("\n");
+
 						if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE)) {
 
 						} else {
 							str.append(getString(R.string.export_body_Water) + lastRecod.getRbodywater() + "%");
 							str.append("   "+MoveView.moistureString(gender,lastRecod.getRbodywater()));
 							str.append("\n");
-							str.append("\n");
+
 							str.append(getString(R.string.export_body_Fat) + lastRecod.getRbodyfat() + "%");
 							str.append("   "+MoveView.bftString(gender,user.getAgeYear(),lastRecod.getRbodyfat()));
 							str.append("\n");
-							str.append("\n");
+
 							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 								str.append(getString(R.string.export_bone) + lastRecod.getRbone() + "");
 								str.append(getText(R.string.kg_danwei) );
@@ -980,7 +984,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 							}
 							str.append("   "+MoveView.boneString(lastRecod.getRbone()));
 							str.append("\n");
-							str.append("\n");
+
 						}
 						float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
 						bmi = UtilTooth.myround(bmi);
@@ -988,7 +992,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						str.append(getString(R.string.export_BMI) + bmi );
 						str.append("   "+MoveView.bmiString(bmi));
 						str.append("\n");
-						str.append("\n");
+
 						if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE)) {
 
 						} else {
