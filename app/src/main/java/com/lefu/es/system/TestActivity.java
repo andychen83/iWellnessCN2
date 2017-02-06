@@ -124,7 +124,7 @@ public class TestActivity extends AppCompatActivity {
         bone_biaoz = (AppCompatTextView) findViewById(R.id.bone_biaoz);
         face_img_bone = (ImageView) findViewById(R.id.face_img_bone);
         // 骨量
-        MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7f,UtilConstants.UNIT_KG);
+       // MoveView.bone(TestActivity.this,face_img_bone_ll,face_img_bone,bone_critical_point1,bone_critical_point2,bone_biaoz,2.7f,UtilConstants.UNIT_KG);
 
 
         face_img_bmi_ll = (LinearLayout) findViewById(R.id.face_img_bmi_ll);

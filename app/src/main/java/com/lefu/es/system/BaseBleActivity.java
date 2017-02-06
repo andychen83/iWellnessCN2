@@ -3,11 +3,14 @@ package com.lefu.es.system;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -50,6 +53,7 @@ import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.event.NoRecordsEvent;
+import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
 import com.lefu.es.util.SharedPreferencesUtil;
@@ -96,6 +100,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         recordService = new RecordService(this);
         mBluetoothUtils = new BluetoothUtils1(this);
         if(mBluetoothUtils.isBluetoothLeSupported()){
+            BluetoolUtil.bleflag = true;
             scanHandler = new Handler();
             mScanner = mBluetoothUtils.initBleScaner(nofityHandler);
             //注册通知
@@ -115,8 +120,8 @@ public abstract class BaseBleActivity extends AppCompatActivity {
                 scanHandler.post(scanThread);
             }
         }else{
-            Toast.makeText(this,"该设备不支持BLE",Toast.LENGTH_LONG).show();
-            finish();
+           //BT
+            BluetoolUtil.bleflag = false;
         }
     }
 
@@ -474,11 +479,25 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         ageError = true;
     }
 
+    @Override
+    protected void onStart() {
+        if (!BluetoolUtil.bleflag && null == UtilConstants.serveIntent) {
+            UtilConstants.serveIntent = new Intent(this, TimeService.class);
+            this.startService(UtilConstants.serveIntent);
+			/* 开机BT循环扫描线程 */
+            new Thread(ScanRunnable).start();
+			/* 连接状态 */
+           // TimeService.scale_connect_state = scale_connect_state;
+        }
+        super.onStart();
+    }
+
 
     @Override
     protected void onStop() {
         super.onStop();
         mActivty = false;
+        stopScanService();
     }
 
     @Override
@@ -487,6 +506,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         /* 秤识别中 */
         AppData.isCheckScale = false;
         mActivty = false;
+        //stopScanService();
     }
 
     @Override
@@ -504,5 +524,96 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         unregisterReceiver(mGattUpdateReceiver);
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+    }
+
+
+    protected BluetoothAdapter mBtAdapter;
+    Handler BTHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
+    /** 停止扫描服务 */
+    private void stopScanService() {
+		/* 蓝牙2.1 */
+        if (null != UtilConstants.serveIntent) {
+            stopService(UtilConstants.serveIntent);
+        }
+    }
+
+    /** BT广播接收器 */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (device != null) {
+                    String deviceName = device.getName();
+                    System.out.println(deviceName + "=" + device.getAddress());
+                    if (deviceName != null && deviceName.equalsIgnoreCase(UtilConstants.scaleName)) {
+                        BluetoolUtil.mChatService.connect(device, true);
+                        stopDiscovery();
+                        BTHandler.postDelayed(ScanRunnable, 15 * 1000);
+                    }
+                }
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                stopDiscovery();
+                BTHandler.postDelayed(ScanRunnable, 10 * 1000);
+            }
+        }
+    };
+
+    /** 开始检测蓝牙 */
+    public void startDiscovery() {
+        try {
+            System.out.println("BT开始扫描...");
+            // Register for broadcasts when a device is discovered
+            final IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+            intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+            this.registerReceiver(mReceiver, intentFilter);
+            mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+            mBtAdapter.startDiscovery();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    /** 停止扫描 */
+    public void stopDiscovery() {
+        try {
+            mBtAdapter.cancelDiscovery();
+            if (null != mReceiver)
+                BaseBleActivity.this.unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    /** 蓝牙扫描线程 */
+    private Runnable ScanRunnable = new Runnable() {
+        public void run() {
+            startDiscovery();
+        }
+    };
+
+    /** 检测是否有测量记录线程 */
+    private Runnable CheckHasDataRunnable = new Runnable() {
+        public void run() {
+            if (!AppData.hasCheckData && mActivty && !UtilConstants.isTipChangeScale) {
+                scaleChangeAlert();
+                UtilConstants.isTipChangeScale = true;
+            }
+        }
+    };
+
+    /** 秤改变弹窗 */
+    public void scaleChangeAlert() {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), ScaleChangeAlertActivity.class);
+        startActivity(intent);
     }
 }

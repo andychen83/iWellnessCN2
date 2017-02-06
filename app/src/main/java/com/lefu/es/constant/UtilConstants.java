@@ -103,8 +103,7 @@ public class UtilConstants {
 	/**秤蓝牙名称*/
 	public static final String scaleName="Electronic Scale";
 
-
-	public static final String DLscaleName="electronic";
+	public static final String DLscaleName="smart";
 	
 	/**接收到秤数据的时间*/
 	public static long receiveDataTime= 0;
