@@ -113,7 +113,7 @@
             android:shadowColor="#ff000000"
             android:shadowDx="1.0"
             android:shadowRadius="1.0"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/white"
             android:textSize="20.0sp"
             android:textStyle="bold" />

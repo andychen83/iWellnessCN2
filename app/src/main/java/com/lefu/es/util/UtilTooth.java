@@ -266,6 +266,7 @@ public class UtilTooth {
 	}
 
 	public static String keep1Point(float kg) {
+		if(0==kg)return "0.0";
 		BigDecimal b = new BigDecimal(kg);
 		float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 		return String.valueOf(f1);
@@ -511,6 +512,7 @@ public class UtilTooth {
     }
 
 	public static String kgToLB_ForFatScale(float tempKg){
+		if(0==tempKg)return "0.0";
 	    BigDecimal b0 = new BigDecimal(String.valueOf(tempKg));
 	    BigDecimal b1 = new BigDecimal("1155845");
 	    BigDecimal b2 = new BigDecimal("16");
