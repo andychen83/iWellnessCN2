@@ -90,10 +90,10 @@
     <string name="height_error_6">身高必须在3ft:3in到7ft:3in之间</string>
     <string name="age_error">请输入正确的年龄</string>
     <string name="age_error_2">年龄必须是在0岁到99岁之间</string>
-    <string name="age_error_4">蓝牙无法连接\n身高或年龄设定错误\n 年龄:10-99 \n 身高:100-220cm \n 返回</string>
-    <string name="age_error_6">蓝牙无法连接\n身高或年龄设定错误 \n 年龄:10-99 \n 身高:3ft:3in and 7ft:3in \n 返回</string>
-    <string name="age_error_5">蓝牙无法连接\n身高或年龄设定错误 \n 年龄:1-99 \n 身高:30-220cm \n 返回</string>
-    <string name="age_error_7">蓝牙无法连接\n身高或年龄设定错误 \n 年龄:1-99 \n 身高:1ft:0in and 7ft:3in \n 返回</string>
+    <string name="age_error_4">年龄:10-99 \n 身高:100-220cm  </string>
+    <string name="age_error_6">年龄:10-99 \n 身高:3ft:3in and 7ft:3in </string>
+    <string name="age_error_5">年龄:1-99 \n 身高:30-220cm \n 返回</string>
+    <string name="age_error_7">年龄:1-99 \n 身高:1ft:0in and 7ft:3in </string>
     <string name="data_error">数据异常</string>
     <string name="mesuefat">请保持站立在体重计上，取得测量值中...</string>
     <string name="scaleerror">此选择无法跟设备连接配对!</string>
@@ -122,8 +122,8 @@
     <string name="detect_timeout_once_more">检测超时，再检测一次!</string>
     <string name="detect_timeout">没有发现设备，请按“返回”返回!</string>
     <string name="babyScacle_param_error">身高或年龄参数不符合婴儿的要求，请重置!</string>
-    <string name="user_data_error">\n年龄：10-100\n身高：100-220cm\n返回</string>
-    <string name="user_data_error_lb">\n年龄：10-99\n身高：3ft:3in-7ft:2in\n返回</string>
+    <string name="user_data_error">年龄：10-100\n身高：100-220cm</string>
+    <string name="user_data_error_lb">年龄：10-99\n身高：3ft:3in-7ft:2in</string>
     <string name="scale_connection_success">请保持站立在设备上!</string>
     <string name="scale_keep_scale_work">请确认设备开启，正在搜寻中…</string>
     <string name="scale_measurement_error">脂肪测量错误，请重新秤重.</string>

@@ -94,7 +94,7 @@ public class AutoBLEActivity extends BaseBleActivity {
 		backButton.setOnClickListener(OnClickListener);
 		recordService = new RecordService(this);
 		uservice = new UserService(this);
-		ExitApplication.getInstance().addActivity(this);
+		//ExitApplication.getInstance().addActivity(this);
 		UtilConstants.su = new SharedPreferencesUtil(AutoBLEActivity.this);
 		//开始扫描
 		search_device_view = (SearchDevicesView) findViewById(R.id.search_device_view);
@@ -134,12 +134,14 @@ public class AutoBLEActivity extends BaseBleActivity {
 		/*是否是重新检测*/
 			Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
 		/*结束程序*/
-			ExitApplication.getInstance().exit(AutoBLEActivity.this);
-			if(reCheck!=null&&reCheck){
-				startActivity(new Intent(AutoBLEActivity.this, LoadingActivity.class));
-			}else{
-				startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class));
-			}
+			//ExitApplication.getInstance().exit(AutoBLEActivity.this);
+//			if(reCheck!=null&&reCheck){
+//				startActivity(new Intent(AutoBLEActivity.this, LoadingActivity.class));
+//			}else{
+//				startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class));
+//			}
+			startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class));
+			AutoBLEActivity.this.finish();
 		}catch (Exception e){
 
 		}

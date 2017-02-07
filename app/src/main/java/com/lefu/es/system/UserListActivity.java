@@ -32,6 +32,9 @@ import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.UserService;
 import com.lefu.iwellness.newes.cn.system.R;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static android.R.attr.tag;
 
 /**
@@ -62,14 +65,15 @@ public class UserListActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_edit_list);
+		ButterKnife.bind(this);
 		viewInit();
 
-		ExitApplication.getInstance().addActivity(this);
+		//ExitApplication.getInstance().addActivity(this);
 	}
 
 	public void viewInit() {
 		addphoto_imageView = (ImageView) findViewById(R.id.addphoto_imageView);
-		addphoto_imageView.setOnClickListener(imgOnClickListener);
+		//addphoto_imageView.setOnClickListener(imgOnClickListener);
 		brithListview = (ListView) this.findViewById(R.id.user_listview);
 		brithListview.setOnItemClickListener(onItemClickListener);
 		editText = (TextView) findViewById(R.id.useredit_textView);
@@ -98,6 +102,7 @@ public class UserListActivity extends Activity {
 	protected void onDestroy() {
 		unregisterReceiver(broadcastReceiver);
 		super.onDestroy();
+		ButterKnife.unbind(this);
 	}
 
 	@Override
@@ -124,12 +129,16 @@ public class UserListActivity extends Activity {
 	}
 
 
+	@OnClick(R.id.addphoto_imageView)
+	public void saveClick(){
+		toAddUser();
+	}
 
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case R.id.addphoto_imageView :
-					toAddUser();
+					//toAddUser();
 					break;
 				case R.id.useredit_textView :
 					if (!isEdit) {
@@ -172,7 +181,7 @@ public class UserListActivity extends Activity {
 	
 	/**跳转到添加用户界面*/
 	private void toAddUser(){
-		ExitApplication.getInstance().exit(UserListActivity.this);
+		//ExitApplication.getInstance().exit(UserListActivity.this);
 		UserListActivity.this.startActivity(new Intent(UserListActivity.this, UserAddActivity.class));
 	}
 
@@ -191,8 +200,9 @@ public class UserListActivity extends Activity {
 				
 			UtilConstants.CHOICE_KG = (UtilConstants.CURRENT_USER.getScaleType() == null || !"".equals(UtilConstants.CURRENT_USER.getScaleType())) ? UtilConstants.UNIT_KG : UtilConstants.CURRENT_USER.getScaleType();
 			
-			ExitApplication.getInstance().exit(UserListActivity.this);
+			//ExitApplication.getInstance().exit(UserListActivity.this);
 			UserListActivity.this.startActivity(new Intent(UserListActivity.this, LoadingActivity.class));
+			UserListActivity.this.finish();
 		}
 
 	};

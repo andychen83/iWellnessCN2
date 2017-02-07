@@ -855,45 +855,13 @@ public class RecordBabyListActivity extends Activity implements View.OnClickList
 						int gender = Integer.parseInt(sex);
 
 						//婴儿秤，分享数据只需显示体重和BMI，其他数据去掉
-						if(user.getScaleType().equals(UtilConstants.BABY_SCALE) || "P999".equals(user.getGroup())){
-							if (null != user) {
-								str.append(user.getUserName());
-								str.append("\n");
-							}
-
-							str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
-							str.append("\n");
-							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()));
-								str.append(getText(R.string.kg_danwei));
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-								str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
-								str.append(getText(R.string.lb_danwei));
-							}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-								str.append(getString(R.string.export_weight) + UtilTooth.lbozToString(lastRecod.getRweight()));
-								//str.append(getText(R.string.lboz_danwei));
-							}
-							str.append("   "+MoveView.weightString(gender,user.getBheigth(),lastRecod.getRweight()));
-							str.append("\n");
-
-
-							float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
-							bmi = UtilTooth.myround(bmi);
-
-							str.append(getString(R.string.export_BMI) + bmi);
-							str.append("   "+MoveView.bmiString(bmi));
-							str.append("\n");
-
-						}else{
 						if (null != user) {
 							str.append(user.getUserName());
 							str.append("\n");
-
 						}
 
 						str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 						str.append("\n");
-
 						if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
 							str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()));
 							str.append(getText(R.string.kg_danwei));
@@ -901,82 +869,19 @@ public class RecordBabyListActivity extends Activity implements View.OnClickList
 							str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
 							str.append(getText(R.string.lb_danwei));
 						}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-							str.append(getString(R.string.export_weight) + UtilTooth.kgToLB_ForFatScale(Math.abs(Float.parseFloat(lastRecod.getRweight() + ""))));
-							str.append(getText(R.string.lb_danwei));
+							str.append(getString(R.string.export_weight) + UtilTooth.lbozToString(lastRecod.getRweight()));
+							//str.append(getText(R.string.lboz_danwei));
 						}
 						str.append("   "+MoveView.weightString(gender,user.getBheigth(),lastRecod.getRweight()));
 						str.append("\n");
 
-						if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE)) {
 
-						} else {
-							str.append(getString(R.string.export_body_Water) + lastRecod.getRbodywater() + "%");
-							str.append("   "+MoveView.moistureString(gender,lastRecod.getRbodywater()));
-							str.append("\n");
+						//float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
+						float bmi = UtilTooth.myround(lastRecod.getRbmi());
 
-							str.append(getString(R.string.export_body_Fat) + lastRecod.getRbodyfat() + "%");
-							str.append("   "+MoveView.bftString(gender,user.getAgeYear(),lastRecod.getRbodyfat()));
-							str.append("\n");
-
-							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								str.append(getString(R.string.export_bone) + lastRecod.getRbone() + "");
-								str.append(getText(R.string.kg_danwei) );
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-								str.append(getString(R.string.export_bone) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRbone() + ""))));
-								str.append(getText(R.string.lb_danwei) );
-							}else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-								str.append(getString(R.string.export_bone) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRbone() + ""))));
-								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
-									str.append(getText(R.string.lboz_danwei) );
-								}else{
-									str.append(getText(R.string.lb_danwei) );
-								}
-							} else {
-								str.append(getString(R.string.export_bone) + lastRecod.getRbone());
-								str.append(getText(R.string.kg_danwei) );
-							}
-							str.append("   "+MoveView.boneString(lastRecod.getRbone()));
-							str.append("\n");
-
-						}
-						float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (user.getBheigth() / 100));
-						bmi = UtilTooth.myround(bmi);
-
-						str.append(getString(R.string.export_BMI) + bmi );
+						str.append(getString(R.string.export_BMI) + bmi);
 						str.append("   "+MoveView.bmiString(bmi));
 						str.append("\n");
-
-						if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE)) {
-
-						} else {
-							str.append(getString(R.string.export_visceral_fat) + lastRecod.getRvisceralfat());
-							str.append("   "+MoveView.visceralFatString(lastRecod.getRvisceralfat()));
-							str.append("\n");
-
-							str.append(getString(R.string.export_BMR) + lastRecod.getRbmr() + " kcal");
-							str.append("   "+MoveView.bmrString(gender,user.getAgeYear(),lastRecod.getRweight(),lastRecod.getRbmr()));
-							str.append("\n");
-
-							if (user.getDanwei().equals(UtilConstants.UNIT_KG)) {
-								str.append(getString(R.string.export_muscle_mass) + lastRecod.getRmuscle() + "kg");
-
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_LB) || user.getDanwei().equals(UtilConstants.UNIT_ST)) {
-								str.append(getString(R.string.export_muscle_mass) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRmuscle() + ""))));
-								str.append(getText(R.string.lb_danwei));
-							} else if (user.getDanwei().equals(UtilConstants.UNIT_FATLB)) {
-								str.append(getString(R.string.export_muscle_mass) + UtilTooth.kgToLB(Math.abs(Float.parseFloat(lastRecod.getRmuscle() + ""))));
-								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
-									str.append(getText(R.string.lboz_danwei) );
-								}else{
-									str.append(getText(R.string.lb_danwei) );
-								}
-							} else {
-								str.append(getString(R.string.export_muscle_mass) + lastRecod.getRmuscle() + "kg");
-							}
-							str.append("   "+MoveView.muscleString(gender,user.getBheigth(),lastRecod.getRmuscle()));
-							str.append("\n");
-						}
-						}
 
 						Intent sendIntent = new Intent();
 						sendIntent.setAction(Intent.ACTION_SEND);

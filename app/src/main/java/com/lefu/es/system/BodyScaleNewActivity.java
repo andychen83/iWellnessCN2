@@ -139,6 +139,9 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     @Bind(R.id.targe_tx)
     TextView targetTx;
 
+    @Bind(R.id.blue_img)
+    ImageView blue_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,10 +171,8 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             }
             try {
                 Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"ce");
-                if(null!=lastRecords){
-                    localData(lastRecords,UtilConstants.CURRENT_USER);
-                    initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
-                }
+                localData(lastRecords,UtilConstants.CURRENT_USER);
+                initBodyBar(UtilConstants.CURRENT_USER,lastRecords);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -183,7 +184,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
      * @param
      */
     private  void localData(Records record,UserModel user){
-        if(null==user || null==record)return;
+        if(null==user)return;
         if (user.getDanwei().equals(UtilConstants.UNIT_ST)) {
             if (UtilConstants.CURRENT_SCALE.equals(UtilConstants.BODY_SCALE)) {
                 String[] tempS = {"0","0"};
@@ -225,7 +226,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         String sex = user.getSex();
         if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
         int gender = Integer.parseInt(sex);
-        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
+        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),null==record?0f:record.getRweight()));
     }
 
     /**
@@ -285,6 +286,22 @@ public class BodyScaleNewActivity extends BaseBleActivity {
         }
     }
 
+    @OnClick(R.id.blue_img)
+    public void setBlueToothClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+    }
+
+    @OnClick(R.id.bluetooth_status)
+    public void setBlueToothTXClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+    }
+
     @OnClick(R.id.setting_menu)
     public void setMenuClick(){
         startActivity(SettingActivity.creatIntent(BodyScaleNewActivity.this));
@@ -314,11 +331,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     public void updateConnectionState(int resourceId) {
         switch (resourceId){
             case R.string.disconnected:
+                bluetoothStatusTx.setTextColor(getColor(R.color.shadow));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_not_connected));
+                blue_img.setBackground(getDrawable(R.drawable.blue_gray_icon));
                 break;
 
             case R.string.connected:
+                bluetoothStatusTx.setTextColor(getColor(R.color.white));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_connected));
+                blue_img.setBackground(getDrawable(R.drawable.blue_icon));
                 break;
         }
     }

@@ -104,7 +104,7 @@ public class UtilConstants {
 	public static final String scaleName="Electronic Scale";
 
 
-	public static final String DLscaleName="electronic";
+	public static final String DLscaleName="smart";//smart scale    electronic
 	
 	/**接收到秤数据的时间*/
 	public static long receiveDataTime= 0;

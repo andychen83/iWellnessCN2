@@ -694,7 +694,7 @@ public class RecordService {
 	public List<Records> getAllDatasByScaleAndIDAsForHarmBaby(int uid) throws Exception {
 		dbs = dbHelper.getReadableDatabase();
 //		String sql = "select *,datetime(recordtime,'localtime') md from userrecord where scaleType=? and useid=? order by recordtime asc ";
-		String sql = "select * from userrecord where scaleType=? and useid=? order by recordtime asc ";
+		String sql = "select * from userrecord where useid=? order by recordtime asc ";
 		Cursor cursor = dbs.rawQuery(sql, new String[]{ String.valueOf(uid)});
 		List<Records> pes = new ArrayList<Records>();
 		while (cursor.moveToNext()) {

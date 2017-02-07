@@ -99,7 +99,7 @@
                 android:id="@+id/muscle_critical_point2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="82.0%"
+                android:text="0.0%"
                 android:textSize="12sp" />
 
             <LinearLayout

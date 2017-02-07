@@ -69,6 +69,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -192,7 +194,7 @@ public class UserEditActivity extends AppCompatActivity {
 		}else{
 			setContentView(R.layout.activity_user_edit);
 		}
-
+		ButterKnife.bind(this);
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -200,13 +202,13 @@ public class UserEditActivity extends AppCompatActivity {
 		Intent center = getIntent();
 		centerIndex = center.getIntExtra("center", -100);
 
-		ExitApplication.getInstance().addActivity(this);
+		//ExitApplication.getInstance().addActivity(this);
 
 		/*判断用户数据是否被清空*/
 		UtilConstants.su = new SharedPreferencesUtil(UserEditActivity.this);
 		/*新检测添加*/
 		if(UtilConstants.CURRENT_USER==null){
-			AppData.isCheckScale=true;
+			//AppData.isCheckScale=true;
 			UtilConstants.CURRENT_USER= JSONObject.parseObject((String) UtilConstants.su.readbackUp("lefuconfig", "addUser", ""),UserModel.class);
 		}
 
@@ -258,7 +260,7 @@ public class UserEditActivity extends AppCompatActivity {
 		professBtn.setOnClickListener(leverOnClickListener);
 		imageCancel = (ImageView) findViewById(R.id.userCancel);
 		imageSave = (ImageView) findViewById(R.id.userSave);
-		imageCancel.setOnClickListener(imgOnClickListener);
+		//imageCancel.setOnClickListener(imgOnClickListener);
 		imageSave.setOnClickListener(imgOnClickListener);
 		//ageET.setOnClickListener(imgOnClickListener);
 
@@ -722,6 +724,7 @@ public class UserEditActivity extends AppCompatActivity {
 		// Clear any configuration that was done!
 		EasyImage.clearConfiguration(this);
 		super.onDestroy();
+		ButterKnife.unbind(this);
 	}
 
 	/**剪切图片*/
@@ -964,12 +967,17 @@ public class UserEditActivity extends AppCompatActivity {
 		}
 	};
 
+	@OnClick(R.id.userCancel)
+	public void  cancleClick(){
+		exit();
+	}
+
 	String sex = "1";
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case (R.id.userCancel) :
-					exit();
+					//exit();
 					break;
 				case (R.id.userSave) :
 					saveUser();
@@ -988,20 +996,20 @@ public class UserEditActivity extends AppCompatActivity {
 
 	/**退出*/
 	private void exit(){
+//		if (AppData.isCheckScale) {
+//			/* 是否存在用户 */
+//			try {
+//				if (uservice.getCount() > 0) {
+//					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
+//				}else{
+//					/* 结束程序 */
+//					ExitApplication.getInstance().exit(UserEditActivity.this);
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		UserEditActivity.this.finish();
-		if (AppData.isCheckScale) {
-			/* 是否存在用户 */
-			try {
-				if (uservice.getCount() > 0) {
-					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
-				}else{
-					/* 结束程序 */
-					ExitApplication.getInstance().exit(UserEditActivity.this);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	/**判断*/
@@ -1091,61 +1099,42 @@ public class UserEditActivity extends AppCompatActivity {
 					if (null != user) {
 						/* 判断是否是识别界面进入 */
 						UserModel user=creatUserModel();
-						/* 保存用户信息 */
-						try {
-							if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
-								user.setDanwei(UtilConstants.UNIT_KG);
+
+						if (user.getId()>0) {
+							/* 保存用户信息 */
+							try {
+								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+									user.setDanwei(UtilConstants.UNIT_KG);
+								}
+								uservice.update(user);
+								user = uservice.find(user.getId());
+								UtilConstants.SELECT_USER = user.getId();
+								Intent intent=new Intent();
+								Bundle bundle=new Bundle();
+								bundle.putSerializable("user",user);
+								intent.putExtras(bundle);
+								setResult(RESULT_OK, intent);
+								if("P999".equals(user.getGroup())){
+									EventBus.getDefault().post(new ReFlushBabyEvent(user));
+								}
+								UserEditActivity.this.finish();
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
-							uservice.update(user);
-							user = uservice.find(user.getId());
-							UtilConstants.SELECT_USER = user.getId();
-							Intent intent=new Intent();
-							Bundle bundle=new Bundle();
-							bundle.putSerializable("user",user);
-							intent.putExtras(bundle);
-							setResult(RESULT_OK, intent);
-							if("P999".equals(user.getGroup())){
-								EventBus.getDefault().post(new ReFlushBabyEvent(user));
+
+						} else {
+							/*跳转到指定的扫描界面*/
+							int currentapiVersion = Build.VERSION.SDK_INT;
+							Intent intent1 = new Intent();
+							intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							if (currentapiVersion < 18) {
+								intent1.setClass(UserEditActivity.this, AutoBTActivity.class);
+							} else {
+								intent1.setClass(UserEditActivity.this, AutoBLEActivity.class);
 							}
-							UserEditActivity.this.finish();
-						} catch (Exception e) {
-							e.printStackTrace();
+							UserEditActivity.this.startActivity(intent1);
+							finish();
 						}
-//						if (!AppData.isCheckScale) {
-//							/* 保存用户信息 */
-//							try {
-//								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
-//									user.setDanwei(UtilConstants.UNIT_KG);
-//								}
-//								uservice.update(user);
-//								user = uservice.find(user.getId());
-//								UtilConstants.SELECT_USER = user.getId();
-//								Intent intent=new Intent();
-//								Bundle bundle=new Bundle();
-//								bundle.putSerializable("user",user);
-//								intent.putExtras(bundle);
-//								setResult(RESULT_OK, intent);
-//								if("P999".equals(user.getGroup())){
-//									EventBus.getDefault().post(new ReFlushBabyEvent(user));
-//								}
-//								UserEditActivity.this.finish();
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//
-//						} else {
-//							/*跳转到指定的扫描界面*/
-//							int currentapiVersion = Build.VERSION.SDK_INT;
-//							Intent intent1 = new Intent();
-//							intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//							if (currentapiVersion < 18) {
-//								intent1.setClass(UserEditActivity.this, AutoBTActivity.class);
-//							} else {
-//								intent1.setClass(UserEditActivity.this, AutoBLEActivity.class);
-//							}
-//							UserEditActivity.this.startActivity(intent1);
-//							finish();
-//						}
 					}
 					break;
 			}

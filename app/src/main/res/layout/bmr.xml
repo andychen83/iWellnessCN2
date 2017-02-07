@@ -85,7 +85,7 @@
                 android:id="@+id/bmr_critical_point1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1261Kcal"
+                android:text="0Kcal"
                 android:textSize="12sp"/>
             <LinearLayout
                 android:layout_width="0dp"

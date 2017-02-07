@@ -207,7 +207,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
     /**
      * 开始扫描蓝牙
      */
-    private void startScan(){
+    protected void startScan(){
         final boolean mIsBluetoothOn = mBluetoothUtils.isBluetoothOn();
         final boolean mIsBluetoothLePresent = mBluetoothUtils.isBluetoothLeSupported();
         mBluetoothUtils.askUserToEnableBluetoothIfNeeded();

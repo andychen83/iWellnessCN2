@@ -293,6 +293,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.targe_tx)
     TextView targetTx;
 
+    @Bind(R.id.blue_img)
+    ImageView blue_img;
+
     public static int SELCET_USER=100;
 
     @Override
@@ -388,6 +391,8 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
     }
 
+
+
     /**
      * 初始化 圆圈参数
      * @param
@@ -435,11 +440,11 @@ public class BodyFatNewActivity extends BaseBleActivity {
         String sex = user.getSex();
         if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
         int gender = Integer.parseInt(sex);
-        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),record.getRweight()));
-        bmTx.setText(String.valueOf(record.getRbmi()));
-        visalTx.setText(UtilTooth.keep1Point(record.getRbodyfat())+"%");
-        bmiStatus.setText(MoveView.bmiString(record.getRbmi()));
-        visalStatus.setText(MoveView.bftString(gender,user.getAgeYear(),record.getRbodyfat()));
+        weithStatus.setText(MoveView.weightString(gender,user.getBheigth(),null==record?0f:record.getRweight()));
+        bmTx.setText(String.valueOf(null==record?"0":record.getRbmi()));
+        visalTx.setText(null==record?"0.0%":UtilTooth.keep1Point(record.getRbodyfat())+"%");
+        bmiStatus.setText(MoveView.bmiString(null==record?0f:record.getRbmi()));
+        visalStatus.setText(MoveView.bftString(gender,user.getAgeYear(),null==record?0f:record.getRbodyfat()));
     }
 
     /**
@@ -523,6 +528,23 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
     }
 
+    @OnClick(R.id.blue_img)
+    public void setBlueToothClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+        startScan();
+    }
+
+    @OnClick(R.id.bluetooth_status)
+    public void setBlueToothTXClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+        startScan();
+    }
 
 
     @OnClick(R.id.setting_menu)
@@ -554,11 +576,15 @@ public class BodyFatNewActivity extends BaseBleActivity {
     public void updateConnectionState(int resourceId) {
         switch (resourceId){
             case R.string.disconnected:
+                bluetoothStatusTx.setTextColor(getColor(R.color.shadow));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_not_connected));
+                blue_img.setBackground(getDrawable(R.drawable.blue_gray_icon));
                 break;
 
             case R.string.connected:
+                bluetoothStatusTx.setTextColor(getColor(R.color.white));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_connected));
+                blue_img.setBackground(getDrawable(R.drawable.blue_icon));
                 break;
         }
     }
