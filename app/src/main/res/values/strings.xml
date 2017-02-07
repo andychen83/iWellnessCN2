@@ -100,7 +100,10 @@
     <string name="mesuefat_try">脂肪测试错误!</string>
     <string name="title_activity_get_fat_date_error">脂肪测试错误!</string>
     <string name="mesuefat__error">未能获得脂肪数据.</string>
+    <string name="done">完成</string>
     <string name="hour">时</string>
+    <string name="mins">分</string>
+    <string name="seconds">秒</string>
     <string name="day_date">日</string>
     <string name="month_date">月</string>
     <string name="yeat_date">年</string>

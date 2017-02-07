@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
@@ -759,15 +760,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     public void menuWeightOpenClick(){
         if(status_bar2.getVisibility()== View.VISIBLE){
             status_bar2.setVisibility(View.GONE);
-            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+            weight_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }else{
             status_bar2.setVisibility(View.VISIBLE);
-            weight_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+            weight_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.up_arrow));
         }
 
         if(status_bar_bmi.getVisibility()==View.VISIBLE){
             status_bar_bmi.setVisibility(View.GONE);
-            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+            bmi_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
     }
 
@@ -775,15 +776,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     public void menuBmiOpenClick(){
         if(status_bar_bmi.getVisibility()==View.VISIBLE){
             status_bar_bmi.setVisibility(View.GONE);
-            bmi_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+            bmi_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }else{
             status_bar_bmi.setVisibility(View.VISIBLE);
-            bmi_jiantou.setBackground(getDrawable(R.drawable.up_arrow));
+            bmi_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.up_arrow));
         }
 
         if(status_bar2.getVisibility()==View.VISIBLE){
             status_bar2.setVisibility(View.GONE);
-            weight_jiantou.setBackground(getDrawable(R.drawable.down_arrow));
+            weight_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
     }
 }

@@ -181,6 +181,10 @@ public class UserEditActivity extends AppCompatActivity {
 			user = (UserModel)serializable;
 		}else{
 			user = UtilConstants.CURRENT_USER;
+			if(null==user){
+				UtilConstants.CURRENT_USER= JSONObject.parseObject((String) UtilConstants.su.readbackUp("lefuconfig", "addUser", ""),UserModel.class);
+				user = UtilConstants.CURRENT_USER;
+			}
 		}
 		if(null==user){
 			ToastUtils.ToastCenter(UserEditActivity.this,"获取用户信息失败");

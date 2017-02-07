@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.lefu.es.application.IwellnessApplication;
 import com.lefu.es.util.otherUtil;
 import com.lefu.iwellness.newes.cn.system.R;
 
@@ -76,14 +77,14 @@ public class WheelMain {
 
 		wv_hours.setAdapter(new NumericWheelAdapter(0, 23));// 设置"年"的显示数据
 		wv_hours.setCyclic(true);// 可循环滚动
-		wv_hours.setLabel("Hour");// 添加文字
+		wv_hours.setLabel(IwellnessApplication.app.getResources().getString(R.string.hour));// 添加文字
 		wv_hours.setCurrentItem(hours);// 初始化时显示的数据
 
 		// 分
 
 		wv_mins.setAdapter(new NumericWheelAdapter(0, 59));
 		wv_mins.setCyclic(true);
-		wv_mins.setLabel("Mins");
+		wv_mins.setLabel(IwellnessApplication.app.getResources().getString(R.string.mins));
 		wv_mins.setCurrentItem(min);
 
 		int textSize = 0;
@@ -191,14 +192,14 @@ public class WheelMain {
 
 		// 年
 		// wv_year = (WheelView) view.findViewById(R.id.year);
-		wv_year.setLabel("Year");// 添加文字
+		wv_year.setLabel(IwellnessApplication.app.getResources().getString(R.string.yeat_date));// 添加文字
 		wv_year.setAdapter(new NumericWheelAdapter(START_YEAR, END_YEAR));// 设置"年"的显示数据
 		wv_year.setCyclic(true);// 可循环滚动
 		wv_year.setCurrentItem(year - START_YEAR);// 初始化时显示的数据
 		wv_year.setVisibleItems(5);
 		// 月
 		// wv_month = (WheelView) view.findViewById(R.id.month);
-		wv_month.setLabel("Month");
+		wv_month.setLabel(IwellnessApplication.app.getResources().getString(R.string.month_date));
 		wv_month.setAdapter(new NumericWheelAdapter(1, 12));
 		wv_month.setCyclic(true);
 		wv_month.setCurrentItem(month);
@@ -207,7 +208,7 @@ public class WheelMain {
 		// 日
 		// wv_day = (WheelView) view.findViewById(R.id.day);
 		wv_day.setCyclic(true);
-		wv_day.setLabel("Day");
+		wv_day.setLabel(IwellnessApplication.app.getResources().getString(R.string.day_date));
 		// 判断大小月及是否闰年,用来确定"日"的数据
 		if (isLinter) {
 			if (list_big.contains(String.valueOf(month + 1))) {
