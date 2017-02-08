@@ -199,13 +199,13 @@
         android:id="@+id/bluetooth_ly"
         android:layout_below="@id/main_ly"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_vertical_margin"
-        android:gravity="center_horizontal"
+        android:layout_height="20dp"
+        android:gravity="center"
         android:background="@color/allbackground"
         >
         <ImageView
             android:id="@+id/blue_img"
-            android:background="@drawable/blue_icon"
+            android:background="@drawable/blue_gray_icon"
             android:layout_width="@dimen/activity_vertical_margin"
             android:layout_height="@dimen/activity_vertical_margin" />
 
@@ -214,7 +214,7 @@
             android:layout_toRightOf="@id/blue_img"
             android:text="@string/connect_state_not_connected"
             android:textSize="12sp"
-            android:textColor="@color/white"
+            android:textColor="@color/shadow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

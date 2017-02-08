@@ -53,7 +53,6 @@ import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
 import com.lefu.es.event.NoRecordsEvent;
-import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
 import com.lefu.es.service.TimeService;
 import com.lefu.es.util.SharedPreferencesUtil;
@@ -120,7 +119,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
                 scanHandler.post(scanThread);
             }
         }else{
-           //BT
+            //BT
             BluetoolUtil.bleflag = false;
         }
     }
@@ -212,7 +211,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
     /**
      * 开始扫描蓝牙
      */
-    private void startScan(){
+    protected void startScan(){
         final boolean mIsBluetoothOn = mBluetoothUtils.isBluetoothOn();
         final boolean mIsBluetoothLePresent = mBluetoothUtils.isBluetoothLeSupported();
         mBluetoothUtils.askUserToEnableBluetoothIfNeeded();
@@ -479,19 +478,6 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         ageError = true;
     }
 
-    @Override
-    protected void onStart() {
-        if (!BluetoolUtil.bleflag && null == UtilConstants.serveIntent) {
-            UtilConstants.serveIntent = new Intent(this, TimeService.class);
-            this.startService(UtilConstants.serveIntent);
-			/* 开机BT循环扫描线程 */
-            new Thread(ScanRunnable).start();
-			/* 连接状态 */
-           // TimeService.scale_connect_state = scale_connect_state;
-        }
-        super.onStart();
-    }
-
 
     @Override
     protected void onStop() {
@@ -506,7 +492,6 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         /* 秤识别中 */
         AppData.isCheckScale = false;
         mActivty = false;
-        //stopScanService();
     }
 
     @Override
@@ -526,6 +511,18 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         mBluetoothLeService = null;
     }
 
+    @Override
+    protected void onStart() {
+        if (!BluetoolUtil.bleflag && null == UtilConstants.serveIntent) {
+            UtilConstants.serveIntent = new Intent(this, TimeService.class);
+            this.startService(UtilConstants.serveIntent);
+			/* 开机BT循环扫描线程 */
+            new Thread(ScanRunnable).start();
+			/* 连接状态 */
+            // TimeService.scale_connect_state = scale_connect_state;
+        }
+        super.onStart();
+    }
 
     protected BluetoothAdapter mBtAdapter;
     Handler BTHandler = new Handler() {

@@ -120,11 +120,12 @@ public class AutoBTActivity extends Activity {
 		Boolean reCheck=(Boolean) UtilConstants.su.readbackUp("lefuconfig", "reCheck", false);
 		/*结束程序*/
 		ExitApplication.getInstance().exit(AutoBTActivity.this);
-		if(reCheck!=null&reCheck){
-			startActivity(new Intent(AutoBTActivity.this, LoadingActivity.class));
-		}else{
-			startActivity(new Intent(AutoBTActivity.this, UserEditActivity.class));
-		}
+//		if(reCheck!=null&reCheck){
+//			startActivity(new Intent(AutoBTActivity.this, LoadingActivity.class));
+//		}else{
+//			startActivity(new Intent(AutoBTActivity.this, UserEditActivity.class));
+//		}
+		this.finish();
 	}
 	
 	@Override

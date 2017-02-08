@@ -67,6 +67,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -174,6 +177,7 @@ public class UserAddActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_add);
+		ButterKnife.bind(this);
 		mDestinationUri = Uri.fromFile(new File(this.getCacheDir(), "cropImage.jpeg"));
 		mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
 		SharedPreferences sharedPreferences = getSharedPreferences(ActivityVolues.shape_name, MODE_PRIVATE);
@@ -185,7 +189,7 @@ public class UserAddActivity extends AppCompatActivity {
 				.setImagesFolderName("EasyImage")
 				.saveInAppExternalFilesDir()
 				.setCopyExistingPicturesToPublicLocation(true);
-		ExitApplication.getInstance().addActivity(this);
+		//ExitApplication.getInstance().addActivity(this);
 
 		UtilConstants.su = new SharedPreferencesUtil(UserAddActivity.this);
 	}
@@ -240,7 +244,7 @@ public class UserAddActivity extends AppCompatActivity {
 		imageCancel = (ImageView) findViewById(R.id.userCancel);
 		imageSave = (ImageView) findViewById(R.id.userSave);
 		imageCancel.setOnClickListener(imgOnClickListener);
-		imageSave.setOnClickListener(imgOnClickListener);
+		//imageSave.setOnClickListener(imgOnClickListener);
 		//ageET.setOnClickListener(imgOnClickListener);
 		birth_layout.setOnClickListener(imgOnClickListener);
 
@@ -590,6 +594,7 @@ public class UserAddActivity extends AppCompatActivity {
 		// Clear any configuration that was done!
 		EasyImage.clearConfiguration(this);
 		super.onDestroy();
+		ButterKnife.unbind(this);
 	}
 
 	/** 剪切图片 */
@@ -853,6 +858,12 @@ public class UserAddActivity extends AppCompatActivity {
 		}
 	};
 
+
+	@OnClick(R.id.userSave)
+	public void saveClick(){
+		saveUser();
+	}
+
 	String sex = "1";
 	OnClickListener imgOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
@@ -861,7 +872,7 @@ public class UserAddActivity extends AppCompatActivity {
 					exit();
 					break;
 				case (R.id.userSave) :
-					saveUser();
+					//saveUser();
 					break;
 				case (R.id.add_brith_day) :
 					/*增加时延，防止快速点击两次*/
@@ -987,10 +998,11 @@ public class UserAddActivity extends AppCompatActivity {
 				intent.setClass(UserAddActivity.this, AutoBLEActivity.class);
 			}
 			UserAddActivity.this.startActivity(intent);
+			UserAddActivity.this.finish();
 		}else{
 			Toast.makeText(this, getString(R.string.user_info_save_error), Toast.LENGTH_SHORT).show();
 		}
-		
+
 	}
 
 	private String maxGroup = "P0";

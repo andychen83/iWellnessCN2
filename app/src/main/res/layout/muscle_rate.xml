@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="0.0%"
+            android:text="75.6%"
             android:textColor="@color/main_text_color" />
 
         <LinearLayout
@@ -99,7 +99,7 @@
                 android:id="@+id/muscle_critical_point2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="82.0%"
+                android:text="0.0%"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -209,4 +209,5 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/gray" />
+
 </LinearLayout>

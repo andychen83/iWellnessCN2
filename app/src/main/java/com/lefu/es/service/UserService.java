@@ -87,7 +87,7 @@ public class UserService {
 	/**根据称类型获取用户组*/
 	public List<String> getAllUserGroupByScaleType(String scale)throws Exception {
 		dbs = dbHelper.getReadableDatabase();
-		String sql="select * from user order where ugroup<>? by ugroup ";
+		String sql="select * from user where ugroup<>? order by ugroup ";
 		Cursor cursor = dbs.rawQuery(sql,new String[]{"P999"});
 		List<String> pes = new ArrayList<String>();
 		while (cursor.moveToNext()) {

@@ -93,6 +93,9 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
     @Bind(R.id.bluetooth_status)
     AppCompatTextView bluetoothStatusTx;
 
+    @Bind(R.id.blue_img)
+    ImageView blue_img;
+
     @Bind(R.id.weith_value_tx)
     MyTextView5 weithValueTx;
 
@@ -345,6 +348,23 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
         startActivityForResult(UserBabyListActivity.creatIntent(BabyScaleNewActivity.this,babyUser.getId()),102);
     }
 
+    @OnClick(R.id.blue_img)
+    public void setBlueToothClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+    }
+
+    @OnClick(R.id.bluetooth_status)
+    public void setBlueToothTXClick(){
+        if(null!=mScanner)mScanner.stopScane();
+        if(null!=mBluetoothLeService){
+            mBluetoothLeService.disconnect();
+        }
+    }
+
+
     /**
      * 返回事件
      */
@@ -392,53 +412,22 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
        }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 102) {
-            Bundle loginBundle = data.getExtras();
-            if(null!=loginBundle){
-                Serializable serializable = loginBundle.getSerializable("user");
-                if(null!=serializable){
-                    UserModel userModel = (UserModel)serializable;
-                    initView(userModel);
-                }
-            }
-        }else if (resultCode == 103) {
-            Bundle loginBundle = data.getExtras();
-            if(null!=loginBundle){
-                Serializable serializable = loginBundle.getSerializable("user");
-                if(null!=serializable){
-                    UserModel user = (UserModel) serializable;
-                    //替换当前页面最后的测量记录
-                    babyUser = user;
-                    initView(babyUser);
-                    //通知界面更新
-                    Message message=initHandler.obtainMessage(1);
-                    message.obj=lastRecord;
-                    initHandler.sendMessage(message);
-                    //保存记录
-                     RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
-                    //重置
-                    if(null!=mBluetoothLeService) mBluetoothLeService.disconnect();
-                    receiveRecod = null;
-                    //lastRecord = null;
-                    isOpenBabyScale = false;
-                }
-            }
-        }
-    }
+
 
 
     @Override
     public void updateConnectionState(int resourceId) {
         switch (resourceId){
             case R.string.disconnected:
+                //bluetoothStatusTx.setTextColor(getColor(R.color.shadow));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_not_connected));
+                //blue_img.setBackground(getDrawable(R.drawable.blue_gray_icon));
                 break;
 
             case R.string.connected:
+               // bluetoothStatusTx.setTextColor(getColor(R.color.white));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_connected));
+                //blue_img.setBackground(getDrawable(R.drawable.blue_icon));
                 break;
         }
     }
@@ -701,7 +690,39 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
         builder.create().show();
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 102) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel userModel = (UserModel)serializable;
+                    initView(userModel);
+                }
+            }
+        }else if (resultCode == 103) {
+            Bundle loginBundle = data.getExtras();
+            if(null!=loginBundle){
+                Serializable serializable = loginBundle.getSerializable("user");
+                if(null!=serializable){
+                    UserModel user = (UserModel) serializable;
+                    //替换当前页面最后的测量记录
+                    babyUser = user;
+                    //保存记录
+                    RecordDao.handHarmBabyData(recordService,lastRecord,babyUser);
+                    //通知界面更新
+                    initView(babyUser);
+                    //重置
+                    if(null!=mBluetoothLeService) mBluetoothLeService.disconnect();
+                    receiveRecod = null;
+                    //lastRecord = null;
+                    isOpenBabyScale = false;
+                }
+            }
+        }
+    }
 
 
     @Override

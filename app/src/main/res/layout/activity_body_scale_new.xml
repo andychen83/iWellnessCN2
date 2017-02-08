@@ -111,16 +111,16 @@
     <RelativeLayout
         android:id="@+id/bluetooth_ly"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_vertical_margin"
+        android:layout_height="20dp"
         android:layout_below="@id/main_ly"
         android:background="@color/allbackground"
-        android:gravity="center_horizontal">
+        android:gravity="center">
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/blue_img"
             android:layout_width="@dimen/activity_vertical_margin"
             android:layout_height="@dimen/activity_vertical_margin"
-            android:background="@drawable/blue_icon" />
+            android:background="@drawable/blue_gray_icon" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/bluetooth_status"
@@ -128,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/blue_img"
             android:text="@string/connect_state_not_connected"
-            android:textColor="@color/white"
+            android:textColor="@color/shadow"
             android:textSize="12sp" />
     </RelativeLayout>
 

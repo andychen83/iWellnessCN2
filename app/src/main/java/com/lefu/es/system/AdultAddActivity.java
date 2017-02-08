@@ -980,7 +980,7 @@ public class AdultAddActivity extends AppCompatActivity {
 				UtilConstants.CURRENT_USER.setScaleType(UtilConstants.BATHROOM_SCALE);
 				UtilConstants.SELECT_USER = UtilConstants.CURRENT_USER.getId();
 				/*防止数据被清空，记录到本地*/
-				String blueTooth_type=(String) UtilConstants.su.readbackUp("lefuconfig", "bluetooth_type"+UtilConstants.CURRENT_USER.getId(), String.class);
+				UtilConstants.su.editSharedPreferences("lefuconfig", "bluetooth_type"+UtilConstants.CURRENT_USER.getId(), "1");
 				UtilConstants.su.editSharedPreferences("lefuconfig", "addUser", JSONObject.toJSONString(UtilConstants.CURRENT_USER));
 				UtilConstants.su.editSharedPreferences("lefuconfig", "user", UtilConstants.SELECT_USER);
 				Intent intent = new Intent();
