@@ -577,13 +577,13 @@ public class BodyFatNewActivity extends BaseBleActivity {
     public void updateConnectionState(int resourceId) {
         switch (resourceId){
             case R.string.disconnected:
-                bluetoothStatusTx.setTextColor(getColor(R.color.shadow));
+                bluetoothStatusTx.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.shadow));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_not_connected));
                 blue_img.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_gray_icon));
                 break;
 
             case R.string.connected:
-                bluetoothStatusTx.setTextColor(getColor(R.color.white));
+                bluetoothStatusTx.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
                 bluetoothStatusTx.setText(getResources().getText(R.string.connect_state_connected));
                 blue_img.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_icon));
                 break;
