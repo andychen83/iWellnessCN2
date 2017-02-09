@@ -155,9 +155,12 @@ public class UserEditActivity extends AppCompatActivity {
 
 	protected UserModel user = null; //需要编辑的用户
 
-	public static Intent creatIntent(Context context, UserModel user){
+	protected  boolean isFirst = false;
+
+	public static Intent creatIntent(Context context, UserModel user,boolean isfirst){
 		Intent intent = new Intent(context,UserEditActivity.class);
 		intent.putExtra("user",user);
+		intent.putExtra("isfirst",isfirst);
 		return intent;
 	}
 	
@@ -179,6 +182,7 @@ public class UserEditActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Serializable serializable = getIntent().getSerializableExtra("user");
+		isFirst =  getIntent().getBooleanExtra("isfirst",false);
 		if(null!=serializable){
 			user = (UserModel)serializable;
 		}else{
@@ -1002,18 +1006,26 @@ public class UserEditActivity extends AppCompatActivity {
 	private void exit(){
 //		if (AppData.isCheckScale) {
 //			/* 是否存在用户 */
-//			try {
-//				if (uservice.getCount() > 0) {
-//					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
-//				}else{
-//					/* 结束程序 */
-//					ExitApplication.getInstance().exit(UserEditActivity.this);
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			try {
+				if (uservice.getCount() > 0) {
+					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
+				}else{
+					/* 结束程序 */
+					ExitApplication.getInstance().exit(UserEditActivity.this);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 //		}
-		UserEditActivity.this.finish();
+		if(isFirst){
+			if (null != LoadingActivity.mainActivty) {
+				LoadingActivity.mainActivty.finish();
+			}
+			System.exit(0);
+			UserEditActivity.this.finish();
+		}else {
+			UserEditActivity.this.finish();
+		}
 	}
 
 	/**判断*/

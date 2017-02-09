@@ -86,7 +86,7 @@ public class BodyFatScaleSetActivity extends AppCompatActivity {
 
     @OnClick(R.id.info_layout)
     public void infoLyClick(){
-        startActivityForResult(UserEditActivity.creatIntent(BodyFatScaleSetActivity.this,babyUser),2);
+        startActivityForResult(UserEditActivity.creatIntent(BodyFatScaleSetActivity.this,babyUser,false),2);
     }
 
     @OnClick(R.id.save_layout)
