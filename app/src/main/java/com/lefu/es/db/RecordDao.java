@@ -553,6 +553,9 @@ public class RecordDao {
 			try {
 				recod.setUseId(baby.getId());
 				recod.setUgroup(baby.getGroup());
+				float bmi = UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (baby.getBheigth() / 100)));
+				recod.setRbmi(bmi);
+				recod.setSbmi(recod.getRbmi()+"");
 				Records lastRecod = recordService.findLastRecordsByUID(baby.getId());
 				if (null != lastRecod) {
 					recod.setCompareRecord((UtilTooth.myround(recod.getRweight() - lastRecod.getRweight())) + "");

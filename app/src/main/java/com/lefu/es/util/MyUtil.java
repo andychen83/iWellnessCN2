@@ -164,18 +164,18 @@ public class MyUtil {
 				recod.setSweight(weight + "");
 				recod.setRweight(Float.parseFloat(recod.getSweight()));
 				recod.setUnitType(StringUtils.hexToTen(readMessage.substring(12, 14)));
-			} else {
-				recod.setRweight(UtilTooth.myround((float) (recod.getRweight() * 0.1)));
 			}
+//			} else {
+//				recod.setRweight(UtilTooth.myround((float) (recod.getRweight() * 0.1)));
+//			}
 			if (UtilConstants.KITCHEN_SCALE.equals(recod.getScaleType())) {
 				recod.setSbmi("0.0");
 				recod.setRbmi(0.0f);
 			}else{
-				if (StringUtils.isNumber(recod.getsHeight()) == true && !"0".equals(recod.getsHeight())) {
-					recod.setSbmi(UtilTooth.countBMI(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100));
-				}
-				if (StringUtils.isNumber(recod.getSbmi())) {
-					recod.setRbmi(UtilTooth.myround(Float.parseFloat(recod.getSbmi())));
+				if(null!=UtilConstants.CURRENT_USER){
+					float bmi = UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100)));
+					recod.setRbmi(bmi);
+					recod.setSbmi(recod.getRbmi()+"");
 				}
 			}
 			if (!UtilConstants.KITCHEN_SCALE.equals(recod.getScaleType())) {
@@ -512,8 +512,10 @@ public class MyUtil {
 
 		try {
 			if(readMessage.startsWith(UtilConstants.BATHROOM_SCALE)){
-				recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
-				recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
+				float bmi = UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (user.getBheigth() / 100)));
+
+				recod.setRbmi(bmi);
+				recod.setSbmi(recod.getRbmi()+"");
 			}else{
 				HTBodyfatGeneral bodyfat = new HTBodyfatGeneral(weight,height,sex, age, level, impedance);
 
@@ -549,8 +551,9 @@ public class MyUtil {
 							"  水分:" + String.format("%.1f%%",bodyfat.waterPercentage) +
 							"  肌肉:" + String.format("%.1fkg",bodyfat.muscleKg) + "\r\n");
 				}else {
-					recod.setRbmi(UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (Float.parseFloat(recod.getsHeight())) / 100)));
-					recod.setSbmi(UtilTooth.onePoint(recod.getRbmi()));
+					float bmi = UtilTooth.myround(UtilTooth.countBMI2(recod.getRweight(), (user.getBheigth() / 100)));
+					recod.setRbmi(bmi);
+					recod.setSbmi(recod.getRbmi()+"");
 					Log.e(TAG, "输入数据有误==>" + bodyfat.toString());
 				}
 			}

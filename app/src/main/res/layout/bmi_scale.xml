@@ -137,7 +137,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="@color/green_light_color" />
+                    android:background="@drawable/shape_corner_green_light_left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,13 +146,11 @@
                     android:text="@string/bar_pianshou_title" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="1dp"
-                android:layout_height="30dp"
+            <include
+                layout="@layout/jiantou"
                 android:layout_gravity="top"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/gray"></RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -164,7 +162,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="@color/green_color" />
+                    android:background="@drawable/shape_corner_green_right" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -173,13 +171,11 @@
                     android:text="@string/bar_biaozhun_title" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="1dp"
-                android:layout_height="30dp"
+            <include
+                layout="@layout/jiantou"
                 android:layout_gravity="top"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/gray"></RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -191,7 +187,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="@color/red_med_color" />
+                    android:background="@drawable/shape_corner_red_left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,13 +196,11 @@
                     android:text="@string/bar_pianpang_title" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="1dp"
-                android:layout_height="30dp"
+            <include
+                layout="@layout/jiantou"
                 android:layout_gravity="top"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/gray"></RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -218,7 +212,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="@color/red_color" />
+                    android:background="@drawable/shape_corner_red_right" />
 
                 <TextView
                     android:layout_width="wrap_content"

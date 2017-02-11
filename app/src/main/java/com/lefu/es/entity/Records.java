@@ -39,6 +39,8 @@ public class Records implements Serializable  {
 	private int unitType;// 00-g,01=ml,02=lb,04-ml
 	public boolean isNull=false;
 
+	private String receiveMsg ;
+
 	private UserModel user;
 
 	public Records(){}
@@ -141,7 +143,13 @@ public class Records implements Serializable  {
 		this.bodyAge = bodyAge;
 	}
 
+	public String getReceiveMsg() {
+		return receiveMsg;
+	}
 
+	public void setReceiveMsg(String receiveMsg) {
+		this.receiveMsg = receiveMsg;
+	}
 
 	public int getUnitType() {
 		return unitType;

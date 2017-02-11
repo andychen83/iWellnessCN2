@@ -42,6 +42,7 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.DeletedRecordsEvent;
 import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
@@ -246,14 +247,15 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             }else{
                 weightIndex.setText(UtilTooth.keep1Point(weight)+ "kg");
             }
-
             MoveView.weight(BodyScaleNewActivity.this,face_img_weight_ll,face_img_weight,weight_critical_point1,weight_critical_point2,biaoz,gender,user.getBheigth(),weight,user.getDanwei());
 
             // BMI
-            float bmi = (null==record?0f:record.getRbmi());
+            float bmi = 0.0f;
+            if(null!=record){
+                bmi = UtilTooth.myround(UtilTooth.countBMI2(record.getRweight(), (user.getBheigth() / 100)));
+            }
             bmiIndex.setText(UtilTooth.keep1Point(bmi));
             MoveView.bmi(BodyScaleNewActivity.this,face_img_bmi_ll,face_img_bmi,bmi_critical_point1,bmi_critical_point2,bmi_critical_point3,bmi_biaoz,bmi);
-
         }
     }
 
@@ -269,10 +271,31 @@ public class BodyScaleNewActivity extends BaseBleActivity {
 
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DeletedRecordsEvent noRecordsEvent) {
+        try {
+            if(null!=noRecordsEvent && null!=noRecordsEvent.getLastRecod()){
+                localData(noRecordsEvent.getLastRecod(),UtilConstants.CURRENT_USER);
+                initBodyBar(UtilConstants.CURRENT_USER,noRecordsEvent.getLastRecod());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    };
+
+
     List<UserModel> babys = null;
     @OnClick(R.id.harmbaby_menu)
     public void harmBabyMenuClick(){
         try {
+            if(null!=mScanner)mScanner.stopScane();
+            if(null!=mBluetoothLeService){
+                mBluetoothLeService.disconnect();
+                //mBluetoothLeService.close();
+            }
+
             if(null==babys || babys.size()==0) babys=uservice.getAllBabys();
 
             if(null==babys || babys.size()==0){
@@ -443,8 +466,8 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                 }
                 UtilConstants.CURRENT_SCALE = choice_scale;
             }
-            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
-                //CF 88 13 00 14 00 00 00 00 00 40
+            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName) && readMessage.length()=="ce0000d61500000000010d".length()){ //新的DL Scale
+                Log.e(TAG,"处理数据:"+readMessage);
                 if(RecordDao.isLockData(readMessage)){
                     if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1500) && null==receiveDataDialog) {
                         UtilConstants.receiveDataTime = System.currentTimeMillis();
@@ -455,7 +478,7 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                 }
             }else{
                 /**判断是不是两次连续的数据*/
-                if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
+                if (readMessage.length() > 31  && !mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName) && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000)) {
                     UtilConstants.receiveDataTime=System.currentTimeMillis();
 
                     if(newScale){
@@ -551,18 +574,19 @@ public class BodyScaleNewActivity extends BaseBleActivity {
     private void dueDate(String readMessage, int i) {
         if(0==i){//旧秤
             receiveRecod = MyUtil.parseMeaage(this.recordService, readMessage);
-            Message msg1 = handler.obtainMessage(0);
+            Message msg1 = handler.obtainMessage(3);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(1==i){//阿里秤
             receiveRecod = MyUtil.parseZuKangMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
-            Message msg1 = handler.obtainMessage(0);
+            Message msg1 = handler.obtainMessage(3);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
             MyUtil.setProcessWeightData(readMessage,weithValueTx,UtilConstants.CURRENT_USER.getDanwei(),false);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
+            if(null!=receiveRecod)receiveRecod.setReceiveMsg(readMessage);
             Message msg1 = handler.obtainMessage(0);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
@@ -576,6 +600,14 @@ public class BodyScaleNewActivity extends BaseBleActivity {
             switch (msg.what) {
                 case 0 :
                     Records data  = (Records)msg.obj;
+                    if(null!=data && null!=data.getReceiveMsg() && RecordDao.isLockData(data.getReceiveMsg()) && data.getReceiveMsg().length()=="ce0000e01500000000003b".length()){
+                        playSound();
+                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
+                        showReceiveDataDialog();
+                    }
+                    break;
+                case 3 :
+                    data  = (Records)msg.obj;
                     if(null!=data){
                         playSound();
                         weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
@@ -647,6 +679,12 @@ public class BodyScaleNewActivity extends BaseBleActivity {
                 case cancle_datacbtn:
                     if(null!=receiveDataDialog)receiveDataDialog.dismiss();
                     receiveDataDialog = null;
+                    try {
+                        Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"ce");
+                        localData(lastRecords,UtilConstants.CURRENT_USER);
+                    }catch (Exception e){
+                        Log.e(TAG,"");
+                    }
                     break;
                 case save_databtn:
                     try {

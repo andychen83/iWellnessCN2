@@ -327,7 +327,8 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 			tvdetail_bone_status.setText(MoveView.boneString(record.getRbone()));
 
 			// BMI
-			tvdetail_bmi_status.setText(MoveView.bmiString(record.getRbmi()));
+			float bmi = UtilTooth.myround(UtilTooth.countBMI2(record.getRweight(), (user.getBheigth() / 100)));
+			tvdetail_bmi_status.setText(MoveView.bmiString(bmi));
 
 			// 内脏脂肪指数
 			tvdetail_visceral_status.setText(MoveView.visceralFatString(record.getRvisceralfat()));

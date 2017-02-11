@@ -455,7 +455,10 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
                         unit = "00";
                     }
                     // 获取用户组
-                    String p = babyUser.getGroup().replace("P", "0");
+                    String p = "00";
+                    if(null!=UtilConstants.CURRENT_USER){
+                        p = UtilConstants.CURRENT_USER.getGroup().replace("P", "0");
+                    }
                     // 获取 校验位
                     String xor = Integer.toHexString(StringUtils.hexToTen("fd") ^ StringUtils.hexToTen("37")^ StringUtils.hexToTen(unit) ^ StringUtils.hexToTen(p));
                     Log.e(TAG, "发送新称数据：" + "fd37"+unit + p + "000000000000" + xor);
@@ -557,17 +560,27 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
     private void dueDate(String readMessage, int i) {
         Records records = null;
         if(0==i){//旧秤
-            records = MyUtil.parseMeaageForBaby(this.recordService, readMessage);
+            records = MyUtil.parseMeaage(this.recordService, readMessage);
+            Log.e(TAG, "解析体重"+records.getRweight());
+            Message msg1 = handler.obtainMessage(0);
+            msg1.obj = records;
+            handler.sendMessage(msg1);
         }else if(1==i){//阿里秤
             records = MyUtil.parseZuKangMeaage(this.recordService, readMessage,babyUser);
+            Log.e(TAG, "解析体重"+records.getRweight());
+            Message msg1 = handler.obtainMessage(0);
+            msg1.obj = records;
+            handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
             MyUtil.setProcessWeightData(readMessage,weithValueTx,babyUser.getDanwei(),true);
+
         }else if(3==i){//新秤锁定数据
             records = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,babyUser);
+            Message msg1 = handler.obtainMessage(0);
+            msg1.obj = records;
+            handler.sendMessage(msg1);
         }
-        Message msg1 = handler.obtainMessage(0);
-        msg1.obj = records;
-        handler.sendMessage(msg1);
+
     }
 
 
@@ -614,7 +627,7 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
                                         float compare = data.getRweight() - lastRecord.getRweight();
                                         data.setCompareRecord((UtilTooth.myround(compare)) + "");
                                         Log.e(TAG, "婴儿车前后重量相差:"+ compare);
-                                        if(Math.abs(compare)>=0.2){
+                                        if(Math.abs(compare)>=2){
                                             //替换当前页面最后的测量记录
                                             lastRecord = data;
                                             askForSaveExceptionData(data);

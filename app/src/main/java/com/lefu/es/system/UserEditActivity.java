@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -820,7 +821,7 @@ public class UserEditActivity extends AppCompatActivity {
 							targetweight = UtilTooth.lbToKg_target(Float.parseFloat(h1));
 							kg = UtilTooth.onePoint(targetweight);
 						}
-						target_edittv.setText(kg);
+						if(!"0".equals(kg) || !"0.0".equals(kg))target_edittv.setText(kg);
 					}
 
 					isKG = true;
@@ -861,8 +862,8 @@ public class UserEditActivity extends AppCompatActivity {
 							targetweightLB = UtilTooth.kgToLB_target(Float.parseFloat(h1));
 							kg = UtilTooth.onePoint(targetweightLB);
 						}
-						target_edittv.setText(kg);
-						target_edittv2.setText("0");
+						if(!"0".equals(kg) || !"0.0".equals(kg))target_edittv.setText(kg);
+						target_edittv2.setText("");
 					}
 					isKG = false;
 					UtilConstants.CHOICE_KG = UtilConstants.UNIT_ST;
@@ -901,8 +902,8 @@ public class UserEditActivity extends AppCompatActivity {
 							targetweightLB = UtilTooth.kgToLB_target(Float.parseFloat(h1));
 							kg = UtilTooth.onePoint(targetweightLB);
 						}
-						target_edittv.setText(kg);
-						target_edittv2.setText("0");
+						if(!"0".equals(kg) || !"0.0".equals(kg))target_edittv.setText(kg);
+						target_edittv2.setText("");
 					}
 					isKG = false;
 					UtilConstants.CHOICE_KG = UtilConstants.UNIT_LB;
@@ -1007,25 +1008,30 @@ public class UserEditActivity extends AppCompatActivity {
 //		if (AppData.isCheckScale) {
 //			/* 是否存在用户 */
 			try {
-				if (uservice.getCount() > 0) {
-					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
-				}else{
-					/* 结束程序 */
-					ExitApplication.getInstance().exit(UserEditActivity.this);
+//				if (uservice.getCount() > 0) {
+//					UserEditActivity.this.startActivity(new Intent(UserEditActivity.this, UserListActivity.class));
+//				}else{
+//					/* 结束程序 */
+//					ExitApplication.getInstance().exit(UserEditActivity.this);
+//				}
+				if(isFirst){
+					if (null != LoadingActivity.mainActivty) {
+						LoadingActivity.mainActivty.finish();
+					}
+					System.exit(0);
+					UserEditActivity.this.finish();
+				}else {
+					if(null!=user && user.getId()>0){
+						Message msg = saveHandler.obtainMessage(UPDATE_ATION);
+						saveHandler.sendMessage(msg);
+					}else{
+						UserEditActivity.this.finish();
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-//		}
-		if(isFirst){
-			if (null != LoadingActivity.mainActivty) {
-				LoadingActivity.mainActivty.finish();
-			}
-			System.exit(0);
-			UserEditActivity.this.finish();
-		}else {
-			UserEditActivity.this.finish();
-		}
+
 	}
 
 	/**判断*/
@@ -1106,7 +1112,10 @@ public class UserEditActivity extends AppCompatActivity {
 		saveHandler.sendMessage(msg);
 	}
 
+
+
 	public static final int SAVE_ATION = 1;
+	public static final int UPDATE_ATION = 2;
 	private final Handler saveHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -1115,6 +1124,48 @@ public class UserEditActivity extends AppCompatActivity {
 					if (null != user) {
 						/* 判断是否是识别界面进入 */
 						UserModel user=creatUserModel();
+
+						if (user.getId()>0) {
+							/* 保存用户信息 */
+							try {
+								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+									user.setDanwei(UtilConstants.UNIT_KG);
+								}
+								uservice.update(user);
+								user = uservice.find(user.getId());
+								UtilConstants.SELECT_USER = user.getId();
+								Intent intent=new Intent();
+								Bundle bundle=new Bundle();
+								bundle.putSerializable("user",user);
+								intent.putExtras(bundle);
+								setResult(RESULT_OK, intent);
+								if("P999".equals(user.getGroup())){
+									EventBus.getDefault().post(new ReFlushBabyEvent(user));
+								}
+								UserEditActivity.this.finish();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+						} else {
+							/*跳转到指定的扫描界面*/
+							int currentapiVersion = Build.VERSION.SDK_INT;
+							Intent intent1 = new Intent();
+							intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							if (currentapiVersion < 18) {
+								intent1.setClass(UserEditActivity.this, AutoBTActivity.class);
+							} else {
+								intent1.setClass(UserEditActivity.this, AutoBLEActivity.class);
+							}
+							UserEditActivity.this.startActivity(intent1);
+							finish();
+						}
+					}
+					break;
+				case UPDATE_ATION :
+					if (null != user) {
+						/* 判断是否是识别界面进入 */
+
 
 						if (user.getId()>0) {
 							/* 保存用户信息 */
@@ -1285,6 +1336,46 @@ public class UserEditActivity extends AppCompatActivity {
 		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+			View v = getCurrentFocus();
+			if (isShouldHideInput(v, ev)) {
+
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				if (imm != null) {
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				}
+			}
+			return super.dispatchTouchEvent(ev);
+		}
+		// 必不可少，否则所有的组件都不会有TouchEvent了
+		if (getWindow().superDispatchTouchEvent(ev)) {
+			return true;
+		}
+		return onTouchEvent(ev);
+	}
+
+	public  boolean isShouldHideInput(View v, MotionEvent event) {
+		if (v != null && (v instanceof EditText)) {
+			int[] leftTop = { 0, 0 };
+			//获取输入框当前的location位置
+			v.getLocationInWindow(leftTop);
+			int left = leftTop[0];
+			int top = leftTop[1];
+			int bottom = top + v.getHeight();
+			int right = left + v.getWidth();
+			if (event.getX() > left && event.getX() < right
+					&& event.getY() > top && event.getY() < bottom) {
+				// 点击的是输入框区域，保留点击EditText的事件
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

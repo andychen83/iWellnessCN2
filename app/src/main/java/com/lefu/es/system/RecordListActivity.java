@@ -59,6 +59,7 @@ import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.constant.imageUtil;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.DeletedRecordsEvent;
 import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.RecordService;
@@ -516,7 +517,8 @@ public class RecordListActivity extends Activity implements android.view.View.On
 								views[i] = recor.getRweight();
 							}
 						} else if (type == UtilConstants.BMI_SINGLE) {
-							views[i] = recor.getRbmi();
+							float bmi = UtilTooth.myround(UtilTooth.countBMI2(recor.getRweight(), (user.getBheigth() / 100)));
+							views[i] = bmi;
 						} else if (type == UtilConstants.BMR_SINGLE) {
 							views[i] = UtilTooth.myround(recor.getRbmr());
 						} else if (type == UtilConstants.BODYFAT_SINGLE) {
@@ -1061,6 +1063,7 @@ public class RecordListActivity extends Activity implements android.view.View.On
 								if (null != CacheHelper.recordListDesc && CacheHelper.recordListDesc.size() > 0) {
 									lastRecod = CacheHelper.recordListDesc.get(0);
 									recordid = lastRecod.getId();
+									EventBus.getDefault().post(new DeletedRecordsEvent(lastRecod));
 								}else{
 									EventBus.getDefault().post(new NoRecordsEvent());
 								}

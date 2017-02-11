@@ -87,7 +87,7 @@ public class BleHelper1 {
 
     /**
      * 发送 数据给称
-     * @param mBluetoothLeService
+     * @param mBluetoothLeService  fd37000999000000000000953
      * @param data
      */
     public void sendDateToScale(BluetoothLeService1 mBluetoothLeService, String data) {

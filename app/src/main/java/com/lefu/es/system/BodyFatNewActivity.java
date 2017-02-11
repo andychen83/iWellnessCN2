@@ -28,6 +28,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import com.lefu.es.db.RecordDao;
 import com.lefu.es.entity.NutrientBo;
 import com.lefu.es.entity.Records;
 import com.lefu.es.entity.UserModel;
+import com.lefu.es.event.DeletedRecordsEvent;
 import com.lefu.es.event.NoRecordsEvent;
 import com.lefu.es.service.ExitApplication;
 import com.lefu.es.service.TimeService;
@@ -296,6 +298,9 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     @Bind(R.id.blue_img)
     ImageView blue_img;
+
+    @Bind(R.id.info_item)
+    ScrollView scrollView;
 
     public static int SELCET_USER=100;
 
@@ -678,7 +683,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 }
                 UtilConstants.CURRENT_SCALE = choice_scale;
             }
-            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName)){ //新的DL Scale
+            if(null!=mDeviceName && mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName) && readMessage.length()=="cf9015d6153a353b0000bd".length()){ //新的DL Scale
                 //CF 88 13 00 14 00 00 00 00 00 40
                 if(RecordDao.isLockData(readMessage)){
                     if ((System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
@@ -690,7 +695,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 }
             }else{
                 /**判断是不是两次连续的数据*/
-                if (readMessage.length() > 31 && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
+                if ( readMessage.length() > 31 && !mDeviceName.toLowerCase().startsWith(UtilConstants.DLscaleName) && (System.currentTimeMillis()- UtilConstants.receiveDataTime>1000) && null==receiveDataDialog) {
                     UtilConstants.receiveDataTime=System.currentTimeMillis();
 
                     if(newScale){
@@ -711,11 +716,11 @@ public class BodyFatNewActivity extends BaseBleActivity {
                             return;
                         }
 							/*显示称类型错误*/
-                        if (!readMessage.startsWith(UtilConstants.BATHROOM_SCALE)&&readMessage.length()>31) {
+                        if (!readMessage.startsWith(UtilConstants.BODY_SCALE)&&readMessage.length()>31) {
 								/*跳转到制定的秤界面*/
-                            if(readMessage.startsWith(UtilConstants.BODY_SCALE)){
+                            if(readMessage.startsWith(UtilConstants.BATHROOM_SCALE)){
 									/*脂肪秤*/
-                                UtilConstants.CURRENT_SCALE=UtilConstants.BODY_SCALE;
+                                UtilConstants.CURRENT_SCALE=UtilConstants.BATHROOM_SCALE;
                                 UtilConstants.CURRENT_USER.setScaleType(UtilConstants.CURRENT_SCALE);
 									/*保存测量数据*/
                                 RecordDao.dueDate(recordService, readMessage);
@@ -795,12 +800,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
     private void dueDate(String readMessage, int i) {
         if(0==i){//旧秤
             receiveRecod = MyUtil.parseMeaage(this.recordService, readMessage);
-            Message msg1 = handler.obtainMessage(0);
+            Message msg1 = handler.obtainMessage(3);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(1==i){//阿里秤
             receiveRecod = MyUtil.parseZuKangMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
-            Message msg1 = handler.obtainMessage(0);
+            Message msg1 = handler.obtainMessage(3);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
         }else if(2==i){//新称过程数据
@@ -808,6 +813,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
            // weithValueTx.setTexts(UtilTooth.keep1Point(weight),null);
         }else if(3==i){//新秤锁定数据
             receiveRecod = MyUtil.parseDLScaleMeaage(this.recordService, readMessage,UtilConstants.CURRENT_USER);
+            if(null!=receiveRecod)receiveRecod.setReceiveMsg(readMessage);
             Message msg1 = handler.obtainMessage(0);
             msg1.obj = receiveRecod;
             handler.sendMessage(msg1);
@@ -823,10 +829,17 @@ public class BodyFatNewActivity extends BaseBleActivity {
             switch (msg.what) {
                 case 0 :
                     Records data  = (Records)msg.obj;
-                    if(null!=data){
-                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
+                    if(null!=data && null!=data.getReceiveMsg() && RecordDao.isLockData(data.getReceiveMsg()) && data.getReceiveMsg().length()=="cf0000e01500000000003b".length()){
                         playSound();
-
+                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
+                        showReceiveDataDialog();
+                    }
+                    break;
+                case 3 :
+                    data  = (Records)msg.obj;
+                    if(null!=data ){
+                        playSound();
+                        weithValueTx.setTexts(UtilTooth.keep1Point(data.getRweight()),null);
                         showReceiveDataDialog();
                     }
                     break;
@@ -895,6 +908,12 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 case cancle_datacbtn:
                     if(null!=receiveDataDialog)receiveDataDialog.dismiss();
                     receiveDataDialog = null;
+                    try {
+                        Records lastRecords = recordService.findLastRecords(UtilConstants.CURRENT_USER.getId(),"cf");
+                        localData(lastRecords,UtilConstants.CURRENT_USER);
+                    }catch (Exception e){
+                        Log.e(TAG,"");
+                    }
                     break;
                 case save_databtn:
                     try {
@@ -1042,6 +1061,21 @@ public class BodyFatNewActivity extends BaseBleActivity {
 
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DeletedRecordsEvent noRecordsEvent) {
+        try {
+            if(null!=noRecordsEvent && null!=noRecordsEvent.getLastRecod()){
+                localData(noRecordsEvent.getLastRecod(),UtilConstants.CURRENT_USER);
+                initBodyBar(UtilConstants.CURRENT_USER,noRecordsEvent.getLastRecod());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    };
+
+
 
     @OnClick(R.id.weight_jiantou)
     public void menuWeightOpenClick(){
@@ -1058,7 +1092,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1096,7 +1130,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @OnClick(R.id.muscal_jiantou)
     public void menuMuscalOpenClick(){
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }else{
             status_bar_muscial.setVisibility(View.VISIBLE);
@@ -1150,7 +1184,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1196,7 +1230,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1242,7 +1276,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1288,7 +1322,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1334,7 +1368,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 
@@ -1380,7 +1414,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
         }
 
         if(status_bar_muscial.getVisibility()==View.VISIBLE){
-            status_bar_muscial.setVisibility(View.GONE);
+            status_bar_muscial.setVisibility(View.INVISIBLE);
             muscal_jiantou.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.down_arrow));
         }
 

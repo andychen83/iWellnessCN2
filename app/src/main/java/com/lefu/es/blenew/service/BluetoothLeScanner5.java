@@ -37,7 +37,7 @@ public class BluetoothLeScanner5 extends BluetoothLeScannerInterface {
 
     @Override
     public void stopScane(){
-        if(null!=mBluetoothUtils1)mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
+        if(null!=mBluetoothUtils1 && null!=mBluetoothUtils1.getBluetoothAdapter() && null!=mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner())mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
     }
 
     @Override
@@ -53,17 +53,17 @@ public class BluetoothLeScanner5 extends BluetoothLeScannerInterface {
                     public void run() {
                         Log.e("TAG", "~ Stopping Scan (timeout)");
                         mScanning = false;
-                        mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
+                        if(null!=mBluetoothUtils1 && null!=mBluetoothUtils1.getBluetoothAdapter() && null!=mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner())mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
                     }
                 }, duration);
             }
             Log.e("TAG", "BEGIN scane devices scanLeDevice:=");
             mScanning = true;
-            mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().startScan(mLeScanCallback);
+            if(null!=mBluetoothUtils1 && null!=mBluetoothUtils1.getBluetoothAdapter() && null!=mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner()) mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().startScan(mLeScanCallback);
         } else {
             Log.e("TAG", "~ Stopping Scan");
             mScanning = false;
-            mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
+            if(null!=mBluetoothUtils1 && null!=mBluetoothUtils1.getBluetoothAdapter() && null!=mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner())mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
         }
     }
 
@@ -82,7 +82,7 @@ public class BluetoothLeScanner5 extends BluetoothLeScannerInterface {
                     Log.i("BluetoothLeScanner5","发现BLE称=" + deviceName + "[" + device.getAddress() + "]");
                     /* 停止蓝牙扫描 */
                     if (mScanning) {
-                        mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
+                        if(null!=mBluetoothUtils1 && null!=mBluetoothUtils1.getBluetoothAdapter() && null!=mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner())mBluetoothUtils1.getBluetoothAdapter().getBluetoothLeScanner().stopScan(mLeScanCallback);
                         mScanning = false;
                     }
                     final BluetoothLeDevice1 deviceLe = new BluetoothLeDevice1(result.getDevice(), result.getRssi(), null==result.getScanRecord()?null:result.getScanRecord().getBytes(), System.currentTimeMillis());
