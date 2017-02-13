@@ -112,6 +112,8 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 
 		if(UtilConstants.BABY_SCALE.equals(record.getScaleType()) || UtilConstants.BATHROOM_SCALE.equals(record.getScaleType())){
 			setContentView(R.layout.activity_detaillistitem2);
+		}else if(UtilConstants.KITCHEN_SCALE.equals(record.getScaleType())){
+			setContentView(R.layout.activity_detaillistitem_kitchen);
 		}else{
 			setContentView(R.layout.activity_detaillistitem);
 		}
