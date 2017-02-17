@@ -606,7 +606,7 @@ public class RecordKitchenListActivity extends Activity implements android.view.
 						if (null != lastRecod){
 							str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
 							str.append("\n");
-							str.append(getString(R.string.export_name) + lastRecod.getRphoto());
+							str.append(getString(R.string.export_foodname) + lastRecod.getRphoto());
 							str.append("\n");
 						}
 

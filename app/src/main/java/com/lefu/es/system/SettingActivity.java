@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,9 +33,13 @@ import com.lefu.es.constant.UtilConstants;
 import com.lefu.es.constant.imageUtil;
 import com.lefu.es.entity.Records;
 import com.lefu.es.service.ExitApplication;
+import com.lefu.es.service.RecordService;
 import com.lefu.es.service.UserService;
 import com.lefu.es.util.FileUtils;
+import com.lefu.es.util.MoveView;
 import com.lefu.es.util.SharedPreferencesUtil;
+import com.lefu.es.util.StringUtils;
+import com.lefu.es.util.UtilTooth;
 import com.lefu.iwellness.newes.cn.system.R;
 
 /**
@@ -64,7 +69,7 @@ public class SettingActivity extends AppCompatActivity {
 	private FileUtils fileutil = null;
 	
 	private UserService uservice;
-
+	private RecordService recordService;
 	public static Intent creatIntent(Context context){
 		Intent intent = new Intent(context,SettingActivity.class);
 		return intent;
@@ -76,7 +81,8 @@ public class SettingActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		
 		uservice = new UserService(this);
-		
+		recordService = new RecordService(this);
+
 		setContentView(R.layout.activity_user_detail_info);
 		detailActivty = this;
 		/*初始化视图*/
@@ -238,24 +244,102 @@ public class SettingActivity extends AppCompatActivity {
 						savesAlertDialog.dismiss();
 						return;
 					}
-					if (null != CacheHelper.recordListDesc && 0 != CacheHelper.recordListDesc.size()) {
-						try {
-							fileutil.createSDFile("myrecords.txt");
-							String str = "\n";
-							for (Records curRecord : CacheHelper.recordListDesc) {
-								str += curRecord.getRecordTime()+","+curRecord.getRphoto() + " Weight:" + curRecord.getRweight() + "g,Carbohydrate:" + curRecord.getRbodywater() + "kcal,Energ:" 
-							+ curRecord.getRbodyfat() + "g,Protein:"+ curRecord.getRbone() + "g,Fiber:" + curRecord.getRvisceralfat()  + "g,Lipid:" + curRecord.getRmuscle() + "g,Cholesterol:"
-										+ curRecord.getRbmi() + "g，Calcium:" + curRecord.getBodyAge() + "mg,Vitamin C"+ curRecord.getRbmr() + "mg \n";
+					try {
+						CacheHelper.recordListDesc = recordService.getAllDatasByScaleAndIDDesc(UtilConstants.CURRENT_SCALE, UtilConstants.CURRENT_USER.getId(), UtilConstants.CURRENT_USER.getBheigth());
+						if (null != CacheHelper.recordListDesc && 0 != CacheHelper.recordListDesc.size()) {
+							try {
+								fileutil.createSDFile("myrecords.txt");
+								StringBuffer str = new StringBuffer();
+								if(null!=UtilConstants.CURRENT_USER){
+									str.append(UtilConstants.CURRENT_USER.getUserName());
+									str.append("\n");
+								}
+								if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.KITCHEN_SCALE)){
+									for (Records lastRecod : CacheHelper.recordListDesc) {
+										str.append("\n");
+										str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
+										str.append("\n");
+
+										str.append(getString(R.string.export_foodname) + lastRecod.getRphoto());
+										str.append("\n");
+
+										str.append(getString(R.string.kitchen_water) +UtilTooth.keep2Point(lastRecod.getRmuscle())+"g\n");
+										//						str.append(getString(R.string.kitchen_energ) + UtilTooth.keep2Point(lastRecod.getRbodywater())+"g\n");
+										str.append(getString(R.string.kitchen_energ) + UtilTooth.keep2Point(lastRecod.getRbodywater())+"kcal\n");
+										str.append(getString(R.string.kitchen_protein) + UtilTooth.keep2Point(lastRecod.getRbodyfat())+"g\n");
+										str.append(getString(R.string.kitchen_lipid) + UtilTooth.keep2Point(lastRecod.getRbone())+"g\n");
+										str.append(getString(R.string.kitchen_vitaminC) + UtilTooth.keep2Point(lastRecod.getRbmr())+"mg\n");
+										str.append(getString(R.string.kitchen_fiber) + UtilTooth.keep2Point(lastRecod.getRvisceralfat()) + " g\n");
+										str.append(getString(R.string.kitchen_cholesterol) + UtilTooth.keep2Point(lastRecod.getRbmi())+"mg\n");
+										str.append(getString(R.string.kitchen_calcium) + UtilTooth.keep2Point(lastRecod.getBodyAge())+"mg\n");
+									}
+
+								}else{
+									String sex = "1";
+									if(null!=UtilConstants.CURRENT_USER)sex = UtilConstants.CURRENT_USER.getSex();
+									if(TextUtils.isEmpty(sex) || "null".equalsIgnoreCase(sex))sex = "1";
+									int gender = Integer.parseInt(sex);
+									for (Records lastRecod : CacheHelper.recordListDesc) {
+										str.append(getString(R.string.export_time) + StringUtils.getDateShareString(lastRecod.getRecordTime(), 6));
+										str.append("\n");
+										str.append(getString(R.string.export_weight) + UtilTooth.keep1Point(lastRecod.getRweight()) + "kg");
+										if(null!=UtilConstants.CURRENT_USER)str.append("   "+MoveView.weightString(gender,UtilConstants.CURRENT_USER.getBheigth(),lastRecod.getRweight()));
+										str.append("\n");
+										if(UtilConstants.CURRENT_SCALE.equals(UtilConstants.BATHROOM_SCALE) || UtilConstants.CURRENT_SCALE.equals(UtilConstants.BABY_SCALE)){
+
+										}else{
+											str.append(getString(R.string.export_body_Water) + lastRecod.getRbodywater() + "%");
+											str.append("   "+MoveView.moistureString(gender,lastRecod.getRbodywater()));
+											str.append("\n");
+
+											str.append(getString(R.string.export_body_Fat) + lastRecod.getRbodyfat() + "%");
+											if(null!=UtilConstants.CURRENT_USER)str.append("   "+MoveView.bftString(gender,UtilConstants.CURRENT_USER.getAgeYear(),lastRecod.getRbodyfat()));
+											str.append("\n");
+
+											str.append(getString(R.string.export_bone) + lastRecod.getRbone() + "kg");
+											str.append("   "+MoveView.boneString(lastRecod.getRbone()));
+											str.append("\n");
+
+											str.append(getString(R.string.export_visceral_fat) + lastRecod.getRvisceralfat());
+											str.append("   "+MoveView.visceralFatString(lastRecod.getRvisceralfat()));
+											str.append("\n");
+
+											str.append(getString(R.string.export_BMR) + lastRecod.getRbmr() + " kcal");
+											if(null!=UtilConstants.CURRENT_USER)str.append("   "+MoveView.bmrString(gender,UtilConstants.CURRENT_USER.getAgeYear(),lastRecod.getRweight(),lastRecod.getRbmr()));
+											str.append("\n");
+
+											str.append(getString(R.string.export_muscle_mass) + lastRecod.getRmuscle() + "kg");
+											if(null!=UtilConstants.CURRENT_USER)str.append("   "+MoveView.muscleString(gender,UtilConstants.CURRENT_USER.getBheigth(),lastRecod.getRmuscle()));
+											str.append("\n");
+										}
+										if(null!=UtilConstants.CURRENT_USER){
+											float bmi = UtilTooth.countBMI2(lastRecod.getRweight(), (UtilConstants.CURRENT_USER.getBheigth() / 100));
+											bmi = UtilTooth.myround(bmi);
+											str.append(getString(R.string.export_BMI) + bmi );
+											str.append("   "+MoveView.bmiString(bmi));
+											str.append("\n");
+										}
+									}
+								}
+
+//							String str = "\n";
+//							for (Records curRecord : CacheHelper.recordListDesc) {
+//								str += curRecord.getRecordTime()+","+curRecord.getRphoto() + " Weight:" + curRecord.getRweight() + "g,Carbohydrate:" + curRecord.getRbodywater() + "kcal,Energ:"
+//							+ curRecord.getRbodyfat() + "g,Protein:"+ curRecord.getRbone() + "g,Fiber:" + curRecord.getRvisceralfat()  + "g,Lipid:" + curRecord.getRmuscle() + "g,Cholesterol:"
+//										+ curRecord.getRbmi() + "g，Calcium:" + curRecord.getBodyAge() + "mg,Vitamin C"+ curRecord.getRbmr() + "mg \n";
+//							}
+								fileutil.writeSDFile(str.toString(), "myrecords.txt");
+								Toast.makeText(SettingActivity.this, getString(R.string.setting_export_txt_succ), Toast.LENGTH_SHORT).show();
+							} catch (IOException e) {
+								Toast.makeText(SettingActivity.this, getString(R.string.setting_export_createFile_fail), Toast.LENGTH_SHORT).show();
 							}
-							fileutil.writeSDFile(str, "myrecords.txt");
-							Toast.makeText(SettingActivity.this, getString(R.string.setting_export_txt_succ), Toast.LENGTH_SHORT).show();
-						} catch (IOException e) {
-							Toast.makeText(SettingActivity.this, getString(R.string.setting_export_createFile_fail), Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(SettingActivity.this, getString(R.string.setting_export_noRecord), Toast.LENGTH_SHORT).show();
 						}
-					} else {
-						Toast.makeText(SettingActivity.this, getString(R.string.setting_export_noRecord), Toast.LENGTH_SHORT).show();
+						savesAlertDialog.dismiss();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					savesAlertDialog.dismiss();
 					break;
 				case R.id.close_button :
 					savesAlertDialog.dismiss();

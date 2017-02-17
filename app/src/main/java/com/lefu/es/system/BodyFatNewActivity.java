@@ -327,7 +327,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
                 }
                 UtilConstants.su.editSharedPreferences("lefuconfig", "first_install_bodyfat_scale", "1");
                 UtilConstants.FIRST_INSTALL_BODYFAT_SCALE = "1";
-                showHarmBabyTipMask();
+                //showHarmBabyTipMask();
             }
 
         }).show();

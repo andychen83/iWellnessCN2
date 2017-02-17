@@ -387,6 +387,7 @@
     <string name="click_onscale_waring">每次测量请先点击  上秤  菜单</string>
 
     <!-- 分享导出 -->
+    <string name="export_foodname">食物名称:</string>
     <string name="export_name">姓名:</string>
     <string name="export_time">时间:</string>
     <string name="export_weight">体重:</string>
@@ -423,6 +424,6 @@
     <string name="bar_jiankang_title">健康</string>
     <string name="bar_jinti_title">警惕</string>
     <string name="bar_weixian_title">危险</string>
-
-    <string name="receive_data_waring">接收到异常数据,是否保存?</string>
+    <string name="bar_chaozhong_title">超重</string>
+    <string name="receive_data_waring">数据好像不对，是您吗？</string>
 </resources>

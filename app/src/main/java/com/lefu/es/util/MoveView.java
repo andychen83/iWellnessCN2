@@ -284,7 +284,7 @@ public class MoveView {
         if (fatPercent <= critical_point1) {
             deviation = (int) (screenwidth * 0.2 * (fatPercent / critical_point1));
             imageView.setImageDrawable(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.sunface));
-            bft_biaoz.setText("瘦");
+            bft_biaoz.setText("偏瘦");
             bft_biaoz.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.green_light_color_bg));
         } else if (fatPercent > critical_point1 && fatPercent <= critical_point2) {
             imageView.setImageDrawable(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.sunface));
@@ -294,17 +294,17 @@ public class MoveView {
         } else if (fatPercent > critical_point2 && fatPercent <= critical_point3) {
             imageView.setImageDrawable(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.sunface));
             deviation = (int) (screenwidth * 0.4 + (fatPercent - critical_point2) / (critical_point3 - critical_point2) * screenwidth * 0.2);
-            bft_biaoz.setText("标准");
+            bft_biaoz.setText("偏胖");
             bft_biaoz.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.grade_bg));
         } else if (fatPercent > critical_point3 && fatPercent <= critical_point4) {
             imageView.setImageDrawable(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.sunface));
             deviation = (int) (screenwidth * 0.6 + (fatPercent - critical_point3) / (critical_point4 - critical_point3) * screenwidth * 0.2);
-            bft_biaoz.setText("偏胖");
+            bft_biaoz.setText("胖");
             bft_biaoz.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.red_color_bg));
         } else if (fatPercent > critical_point4) {
             imageView.setImageDrawable(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.sunface));
             deviation = (int) (screenwidth * 0.8 + (fatPercent - critical_point4) / critical_point5 * screenwidth * 0.2);
-            bft_biaoz.setText("胖");
+            bft_biaoz.setText("超重");
             bft_biaoz.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.red_color_bg));
         }
         textView1.setText(MyUtil.onePoint(critical_point1) + "%");
@@ -373,15 +373,15 @@ public class MoveView {
         }
 
         if (fatPercent <= critical_point1) {
-            return "瘦";
-        } else if (fatPercent > critical_point1 && fatPercent <= critical_point2) {
             return "偏瘦";
+        } else if (fatPercent > critical_point1 && fatPercent <= critical_point2) {
+            return "健康";
         } else if (fatPercent > critical_point2 && fatPercent <= critical_point3) {
-            return "标准";
-        } else if (fatPercent > critical_point3 && fatPercent <= critical_point4) {
             return "偏胖";
-        } else {
+        } else if (fatPercent > critical_point3 && fatPercent <= critical_point4) {
             return "胖";
+        } else {
+            return "超重";
         }
     }
 
