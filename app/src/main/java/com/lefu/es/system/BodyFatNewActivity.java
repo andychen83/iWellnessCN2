@@ -518,7 +518,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
             }
             MoveView.muscle(BodyFatNewActivity.this,face_img_muscle_ll,face_img_muscle,muscle_critical_point1,muscle_critical_point2,muscle_biaoz,gender,user.getBheigth(),muscal,user.getDanwei());
             //身体年龄
-            if(record.getBodyAge()>0){
+            if(null!=record && record.getBodyAge()>0){
                 MoveView.physicAge(BodyFatNewActivity.this,face_img_age_ll,age_critical_point,ageIndex,age_biaoz,user.getAgeYear(),(int)record.getBodyAge());
                 physicalage_ly.setVisibility(View.VISIBLE);
             }else{
