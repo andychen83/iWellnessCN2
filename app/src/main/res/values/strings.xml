@@ -57,7 +57,7 @@
     <string name="uaermonth_hint">1&#8211;12</string>
     <string name="exit_waring">确定要退出吗？</string>
     <string name="nodata_waring">无此用户数据</string>
-    <string name="deleted_waring">确认要删除此用户全部数据吗?</string>
+    <string name="deleted_waring">确认要删除此用户该条数据吗?</string>
     <string name="delsucess_waring">删除成功!</string>
     <string name="deleteall_waring">确认要删除此用户全部数据吗?</string>
     <string name="newdate_alter">新信息 </string>

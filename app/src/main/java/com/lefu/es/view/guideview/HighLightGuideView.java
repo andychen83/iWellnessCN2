@@ -237,7 +237,7 @@ public class HighLightGuideView extends View {
         
         if(mText!=null){
             Paint paint = new Paint();
-            paint.setTextSize(60);
+            paint.setTextSize(30);
             paint.setColor(Color.parseColor("#ffffff"));
             Bitmap bitmap = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.RGB_565);
             //bitmap.eraseColor(Color.argb(0,0,0,0)); 

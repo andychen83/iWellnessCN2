@@ -998,6 +998,7 @@ public class UserAddActivity extends AppCompatActivity {
 			if (currentapiVersion < 18) {
 				intent.setClass(UserAddActivity.this, AutoBTActivity.class);
 			}else{
+				intent.putExtra("isfirst",true);
 				intent.setClass(UserAddActivity.this, AutoBLEActivity.class);
 			}
 			UserAddActivity.this.startActivity(intent);
