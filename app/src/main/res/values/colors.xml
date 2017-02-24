@@ -42,7 +42,7 @@
     <color name="graph_margin">#C5142429</color>
     <color name="graph_line">#b6c3c7</color>
 
-
+    <color name="lightred_color">#F36650</color>
     <color name="green_color">#5CA145</color>
     <color name="green_light_color">#93CA51</color>
     <color name="green_yello_color">#DCE254</color>

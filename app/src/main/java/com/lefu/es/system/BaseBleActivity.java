@@ -103,6 +103,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
         mBluetoothUtils = new BluetoothUtils1(this);
         if(mBluetoothUtils.isBluetoothLeSupported()){
             BluetoolUtil.bleflag = true;
+            //初始化蓝牙相关对象
             scanHandler = new Handler();
             mScanner = mBluetoothUtils.initBleScaner(nofityHandler);
             //注册通知
@@ -110,7 +111,7 @@ public abstract class BaseBleActivity extends AppCompatActivity {
             //绑定蓝牙服务服务
             final Intent gattServiceIntent = new Intent(BaseBleActivity.this, BluetoothLeService1.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
+            //申请权限
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ) {

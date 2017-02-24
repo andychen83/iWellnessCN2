@@ -83,13 +83,14 @@ public class AutoBLEActivity extends BaseBleActivity {
 	private boolean isConneced=false;
 	/**显示提示语*/
 	private boolean keepScaleWorking=true;
-
+	protected  boolean isFirst = false;
 	//protected static final int REQUEST_ACCESS_COARSE_LOCATION_PERMISSION = 101;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auto);
+		isFirst =  getIntent().getBooleanExtra("isfirst",false);
 		backButton=(Button) this.findViewById(R.id.btn_mback);
 		backButton.setOnClickListener(OnClickListener);
 		recordService = new RecordService(this);
@@ -140,7 +141,7 @@ public class AutoBLEActivity extends BaseBleActivity {
 //			}else{
 //				startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class));
 //			}
-			startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class));
+			startActivity(new Intent(AutoBLEActivity.this, UserEditActivity.class).putExtra("isfirst",isFirst));
 			AutoBLEActivity.this.finish();
 		}catch (Exception e){
 

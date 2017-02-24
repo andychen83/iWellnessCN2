@@ -443,7 +443,7 @@ public class RecordDao {
 		recod.setLevel(user.getLevel());
 
 		String scaleType = readMessage.substring(0,2);
-		impedance = (int)(StringUtils.hexToTen(readMessage.substring(4,6)+readMessage.substring(2,4))*0.1f);
+		impedance = (StringUtils.hexToTen(readMessage.substring(14,16)+readMessage.substring(12,14)+readMessage.substring(10,12)));
 		//String unit = readMessage.substring(16, 18);
 		weight = StringUtils.hexToTen(readMessage.substring(8, 10)+readMessage.substring(6, 8))*0.01d;
 		height = user.getBheigth();

@@ -55,18 +55,116 @@
                 android:background="@drawable/grade_bg"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="@string/bar_biaozhun_title"
+                android:text="@string/bar_you_title"
                 android:textColor="@color/white" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/age_jiantou"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:src="@drawable/down_arrow" />
         </LinearLayout>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/status_bar_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
+        <LinearLayout
+            android:id="@+id/top_wa_moisture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/age_critical_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/top_wa_moisture"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@drawable/shape_corner_green_left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/bar_you_title" />
+            </LinearLayout>
+
+            <include
+                layout="@layout/jiantou"
+                android:layout_gravity="top"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@drawable/shape_corner_red_right" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/bar_piangao_title" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/face_img_age_ll"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/face_img_age"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/sunface" />
+        </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1px"

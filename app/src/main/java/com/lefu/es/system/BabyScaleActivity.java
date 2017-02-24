@@ -688,11 +688,12 @@ public class BabyScaleActivity extends Activity implements Runnable {
 	/**分页图片监听*/
 	android.view.View.OnClickListener imgOnClickListener = new android.view.View.OnClickListener() {
 		public void onClick(View v) {
-			Intent intent = new Intent();
-			intent.setClass(BabyScaleActivity.this, RecordListActivity.class);
-			intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
-			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivityForResult(intent, 0);
+//			Intent intent = new Intent();
+//			intent.setClass(BabyScaleActivity.this, RecordListActivity.class);
+//			intent.putExtra("type", UtilConstants.WEIGHT_SINGLE);
+//			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//			startActivityForResult(intent, 0);
+			startActivityForResult(RecordListActivity.creatIntent(BabyScaleActivity.this,UtilConstants.CURRENT_USER),0);
 		}
 	};
 	
