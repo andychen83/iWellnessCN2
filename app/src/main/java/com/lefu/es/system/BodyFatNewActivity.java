@@ -290,7 +290,7 @@ public class BodyFatNewActivity extends BaseBleActivity {
     @Bind(R.id.age_critical_point)
     TextView age_critical_point;
     @Bind(R.id.age_jiantou)
-    AppCompatTextView age_jiantou;
+    AppCompatImageView age_jiantou;
     @Bind(R.id.status_bar_age)
     RelativeLayout status_bar_age;
 

@@ -541,7 +541,7 @@ public class MyUtil {
 					recod.setSbodywater(UtilTooth.onePoint(recod.getRbodywater()));
 					recod.setSbmr(UtilTooth.onePoint(recod.getRbmr()));
 					//float bmi = UtilTooth.countBMI2(recod.getRweight(), (user.getBheigth() / 100));
-					//recod.setBodyAge(UtilTooth.getPhysicAge(bmi,user.getAgeYear()));
+					//recod.setBodyAge(25);
 					Log.e(TAG, "阻抗:" + bodyfat.ZTwoLegs +
 							"Ω  BMI:" + String.format("%.1f",bodyfat.BMI) +
 							"  BMR:" + (int) bodyfat.BMR +

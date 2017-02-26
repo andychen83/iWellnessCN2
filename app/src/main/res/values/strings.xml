@@ -400,6 +400,7 @@
     <string name="export_visceral_fat">内脏脂肪:</string>
     <string name="export_bmr">BMR:</string>
     <string name="export_muscle_mass">肌肉含量:</string>
+    <string name="export_phiscage_mass">身体年龄:</string>
 
     <string name="bar_weight_title">体重</string>
     <string name="bar_bodywater_title">水分率</string>

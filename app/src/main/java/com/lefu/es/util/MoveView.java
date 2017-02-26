@@ -911,13 +911,13 @@ public class MoveView {
             textView3.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.grade_bg));
         } else {
 
-            deviation = (int) (screenwidth * 0.5 + (physicage - critical_point1) / screenwidth * 0.5);
+            deviation = (int) (screenwidth * 0.5 + (physicage - critical_point1) / (screenwidth * 0.5));
             textView3.setText("偏高");
             textView3.setBackground(ContextCompat.getDrawable(activity.getApplicationContext(),R.drawable.red_color_bg));
         }
         int margin = 0;
         if(physicage!=0){
-            margin = deviation - 40;
+            margin = deviation ;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }

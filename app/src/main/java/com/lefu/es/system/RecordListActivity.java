@@ -1027,6 +1027,15 @@ public class RecordListActivity extends Activity implements android.view.View.On
 						}
 						}
 
+						if(lastRecod.getBodyAge()>0){
+							str.append(getString(R.string.export_phiscage_mass) + lastRecod.getBodyAge() );
+							if(lastRecod.getBodyAge()>user.getAgeYear()){
+								str.append("   "+getString(R.string.bar_piangao_title) );
+							}else{
+								str.append("   "+getString(R.string.bar_you_title)  );
+							}
+						}
+
 						Intent sendIntent = new Intent();
 						sendIntent.setAction(Intent.ACTION_SEND);
 

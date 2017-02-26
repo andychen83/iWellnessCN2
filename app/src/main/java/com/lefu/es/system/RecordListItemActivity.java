@@ -75,8 +75,8 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 	@Bind(R.id.tvdetail_phsicalage_status)
 	TextView tvdetail_phsicalage_status ;
 
-	
-	private TableRow row_phsicalage = null;
+	@Bind(R.id.row_phsicalage)
+	TableRow row_phsicalage ;
 
 	ImageView chaImage = null;
 
@@ -344,6 +344,16 @@ public class RecordListItemActivity extends Activity implements OnClickListener 
 			tvdetail_muscle_status.setText(MoveView.muscleString(gender,user.getBheigth(),muscal));
 
 			//身体年龄
+			if(record.getBodyAge()>0){
+				if(record.getBodyAge()>user.getAgeYear()){
+					tvdetail_phsicalage_status.setText(getResources().getText(R.string.bar_piangao_title));
+				}else{
+					tvdetail_phsicalage_status.setText(getResources().getText(R.string.bar_you_title));
+				}
+				row_phsicalage.setVisibility(View.VISIBLE);
+			}else{
+				row_phsicalage.setVisibility(View.GONE);
+			}
 
 		}
 	}
