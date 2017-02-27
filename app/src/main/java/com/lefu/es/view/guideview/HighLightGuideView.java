@@ -16,6 +16,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,6 +79,7 @@ public class HighLightGuideView extends View {
     private HighLightGuideView(Activity activity) {
         super(activity);
         this.activity=activity;
+        isPad();
         // 计算参数
         cal(activity);
         // 初始化对象
@@ -237,7 +239,11 @@ public class HighLightGuideView extends View {
         
         if(mText!=null){
             Paint paint = new Paint();
-            paint.setTextSize(30);
+            if(isPad){
+                paint.setTextSize(80);
+            }else{
+                paint.setTextSize(60);
+            }
             paint.setColor(Color.parseColor("#ffffff"));
             Bitmap bitmap = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.RGB_565);
             //bitmap.eraseColor(Color.argb(0,0,0,0)); 
@@ -246,6 +252,23 @@ public class HighLightGuideView extends View {
             canvas1.drawColor(0x00ffffff);
             int width = (int) paint.measureText(mText);
             canvas1.drawText(mText, (screenW-width)/2, okBtnY-200, paint);
+        }
+    }
+
+    protected static  boolean isPad ;
+    /**判断是否是pad*/
+    protected  void isPad(){
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = getResources().getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        float density = dm.density;
+        double diagonalPixels = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
+        double screenSize = diagonalPixels / (160 * density);
+        if (screenSize >= 4) {
+            isPad = true;
+        }else{
+            isPad = false;
         }
     }
 

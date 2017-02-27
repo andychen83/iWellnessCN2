@@ -54,6 +54,7 @@ import com.lefu.es.util.StringUtils;
 import com.lefu.es.util.ToastUtils;
 import com.lefu.es.util.UtilTooth;
 import com.lefu.es.view.MyTextView2;
+import com.lefu.es.view.MyTextView3;
 import com.lefu.es.view.MyTextView5;
 import com.lefu.iwellness.newes.cn.system.R;
 
@@ -109,7 +110,7 @@ public class BabyScaleNewActivity extends BaseNotAutoBleActivity {
     TextView targetTx;
 
     @Bind(R.id.compare_last_tx)
-    MyTextView2 compare_tv;
+    MyTextView3 compare_tv;
 
     @Bind(R.id.weith_status)
     TextView weithStatus;

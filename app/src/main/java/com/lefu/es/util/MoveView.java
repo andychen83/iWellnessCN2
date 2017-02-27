@@ -84,7 +84,7 @@ public class MoveView {
 
         int margin = 0;
         if(weight!=0){
-            margin = deviation - 50;
+            margin = deviation - 80;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }
@@ -174,7 +174,7 @@ public class MoveView {
         textView2.setText(MyUtil.onePoint(critical_point2) + "%");
         int margin = 0;
         if(waterPercent!=0){
-            margin = deviation - 50;
+            margin = deviation - 80;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }
@@ -313,7 +313,7 @@ public class MoveView {
         textView4.setText(MyUtil.onePoint(critical_point4) + "%");
         int margin = 0;
         if(fatPercent!=0){
-            margin = deviation - 40;
+            margin = deviation - 100;
             if (margin > screenwidth - 100) {
                 margin = screenwidth - 100;
             }
@@ -466,7 +466,7 @@ public class MoveView {
         }
         int margin = 0;
         if(bone!=0){
-            margin = deviation - 50;
+            margin = deviation - 100;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }
@@ -546,7 +546,7 @@ public class MoveView {
         textView3.setText(MyUtil.onePoint(critical_point3) + "");
         int margin = 0;
         if(bmi!=0){
-            margin = deviation - 50;
+            margin = deviation - 80;
             if (margin > screenwidth - 100) {
                 margin = screenwidth - 100;
             }
@@ -705,7 +705,7 @@ public class MoveView {
         textView1.setText(MyUtil.onePoint(critical_point1) + "Kcal");
         int margin = 0;
         if(bmr!=0){
-            margin = deviation - 70;
+            margin = deviation - 80;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }
@@ -827,7 +827,7 @@ public class MoveView {
         }
         int margin = 0;
         if(muscle!=0){
-            margin = deviation - 40;
+            margin = deviation - 80;
             if (margin > screenwidth - 140) {
                 margin = screenwidth - 140;
             }

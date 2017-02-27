@@ -164,13 +164,13 @@ public class AutoBLEActivity extends BaseBleActivity {
 			super.handleMessage(msg);
 			switch (msg.what) {
 				case 1 :
-					if(!isBack){
-						Intent intent0 = new Intent();
-						intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intent0.setClass(AutoBLEActivity.this, AutoBTActivity.class);
-						AutoBLEActivity.this.startActivity(intent0);
-						finish();
-					}
+//					if(!isBack){
+//						Intent intent0 = new Intent();
+//						intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//						intent0.setClass(AutoBLEActivity.this, AutoBTActivity.class);
+//						AutoBLEActivity.this.startActivity(intent0);
+//						finish();
+//					}
 					break;
 				case 2 :
 					handler.removeCallbacks(TimeoutRunnable);
@@ -189,7 +189,9 @@ public class AutoBLEActivity extends BaseBleActivity {
 					}else{
 						keepScaleWorking=true;
 					}
-					
+					if(bnp.getProgress()>=100){
+						bnp.setProgress(0);
+					}
 					bnp.incrementProgressBy(2);
 					break;
 				case 4 :
@@ -410,22 +412,31 @@ public class AutoBLEActivity extends BaseBleActivity {
 	private Runnable TimeoutRunnable = new Runnable() {
 		public void run() {
 			if (scaleType == null&&!isBack) {
-				if ((System.currentTimeMillis() - startTime) > 20000) {
-					/*是否已经连接*/
-					if(!isConneced){
-						handler.sendEmptyMessage(1);
-					}
-				} else {
-					/*是否已经连接*/
-					if(!isConneced){
-						handler.sendEmptyMessage(3);
-					}else{
+				/*是否已经连接*/
+				if(!isConneced){
+					handler.sendEmptyMessage(3);
+				}else{
 						/*更新进度为100*/
-						handler.sendEmptyMessage(4);
-					}
-					
-					handler.postDelayed(this, 1000);
+					handler.sendEmptyMessage(4);
 				}
+
+				handler.postDelayed(this, 1000);
+//				if ((System.currentTimeMillis() - startTime) > 20000) {
+//					/*是否已经连接*/
+//					if(!isConneced){
+//						handler.sendEmptyMessage(3);
+//					}
+//				} else {
+//					/*是否已经连接*/
+//					if(!isConneced){
+//						handler.sendEmptyMessage(3);
+//					}else{
+//						/*更新进度为100*/
+//						handler.sendEmptyMessage(4);
+//					}
+//
+//					handler.postDelayed(this, 1000);
+//				}
 			}
 		}
 	};
